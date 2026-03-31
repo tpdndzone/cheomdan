@@ -1201,7 +1201,7 @@ async function renderAdvertiserHome(userData) {
     </main>`;
 }
 
-window._goAdvLink = function() {
+window._goAdvLink = async function() {
   const link = document.getElementById('advLinkInput').value.trim();
   if (!link) { toast('⚠️','링크를 입력해주세요','error'); return; }
   try {
@@ -1209,6 +1209,7 @@ window._goAdvLink = function() {
     const c = u.searchParams.get('c');
     const t = u.searchParams.get('t');
     if (!c || !t) { toast('⚠️','올바른 선정 링크가 아닙니다','error'); return; }
+    await setDoc(doc(db,'users',currentUser.uid), { campId:c, token:t }, { merge:true });
     go('viewer', `&c=${c}&t=${t}`);
   } catch(e) {
     toast('⚠️','올바른 링크 형식이 아닙니다','error');
