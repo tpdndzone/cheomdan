@@ -1420,7 +1420,11 @@ async function renderResult(userData) {
 async function main() {
   // viewer 페이지는 로그인 불필요 (링크 접속)
   if (PAGE === 'viewer') {
-    await renderViewer(null);
+    onAuthStateChanged(auth, async (user) => {
+      let ud = null;
+      if (user) { ud = await getUserData(user.uid); }
+      await renderViewer(ud);
+    });
     return;
   }
   // login/register 페이지
