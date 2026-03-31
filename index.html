@@ -1264,8 +1264,10 @@ async function renderResult(userData) {
     us.forEach(d=>{
       const ud=d.data();
       const idx=advs.findIndex(a=>a.token===ud.token);
-      if(idx>=0) advs[idx].userName=ud.name;
+      if(idx>=0){ advs[idx].userName=ud.company||ud.name; advs[idx].linked=true; }
     });
+    // 연결된 광고주만 필터링
+    advs=advs.filter(a=>a.linked);
     const cs=await getDocs(collection(db,'campaigns',id,'confirmed'));
     cs.forEach(d=>confMap[d.id]=d.data());
     const ss=await getDocs(collection(db,'campaigns',id,'selections'));
@@ -1281,7 +1283,7 @@ async function renderResult(userData) {
     const el=document.getElementById('atabs');if(!el)return;
     el.innerHTML=advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
       <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
-      ${a.name}${confMap[a.token]?' ✓':''}
+      ${a.userName||a.name}${confMap[a.token]?' ✓':''}
     </button>`).join('');
   }
 
