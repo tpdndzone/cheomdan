@@ -1086,10 +1086,11 @@ async function renderViewer(userData) {
 }
 
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // RESULT PAGE
 // ══════════════════════════════════════════════════════
 async function renderResult(userData) {
-  let camps=[], selCampId=null, campData={}, allData=[], advs=[], confMap={}, selToken=null;
+  let camps=[], selCampId=null, campData={}, allData=[], advs=[], confMap={}, selMap={}, selToken=null, curFilter='all';
   document.getElementById('root').innerHTML = renderHeader(userData) + `
     <main>
       <div class="card">
@@ -1107,9 +1108,12 @@ async function renderResult(userData) {
     const snap=await getDocs(collection(db,'campaigns'));
     camps=[];
     snap.forEach(d=>camps.push({id:d.id,...d.data()}));
+    if(userData.role==='agency'){
+      camps=camps.filter(c=>c.createdBy===currentUser.uid);
+    }
     camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     renderCampTabs();
-    if(camps.length)await selCamp(camps[0].id);
+    if(camps.length) await selCamp(camps[0].id);
     else{const ct=document.getElementById('ctabs');if(ct)ct.innerHTML='<div class="empty">캠페인이 없습니다</div>';}
   }
 
@@ -1119,7 +1123,7 @@ async function renderResult(userData) {
   }
 
   async function selCamp(id){
-    selCampId=id; selToken=null; allData=[]; advs=[]; confMap={};
+    selCampId=id; selToken=null; allData=[]; advs=[]; confMap={}; selMap={};
     const cd=await getDoc(doc(db,'campaigns',id));
     campData=cd.data();
     const rs=await getDocs(collection(db,'campaigns',id,'rows'));
@@ -1129,10 +1133,12 @@ async function renderResult(userData) {
     as.forEach(d=>advs.push({id:d.id,...d.data()}));
     const cs=await getDocs(collection(db,'campaigns',id,'confirmed'));
     cs.forEach(d=>confMap[d.id]=d.data());
+    const ss=await getDocs(collection(db,'campaigns',id,'selections'));
+    ss.forEach(d=>selMap[d.id]=d.data().selections||{});
     renderCampTabs();
     const aa=document.getElementById('advArea');if(aa)aa.style.display='block';
     renderAdvTabs2();
-    if(advs.length)await selAdv(advs[0].token);
+    if(advs.length) await selAdv(advs[0].token);
     else{const rc=document.getElementById('rcontent');if(rc)rc.innerHTML='<div class="empty">등록된 광고주가 없습니다</div>';}
   }
 
@@ -1145,61 +1151,127 @@ async function renderResult(userData) {
   }
 
   async function selAdv(token){
-    selToken=token; renderAdvTabs2();
+    selToken=token; curFilter='all'; renderAdvTabs2();
     const a=advs.find(x=>x.token===token);
     const conf=confMap[token];
     const allHeaders=campData.headers||[];
     const kakaoCol=allHeaders.find(h=>h.includes('카카오')||h.toLowerCase().includes('kakao'));
-    let selIdx=[];
-if(conf){
-      selIdx=conf.selectedIndices||[];
-      if(!selIdx.length){
-        const sd=await getDoc(doc(db,'campaigns',selCampId,'selections',token));
-        if(sd.exists()){const s=sd.data().selections||{};selIdx=Object.keys(s).filter(i=>s[i]==='selected').map(Number);}
-      }
-    } else {
-      const sd=await getDoc(doc(db,'campaigns',selCampId,'selections',token));
-      if(sd.exists()){const s=sd.data().selections||{};selIdx=Object.keys(s).filter(i=>s[i]==='selected').map(Number);}
+
+    let sels=selMap[token]||{};
+    if(conf && !Object.keys(sels).length){
+      const idxs=conf.selectedIndices||[];
+      idxs.forEach(i=>sels[i]='selected');
     }
-    const selRows=selIdx.map(i=>({r:allData[i],i}));
+
+    const selRows=allData.map((r,i)=>({r,i,status:sels[i]||'pending'}));
+    const selCnt=selRows.filter(x=>x.status==='selected').length;
+    const rejCnt=selRows.filter(x=>x.status==='rejected').length;
+    const pendCnt=selRows.filter(x=>x.status==='pending').length;
     const confAt=conf&&conf.confirmedAt?new Date(conf.confirmedAt.seconds*1000).toLocaleString('ko-KR'):'';
-    window._curRows=selRows; window._curAdv=a; window._allHeaders=allHeaders;
+
+    window._curAllRows=selRows; window._curAdv=a; window._allHeaders=allHeaders; window._kakaoCol=kakaoCol;
+
     const rc=document.getElementById('rcontent');if(!rc)return;
     rc.innerHTML=`
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
         <div>
           <div style="font-size:15px;font-weight:700">${a.name}</div>
-          <div style="font-size:11px;color:var(--text-sub);margin-top:3px">총 ${allData.length}명 · 선정 ${selRows.length}명${a.maxSelect?` · 최대 ${a.maxSelect}명`:''}</div>
+          <div style="font-size:11px;color:var(--text-sub);margin-top:3px">총 ${allData.length}명${a.maxSelect?` · 최대 ${a.maxSelect}명`:''}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          ${conf?`<div class="conf-badge">✅ 확정완료 · ${confAt}</div>`:'<div class="pend-badge">⏳ 미확정</div>'}
-          ${selRows.length?`<button class="btn btn-accent btn-sm" onclick="window._dlr()">⬇ 엑셀</button>`:''}
+          ${conf
+            ?`<div class="conf-badge">✅ 확정완료 · ${confAt}</div>`
+            :`<div class="pend-badge">⏳ 미확정</div>`
+          }
+          <button class="btn btn-ghost btn-sm" onclick="window._dlr()">⬇ 엑셀</button>
         </div>
       </div>
-      ${!selRows.length
-        ?'<div class="empty" style="padding:40px">🔍 선정된 체험단이 없습니다</div>'
-        :`<div class="rtable-wrap"><table class="rtable">
-          <thead><tr><th>#</th>${allHeaders.map(h=>`<th class="${h===kakaoCol?'private':''}">${h}${h===kakaoCol?' 🔒':''}</th>`).join('')}${kakaoCol?'<th>카카오</th>':''}</tr></thead>
-          <tbody>${selRows.map(({r},idx)=>`<tr>
-            <td><span class="row-num">${idx+1}</span></td>
-            ${allHeaders.map(h=>`<td title="${r[h]||''}">${cell(r[h])}</td>`).join('')}
-            ${kakaoCol?`<td>${r[kakaoCol]?`<button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
-          </tr>`).join('')}</tbody>
-        </table></div>`
-      }`;
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+        <div class="stat-box"><div class="num" style="color:var(--accent)">${allData.length}</div><div class="lbl">총 신청</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--success)">${selCnt}</div><div class="lbl">선정</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--danger)">${rejCnt}</div><div class="lbl">탈락</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--text-muted)">${pendCnt}</div><div class="lbl">미검토</div></div>
+      </div>
+
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="rfilters">
+        <button class="filter-btn ${curFilter==='all'?'active':''}" onclick="window._rfilt('all')">전체 ${allData.length}</button>
+        <button class="filter-btn ${curFilter==='selected'?'sel-active':''}" onclick="window._rfilt('selected')">선정 ${selCnt}</button>
+        <button class="filter-btn ${curFilter==='rejected'?'rej-active':''}" onclick="window._rfilt('rejected')">탈락 ${rejCnt}</button>
+        <button class="filter-btn ${curFilter==='pending'?'active':''}" onclick="window._rfilt('pending')">미검토 ${pendCnt}</button>
+      </div>
+
+      <div id="rtableWrap"></div>`;
+
+    renderRTable();
   }
+
+  function renderRTable(){
+    const wrap=document.getElementById('rtableWrap');if(!wrap)return;
+    const rows=window._curAllRows||[];
+    const h=window._allHeaders||[];
+    const kakaoCol=window._kakaoCol;
+    let filtered=rows;
+    if(curFilter!=='all') filtered=rows.filter(x=>x.status===curFilter);
+    if(!filtered.length){wrap.innerHTML='<div class="empty" style="padding:32px">조건에 맞는 체험단이 없습니다</div>';return;}
+    wrap.innerHTML=`<div class="rtable-wrap"><table class="rtable">
+      <thead><tr>
+        <th>#</th>
+        ${h.map(col=>`<th class="${col===kakaoCol?'private':''}">${col}${col===kakaoCol?' 🔒':''}</th>`).join('')}
+        <th>상태</th>
+        ${kakaoCol?'<th>카카오</th>':''}
+      </tr></thead>
+      <tbody>${filtered.map(({r,i,status},idx)=>`<tr>
+        <td><span class="row-num">${i+1}</span></td>
+        ${h.map(col=>`<td title="${r[col]||''}">${cell(r[col])}</td>`).join('')}
+        <td>${
+          status==='selected'
+            ?'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;background:var(--success-dim);color:var(--success);font-size:10px;font-weight:600">✓ 선정</span>'
+            :status==='rejected'
+            ?'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;background:var(--danger-dim);color:var(--danger);font-size:10px;font-weight:600">✗ 탈락</span>'
+            :'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;background:var(--surface2);color:var(--text-muted);font-size:10px">· 미검토</span>'
+        }</td>
+        ${kakaoCol?`<td>${r[kakaoCol]?`<button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+
+  window._rfilt=function(f){
+    curFilter=f;
+    document.querySelectorAll('#rfilters .filter-btn').forEach(b=>b.className='filter-btn');
+    const btns=document.querySelectorAll('#rfilters .filter-btn');
+    const map=['all','selected','rejected','pending'];
+    btns.forEach((b,i)=>{
+      if(map[i]===f){
+        if(f==='selected') b.classList.add('sel-active');
+        else if(f==='rejected') b.classList.add('rej-active');
+        else b.classList.add('active');
+      }
+    });
+    renderRTable();
+  };
 
   window._rsc=async function(id){await selCamp(id);};
   window._rsa=async function(t){await selAdv(t);};
+
   window._dlr=function(){
-    const rows=window._curRows; const a=window._curAdv; const h=window._allHeaders;
+    const rows=window._curAllRows; const a=window._curAdv; const h=window._allHeaders;
     if(!rows||!rows.length)return;
-    const data=rows.map(({r},idx)=>{const o={순번:idx+1};h.forEach(k=>o[k]=r[k]);return o;});
+    let filtered=rows;
+    if(curFilter!=='all') filtered=rows.filter(x=>x.status===curFilter);
+    if(!filtered.length){toast('⚠️','다운로드할 데이터가 없습니다');return;}
+    const statusLabel={selected:'선정',rejected:'탈락',pending:'미검토'};
+    const data=filtered.map(({r,i,status},idx)=>{
+      const o={순번:idx+1,상태:statusLabel[status]||''};
+      h.forEach(k=>o[k]=r[k]);
+      return o;
+    });
     const ws=XLSX.utils.json_to_sheet(data);
     const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,'선정결과');
-    XLSX.writeFile(wb,`${a.name}_최종결과_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast('✅',`${rows.length}명 최종 결과를 다운로드했습니다`,'success-t');
+    XLSX.utils.book_append_sheet(wb,ws,'결과');
+    const filterName=curFilter==='all'?'전체':curFilter==='selected'?'선정':curFilter==='rejected'?'탈락':'미검토';
+    XLSX.writeFile(wb,`${a.name}_${filterName}_${new Date().toISOString().slice(0,10)}.xlsx`);
+    toast('✅',`${filtered.length}명 결과를 다운로드했습니다`,'success-t');
   };
 
   await loadCamps2();
