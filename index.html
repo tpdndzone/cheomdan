@@ -1020,10 +1020,10 @@ async function renderAdmin(userData) {
 async function renderViewer(userData) {
   let allData=[], visHeaders=[], adv=null, sels={}, filter='all', search='', isConf=false, maxSel=0;
   document.getElementById('root').innerHTML=`<div class="loading">데이터 불러오는 중...</div>`;
-  if (!CAMP_ID||!TOKEN){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">404</div><p>링크가 올바르지 않습니다</p></div>`;return;}
+  if (!CAMP_ID||!TOKEN){go('login',`&redirect=viewer&c=${CAMP_ID||''}&t=${TOKEN||''}`);return;}
   try{
     const advDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'advertisers',TOKEN));
-    if(!advDoc.exists()){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">404</div><p>유효하지 않은 링크입니다</p></div>`;return;}
+    if(!advDoc.exists()){go('login',`&redirect=viewer&c=${CAMP_ID}&t=${TOKEN}`);return;}
     adv=advDoc.data(); maxSel=adv.maxSelect||0;
     const campDoc=await getDoc(doc(db,'campaigns',CAMP_ID));
     const campData=campDoc.data();
