@@ -416,30 +416,46 @@ async function renderRegister() {
       <div class="auth-card" style="max-width:460px">
         <h2>회원가입</h2>
         <p class="auth-sub">이미 계정이 있으신가요? <a onclick="go('login')">로그인</a></p>
-        <div class="field" style="margin-bottom:6px"><label>가입 유형 선택 *</label></div>
-        <div class="type-grid" id="typeGrid">
+        <div class="field" style="margin-bottom:8px"><label>가입 유형 선택 *</label></div>
+        <div class="type-grid" id="typeGrid" style="margin-bottom:16px">
           <div class="type-card" onclick="selectType('agency')" id="t-agency">
             <div class="tc-icon">🏢</div>
-            <div class="tc-name">대행사</div>
-            <div class="tc-desc" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">
-              <span style="font-size:10px;color:var(--text-sub)">· 체험단 명단 생성</span>
-              <span style="font-size:10px;color:var(--text-sub)">· 체험단 리스트 확인</span>
-              <span style="font-size:10px;color:var(--text-sub)">· 체험단 선정</span>
-              <span style="font-size:10px;color:var(--text-sub)">· 선정 후 리스트 열람</span>
+            <div class="tc-name" id="tn-agency">대행사</div>
+            <div class="tc-perms" id="tp-agency">
+              <div class="tc-perm">체험단 명단 생성</div>
+              <div class="tc-perm">체험단 리스트 확인</div>
+              <div class="tc-perm">체험단 선정</div>
+              <div class="tc-perm">선정 후 리스트 열람</div>
             </div>
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);line-height:1.6">
-              사업자등록증을<br><span style="color:var(--accent)">tpdnd_zone@naver.com</span><br>으로 발송 필요
+            <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
+            <div id="agency-active" style="display:none">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px">사업자등록증 발송 필요</div>
+              <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px">
+                <span style="font-size:11px;color:var(--accent)">tpdnd_zone@naver.com</span>
+                <button style="font-size:9px;padding:1px 5px;border-radius:4px;border:1px solid var(--accent-dim);background:var(--accent-dim);color:var(--accent);cursor:pointer" onclick="event.stopPropagation();navigator.clipboard.writeText('tpdnd_zone@naver.com').then(()=>toast('✅','이메일 주소가 복사되었습니다'))">복사</button>
+              </div>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;background:var(--danger-dim);color:var(--danger);border:1px solid var(--danger-dim)">⏳ 가입 후 승인 필요</span>
+            </div>
+            <div id="agency-dim">
+              <div style="font-size:10px;color:var(--text-muted);line-height:1.5;margin-bottom:6px">사업자등록증을 tpdnd_zone@naver.com 으로 발송 필요</div>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;background:var(--danger-dim);color:var(--danger);border:1px solid var(--danger-dim)">⏳ 가입 후 승인 필요</span>
             </div>
           </div>
           <div class="type-card" onclick="selectType('advertiser')" id="t-advertiser">
             <div class="tc-icon">📢</div>
-            <div class="tc-name">광고주(매장)</div>
-            <div class="tc-desc" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">
-              <span style="font-size:10px;color:var(--text-sub)">· 체험단 리스트 확인</span>
-              <span style="font-size:10px;color:var(--text-sub)">· 체험단 선정</span>
+            <div class="tc-name" id="tn-advertiser">광고주(매장)</div>
+            <div class="tc-perms" id="tp-advertiser">
+              <div class="tc-perm">체험단 리스트 확인</div>
+              <div class="tc-perm">체험단 선정</div>
             </div>
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);line-height:1.6">
-              체험단 URL을 받으신 분들은<br>이 유형으로 가입해주세요
+            <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
+            <div id="adv-active" style="display:none">
+              <div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">체험단 선정 링크를 받으신 분들은 이 유형으로 가입해주세요.</div>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;background:var(--success-dim);color:var(--success);border:1px solid var(--success)">✓ 승인 없이 즉시 가입</span>
+            </div>
+            <div id="adv-dim">
+              <div style="font-size:10px;color:var(--text-muted);line-height:1.5;margin-bottom:6px">체험단 선정 링크를 받으신 분들은 이 유형으로 가입해주세요.</div>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;background:var(--success-dim);color:var(--success);border:1px solid var(--success)">✓ 승인 없이 즉시 가입</span>
             </div>
           </div>
         </div>
@@ -453,7 +469,6 @@ async function renderRegister() {
           <div class="field"><label>비밀번호 확인 *</label><input class="input" id="rpw2" type="password" placeholder="재입력"></div>
         </div>
         <button class="btn btn-accent btn-full" onclick="window._register()">가입 신청</button>
-        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px">가입 후 관리자 승인이 필요할 수 있습니다</p>
       </div>
     </div>`;
 }
@@ -463,6 +478,32 @@ window.selectType = function(type) {
   selectedType = type;
   document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
   document.getElementById(`t-${type}`)?.classList.add('selected');
+
+  const isAgency = type === 'agency';
+
+  // 대행사 카드
+  document.getElementById('agency-active').style.display = isAgency ? 'block' : 'none';
+  document.getElementById('agency-dim').style.display = isAgency ? 'none' : 'block';
+  const tnAgency = document.getElementById('tn-agency');
+  tnAgency.style.fontSize = isAgency ? '15px' : '13px';
+  tnAgency.style.color = isAgency ? 'var(--accent)' : 'var(--text)';
+  document.querySelectorAll('#tp-agency .tc-perm').forEach(p => {
+    p.style.fontSize = isAgency ? '12px' : '11px';
+    p.style.fontWeight = isAgency ? '500' : '400';
+    p.style.color = isAgency ? 'var(--text)' : 'var(--text-sub)';
+  });
+
+  // 광고주 카드
+  document.getElementById('adv-active').style.display = isAgency ? 'none' : 'block';
+  document.getElementById('adv-dim').style.display = isAgency ? 'block' : 'none';
+  const tnAdv = document.getElementById('tn-advertiser');
+  tnAdv.style.fontSize = isAgency ? '13px' : '15px';
+  tnAdv.style.color = isAgency ? 'var(--text)' : 'var(--accent)';
+  document.querySelectorAll('#tp-advertiser .tc-perm').forEach(p => {
+    p.style.fontSize = isAgency ? '11px' : '12px';
+    p.style.fontWeight = isAgency ? '400' : '500';
+    p.style.color = isAgency ? 'var(--text-sub)' : 'var(--text)';
+  });
 };
 
 window._register = async function() {
