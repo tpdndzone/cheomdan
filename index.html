@@ -303,8 +303,9 @@ const PAGE = params.get('page') || 'login';
 const CAMP_ID = params.get('c');
 const TOKEN = params.get('t');
 
-function go(page, extra='') { location.href = `${location.pathname}?page=${page}${extra}`; }
-function url(page, extra='') { return `${location.pathname}?page=${page}${extra}`; }
+window.go = function(page, extra='') {
+location.href = `${location.pathname}?page=${page}${extra}`; }
+window.url = function(page, extra='') { return `${location.pathname}?page=${page}${extra}`; }
 
 // ── TOAST ─────────────────────────────────────────────
 let toastTimer;
