@@ -351,7 +351,7 @@ function renderHeader(userData) {
     <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>관리</span></div></div>
     <div class="header-right">
       ${(isSuper || isAgency) ? `<a class="nav-btn ${PAGE==='admin'?'active':''}" href="${url('admin')}">🗂 관리</a>` : ''}
-      ${isSuper ? `<a class="nav-btn ${PAGE==='result'?'active':''}" href="${url('result')}">📋 결과</a>` : ''}
+      ${(isSuper||isAgency) ? `<a class="nav-btn ${PAGE==='result'?'active':''}" href="${url('result')}">📋 결과</a>` : ''}
       ${isSuper ? `<a class="nav-btn ${PAGE==='members'?'active':''}" href="${url('members')}">👥 회원</a>` : ''}
       ${userData ? `<a class="nav-btn ${PAGE==='profile'?'active':''}" href="${url('profile')}">⚙ 내정보</a>` : ''}
       ${themeBtn()}
