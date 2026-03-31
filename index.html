@@ -1281,7 +1281,7 @@ async function renderResult(userData) {
     const el=document.getElementById('atabs');if(!el)return;
     el.innerHTML=advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
       <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
-      ${a.userName||a.name}${confMap[a.token]?' ✓':''}
+      ${a.userName||'미연결'}${confMap[a.token]?' ✓':''}
     </button>`).join('');
   }
 
