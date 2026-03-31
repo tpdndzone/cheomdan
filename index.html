@@ -1266,8 +1266,6 @@ async function renderResult(userData) {
       const idx=advs.findIndex(a=>a.token===ud.token);
       if(idx>=0){ advs[idx].userName=ud.company||ud.name; advs[idx].linked=true; }
     });
-    // 연결된 광고주만 필터링
-    advs=advs.filter(a=>a.linked);
     const cs=await getDocs(collection(db,'campaigns',id,'confirmed'));
     cs.forEach(d=>confMap[d.id]=d.data());
     const ss=await getDocs(collection(db,'campaigns',id,'selections'));
