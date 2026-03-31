@@ -413,7 +413,7 @@ async function renderRegister() {
       <div class="header-right">${themeBtn()}</div>
     </header>
     <div class="auth-wrap">
-      <div class="auth-card" style="max-width:440px">
+      <div class="auth-card" style="max-width:460px">
         <h2>회원가입</h2>
         <p class="auth-sub">이미 계정이 있으신가요? <a onclick="go('login')">로그인</a></p>
         <div class="field" style="margin-bottom:6px"><label>가입 유형 선택 *</label></div>
@@ -421,12 +421,26 @@ async function renderRegister() {
           <div class="type-card" onclick="selectType('agency')" id="t-agency">
             <div class="tc-icon">🏢</div>
             <div class="tc-name">대행사</div>
-            <div class="tc-desc">체험단 캠페인 운영</div>
+            <div class="tc-desc" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">
+              <span style="font-size:10px;color:var(--text-sub)">· 체험단 명단 생성</span>
+              <span style="font-size:10px;color:var(--text-sub)">· 체험단 리스트 확인</span>
+              <span style="font-size:10px;color:var(--text-sub)">· 체험단 선정</span>
+              <span style="font-size:10px;color:var(--text-sub)">· 선정 후 리스트 열람</span>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);line-height:1.6">
+              사업자등록증을<br><span style="color:var(--accent)">tpdnd_zone@naver.com</span><br>으로 발송 필요
+            </div>
           </div>
           <div class="type-card" onclick="selectType('advertiser')" id="t-advertiser">
             <div class="tc-icon">📢</div>
-            <div class="tc-name">광고주</div>
-            <div class="tc-desc">체험단 선정 참여</div>
+            <div class="tc-name">광고주(매장)</div>
+            <div class="tc-desc" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">
+              <span style="font-size:10px;color:var(--text-sub)">· 체험단 리스트 확인</span>
+              <span style="font-size:10px;color:var(--text-sub)">· 체험단 선정</span>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);line-height:1.6">
+              체험단 URL을 받으신 분들은<br>이 유형으로 가입해주세요
+            </div>
           </div>
         </div>
         <div class="input-grid2" style="margin-bottom:12px">
@@ -463,13 +477,13 @@ window._register = async function() {
   if (pw.length < 6) { toast('⚠️','비밀번호는 6자 이상이어야 합니다','error'); return; }
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pw);
-    const status = selectedType === 'advertiser' ? 'pending' : 'pending';
+    const status = selectedType === 'advertiser' ? 'active' : 'pending';
     await setDoc(doc(db, 'users', cred.user.uid), {
       uid: cred.user.uid, name, company, email, role: selectedType,
       status, createdAt: serverTimestamp()
     });
     await signOut(auth);
-    toast('✅','가입 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다','success-t');
+    toast('✅', selectedType === 'advertiser' ? '가입이 완료되었습니다. 바로 로그인하세요!' : '가입 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다', 'success-t');
     setTimeout(() => go('login'), 2500);
   } catch(e) {
     if (e.code === 'auth/email-already-in-use') toast('❌','이미 사용 중인 이메일입니다','error');
