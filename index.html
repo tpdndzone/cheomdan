@@ -1076,6 +1076,7 @@ async function renderViewer(userData) {
       <header>
         <div class="logo"><div class="logo-dot"></div><div style="font-size:13px;font-weight:600">${adv.name} · 체험단 선정</div></div>
         <div class="header-right">
+          ${userData&&userData.role!=='advertiser'?`<a class="nav-btn" href="${url('admin')}">🗂 관리</a><a class="nav-btn" href="${url('result')}">📋 결과</a>`:''}
           <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
           <span style="font-size:11px;color:var(--text-sub)">${selCnt+rejCnt}/${total}</span>
           ${maxSel>0?`<span style="font-size:11px;color:${selCnt>=maxSel?'var(--danger)':'var(--success)'}">선정 ${selCnt}/${maxSel}명</span>`:''}
