@@ -8,144 +8,262 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
-:root{--bg:#0f0f0f;--surface:#181818;--surface2:#222222;--border:#2a2a2a;--accent:#c8ff00;--accent-dim:rgba(200,255,0,0.12);--text:#f0f0f0;--text-sub:#888;--text-muted:#555;--danger:#ff4d4d;--danger-dim:rgba(255,77,77,0.12);--success:#00e5a0;--success-dim:rgba(0,229,160,0.12);--radius:12px}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
-header{border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(15,15,15,0.95);backdrop-filter:blur(10px);z-index:100;gap:12px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-dot{width:9px;height:9px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-.logo-text{font-size:15px;font-weight:600}.logo-text span{color:var(--accent)}
-.badge{font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:1px}
-.badge-admin{color:var(--accent);background:var(--accent-dim);border:1px solid rgba(200,255,0,0.3)}
-.badge-adv{color:var(--text-sub);background:var(--surface2);border:1px solid var(--border)}
-.header-nav{display:flex;gap:8px}
-.nav-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-sub);font-size:12px;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
-.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-main{max-width:1000px;margin:0 auto;padding:28px;display:flex;flex-direction:column;gap:20px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
-.section-title{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
-.steps{display:flex;margin-bottom:4px}
-.step{flex:1;padding:11px 14px;font-size:11px;color:var(--text-muted);border-bottom:2px solid var(--border);display:flex;align-items:center;gap:7px}
-.step.active{color:var(--accent);border-bottom-color:var(--accent)}
-.step.done{color:var(--success);border-bottom-color:var(--success)}
-.step-num{width:18px;height:18px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
-.step.active .step-num{background:var(--accent);color:#0f0f0f}
-.step.done .step-num{background:var(--success);color:#0f0f0f}
-.row{display:flex;gap:10px;align-items:center}
-.input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 13px;color:var(--text);font-size:13px;font-family:'Pretendard',sans-serif;outline:none;transition:border-color 0.2s}
-.input:focus{border-color:var(--accent)}
-.input::placeholder{color:var(--text-muted)}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'Pretendard',sans-serif;white-space:nowrap}
-.btn-accent{background:var(--accent);color:#0f0f0f}.btn-accent:hover{background:#d4ff33}
-.btn-ghost{background:transparent;color:var(--text-sub);border:1px solid var(--border)}.btn-ghost:hover{border-color:#3a3a3a;color:var(--text)}
-.btn-danger{background:transparent;color:var(--danger);border:1px solid rgba(255,77,77,0.3)}.btn-danger:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
-.btn-sm{padding:5px 11px;font-size:11px}
-.btn-success{background:transparent;color:var(--success);border:1px solid rgba(0,229,160,0.3);cursor:default}
-.camp-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.camp-row{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.15s}
-.camp-row:hover{border-color:var(--accent)}
-.camp-row.active{border-color:var(--accent);background:var(--accent-dim)}
-.camp-name{flex:1;font-weight:600;font-size:14px}
-.camp-meta{font-size:11px;color:var(--text-muted)}
-.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:36px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative}
-.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-dim)}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-zone h3{font-size:14px;font-weight:600;margin-bottom:5px}
-.upload-zone p{color:var(--text-sub);font-size:12px}
-.file-ext{display:inline-block;margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);background:var(--accent-dim);padding:2px 8px;border-radius:4px}
-.upload-ok{display:none;align-items:center;gap:12px;padding:12px 16px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);border-radius:10px;margin-top:12px}
-.upload-ok.show{display:flex}
-.upload-ok strong{font-size:13px;font-weight:600;color:var(--success)}
-.upload-ok p{font-size:11px;color:var(--text-sub);margin-top:2px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
-.stat-box .num{font-size:24px;font-weight:700;color:var(--accent);font-family:'DM Mono',monospace}
-.stat-box .lbl{font-size:11px;color:var(--text-sub);margin-top:3px}
-.preview-wrap{overflow-x:auto;margin-top:12px;border:1px solid var(--border);border-radius:10px;max-height:180px;overflow-y:auto}
-.ptable{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}
-.ptable th{background:var(--surface2);color:var(--text-sub);font-weight:500;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0}
-.ptable td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);max-width:160px;overflow:hidden;text-overflow:ellipsis}
-.ptable tr:last-child td{border-bottom:none}
-.col-checks{display:flex;flex-wrap:wrap;gap:8px}
-.col-checks label{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px}
-.col-checks input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px}
-.adv-list{display:flex;flex-direction:column;gap:8px}
-.adv-row{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px}
-.adv-idx{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);width:22px;flex-shrink:0}
-.adv-name{flex:1;font-weight:500;font-size:13px}
-.adv-link{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);padding:4px 10px;border-radius:6px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.empty{text-align:center;padding:28px;color:var(--text-muted);font-size:13px}
-.delete-card{background:var(--surface);border:1px solid rgba(255,77,77,0.3);border-radius:var(--radius);padding:22px}
-.del-confirm{background:var(--danger-dim);border:1px solid rgba(255,77,77,0.3);border-radius:10px;padding:14px 18px;margin-top:12px;display:none}
-.del-confirm.show{display:block}
-.del-confirm p{font-size:13px;color:var(--danger);margin-bottom:10px}
 
-/* VIEWER */
-.toolbar{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface)}
-.filter-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-sub);font-size:11px;font-family:'Pretendard',sans-serif;cursor:pointer;transition:all 0.15s}
-.filter-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-.filter-btn.sel-active{border-color:var(--success);color:var(--success);background:var(--success-dim)}
-.filter-btn.rej-active{border-color:var(--danger);color:var(--danger);background:var(--danger-dim)}
-.search-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-size:12px;font-family:'Pretendard',sans-serif;outline:none;min-width:180px}
-.search-input:focus{border-color:var(--accent)}
-.search-input::placeholder{color:var(--text-muted)}
-.table-wrap{overflow-x:auto;overflow-y:auto;height:calc(100vh - 220px)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{position:sticky;top:0;background:var(--surface);color:var(--text-sub);font-weight:500;font-size:10px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;z-index:10;letter-spacing:0.5px}
-thead th:first-child{width:48px;text-align:center}
-thead th:last-child{width:130px}
-tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s}
-tbody tr:hover{background:var(--surface)}
-tbody tr.row-sel{background:rgba(0,229,160,0.05)}
-tbody tr.row-rej{background:rgba(255,77,77,0.05);opacity:0.6}
-td{padding:10px 14px;color:var(--text);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
-td:first-child{text-align:center}
-.row-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted)}
-.action-cell{display:flex;gap:5px}
-.btn-sel,.btn-rej{padding:4px 10px;border-radius:6px;border:1px solid;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'Pretendard',sans-serif}
-.btn-sel{border-color:rgba(0,229,160,0.3);color:var(--success);background:transparent}
-.btn-sel:hover,.btn-sel.active{background:var(--success);color:#0f0f0f;border-color:var(--success)}
-.btn-rej{border-color:rgba(255,77,77,0.3);color:var(--danger);background:transparent}
-.btn-rej:hover,.btn-rej.active{background:var(--danger);color:#fff;border-color:var(--danger)}
-.btn-sel:disabled,.btn-rej:disabled{opacity:0.35;cursor:not-allowed}
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;z-index:100}
-.bstats{display:flex;gap:18px}
-.bstat{font-size:12px;color:var(--text-sub)}
-.bstat strong{font-weight:600}
-.bstat.sel strong{color:var(--success)}
-.bstat.rej strong{color:var(--danger)}
-.prog-wrap{flex:1;max-width:280px;background:var(--border);border-radius:10px;height:5px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.4s}
+/* ── THEME VARIABLES ─────────────────────────────────── */
+:root {
+  --bg: #0f0f0f;
+  --surface: #181818;
+  --surface2: #222222;
+  --border: #2a2a2a;
+  --accent: #c8ff00;
+  --accent-dim: rgba(200,255,0,0.12);
+  --accent-hover: #d4ff33;
+  --text: #f0f0f0;
+  --text-sub: #888;
+  --text-muted: #555;
+  --danger: #ff4d4d;
+  --danger-dim: rgba(255,77,77,0.12);
+  --success: #00e5a0;
+  --success-dim: rgba(0,229,160,0.12);
+  --info: #6496ff;
+  --info-dim: rgba(100,150,255,0.12);
+  --radius: 12px;
+  --shadow: none;
+}
 
-/* RESULT */
-.camp-tabs,.adv-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.camp-tab,.adv-tab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-sub);font-size:12px;font-family:'Pretendard',sans-serif;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px}
-.camp-tab:hover,.adv-tab:hover{border-color:#3a3a3a;color:var(--text)}
-.camp-tab.active,.adv-tab.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.dot-ok{background:var(--success)}
-.dot-pending{background:var(--text-muted)}
-.rtable-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
-.rtable{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
-.rtable th{background:var(--surface2);color:var(--text-sub);font-weight:500;font-size:10px;padding:10px 13px;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0}
-.rtable th.private{color:var(--danger)}
-.rtable td{padding:10px 13px;color:var(--text);max-width:200px;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--border)}
-.rtable tr:last-child td{border-bottom:none}
-.rtable tr:hover td{background:var(--surface2)}
-.btn-kakao{padding:3px 9px;border-radius:6px;border:none;background:#FEE500;color:#3C1E1E;font-size:10px;font-weight:700;cursor:pointer;font-family:'Pretendard',sans-serif;white-space:nowrap}
-.btn-kakao:hover{background:#f0d800}
-.conf-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--success-dim);border:1px solid rgba(0,229,160,0.3);color:var(--success);font-size:11px;font-weight:600}
-.pend-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);font-size:11px}
+[data-theme="light"] {
+  --bg: #f5f5f0;
+  --surface: #ffffff;
+  --surface2: #f0f0eb;
+  --border: #e0e0d8;
+  --accent: #5a8a00;
+  --accent-dim: rgba(90,138,0,0.1);
+  --accent-hover: #4a7500;
+  --text: #1a1a1a;
+  --text-sub: #666;
+  --text-muted: #aaa;
+  --danger: #e03030;
+  --danger-dim: rgba(224,48,48,0.1);
+  --success: #00a870;
+  --success-dim: rgba(0,168,112,0.1);
+  --info: #3060d0;
+  --info-dim: rgba(48,96,208,0.1);
+  --shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
 
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:9999}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.error{border-color:rgba(255,77,77,0.4)}
-.loading{text-align:center;padding:40px;color:var(--text-muted);font-size:13px}
-.error-page{display:flex;flex-direction:column;align-items:center;justify-content:center;height:80vh;gap:14px;color:var(--text-sub);text-align:center}
-.error-code{font-family:'DM Mono',monospace;font-size:42px;color:var(--danger)}
-.pb{padding-bottom:70px}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; transition: background 0.2s, color 0.2s; }
+
+/* ── HEADER ──────────────────────────────────────────── */
+header { border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); backdrop-filter: blur(10px); z-index: 100; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+.logo-text { font-size: 14px; font-weight: 700; color: var(--text); }
+.logo-text span { color: var(--accent); }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.nav-btn { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); font-size: 12px; cursor: pointer; font-family: 'Pretendard', sans-serif; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.nav-btn:hover, .nav-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 20px; }
+.badge-super { color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent); }
+.badge-agency { color: var(--success); background: var(--success-dim); border: 1px solid var(--success); }
+.badge-adv { color: var(--info); background: var(--info-dim); border: 1px solid var(--info); }
+.badge-pending { color: var(--danger); background: var(--danger-dim); border: 1px solid var(--danger); }
+
+/* ── THEME TOGGLE ────────────────────────────────────── */
+.theme-toggle { width: 36px; height: 20px; border-radius: 10px; background: var(--border); border: 1px solid var(--border); cursor: pointer; position: relative; transition: background 0.2s; display: flex; align-items: center; padding: 2px; }
+.theme-toggle::after { content: ''; width: 14px; height: 14px; border-radius: 50%; background: var(--text-sub); transition: transform 0.2s, background 0.2s; }
+[data-theme="light"] .theme-toggle { background: var(--accent-dim); border-color: var(--accent); }
+[data-theme="light"] .theme-toggle::after { transform: translateX(16px); background: var(--accent); }
+
+/* ── MAIN ────────────────────────────────────────────── */
+main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; }
+
+/* ── CARD ────────────────────────────────────────────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.section-title { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+
+/* ── STEPS ───────────────────────────────────────────── */
+.steps { display: flex; }
+.step { flex: 1; padding: 10px 12px; font-size: 11px; color: var(--text-muted); border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 6px; }
+.step.active { color: var(--accent); border-bottom-color: var(--accent); }
+.step.done { color: var(--success); border-bottom-color: var(--success); }
+.step-num { width: 17px; height: 17px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.step.active .step-num { background: var(--accent); color: #0f0f0f; }
+.step.done .step-num { background: var(--success); color: #0f0f0f; }
+
+/* ── FORM ────────────────────────────────────────────── */
+.row { display: flex; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: var(--text-sub); }
+.input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: 'Pretendard', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; }
+.input:focus { border-color: var(--accent); }
+.input::placeholder { color: var(--text-muted); }
+.input-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Pretendard', sans-serif; white-space: nowrap; }
+.btn-accent { background: var(--accent); color: #0f0f0f; }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-ghost { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger-dim); }
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-success { background: transparent; color: var(--success); border: 1px solid var(--success); cursor: default; }
+.btn-sm { padding: 5px 11px; font-size: 11px; }
+.btn-full { width: 100%; justify-content: center; padding: 11px; }
+
+/* ── AUTH ────────────────────────────────────────────── */
+.auth-wrap { min-height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; padding: 24px; }
+.auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 400px; box-shadow: var(--shadow); }
+.auth-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.auth-card .auth-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 24px; }
+.auth-card .auth-sub a { color: var(--accent); cursor: pointer; text-decoration: none; }
+.auth-divider { text-align: center; font-size: 11px; color: var(--text-muted); margin: 16px 0; }
+.auth-link { width: 100%; text-align: center; font-size: 12px; color: var(--text-sub); cursor: pointer; background: none; border: none; font-family: 'Pretendard', sans-serif; margin-top: 12px; }
+.auth-link:hover { color: var(--text); }
+
+/* TYPE SELECT */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.type-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.type-card:hover { border-color: var(--text-muted); }
+.type-card.selected { border-color: var(--accent); background: var(--accent-dim); }
+.type-card .tc-icon { font-size: 22px; margin-bottom: 6px; }
+.type-card .tc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.type-card .tc-desc { font-size: 10px; color: var(--text-sub); margin-top: 2px; }
+.type-card.selected .tc-name { color: var(--accent); }
+
+/* ── CAMPAIGN LIST ───────────────────────────────────── */
+.camp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.camp-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.15s; }
+.camp-row:hover, .camp-row.active { border-color: var(--accent); background: var(--accent-dim); }
+.camp-name { flex: 1; font-weight: 600; font-size: 14px; }
+.camp-meta { font-size: 11px; color: var(--text-muted); }
+
+/* ── UPLOAD ──────────────────────────────────────────── */
+.upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 36px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: var(--accent-dim); }
+.upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-zone h3 { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.upload-zone p { color: var(--text-sub); font-size: 12px; }
+.file-ext { display: inline-block; margin-top: 8px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); background: var(--accent-dim); padding: 2px 8px; border-radius: 4px; }
+.upload-ok { display: none; align-items: center; gap: 12px; padding: 12px 16px; background: var(--success-dim); border: 1px solid var(--success); border-radius: 10px; margin-top: 12px; }
+.upload-ok.show { display: flex; }
+.upload-ok strong { font-size: 13px; font-weight: 600; color: var(--success); }
+.upload-ok p { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+/* ── STATS ───────────────────────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+.stat-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+.stat-box .num { font-size: 24px; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; }
+.stat-box .lbl { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
+
+/* ── PREVIEW TABLE ───────────────────────────────────── */
+.preview-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 10px; max-height: 180px; overflow-y: auto; }
+.ptable { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
+.ptable th { background: var(--surface2); color: var(--text-sub); font-weight: 500; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+.ptable td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+.ptable tr:last-child td { border-bottom: none; }
+
+/* ── COL CHECKS ──────────────────────────────────────── */
+.col-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.col-checks label { display: flex; align-items: center; gap: 7px; padding: 7px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 12px; }
+.col-checks input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; }
+
+/* ── ADVERTISER LIST ─────────────────────────────────── */
+.adv-list { display: flex; flex-direction: column; gap: 8px; }
+.adv-row { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; }
+.adv-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); width: 20px; flex-shrink: 0; }
+.adv-name { flex: 1; font-weight: 500; font-size: 13px; }
+.adv-link { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── MEMBER LIST ─────────────────────────────────────── */
+.member-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+.member-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.av-super { background: var(--accent-dim); color: var(--accent); }
+.av-agency { background: var(--success-dim); color: var(--success); }
+.av-adv { background: var(--info-dim); color: var(--info); }
+.av-pending { background: var(--danger-dim); color: var(--danger); }
+.member-info { flex: 1; }
+.member-name { font-size: 13px; font-weight: 600; }
+.member-email { font-size: 11px; color: var(--text-sub); margin-top: 1px; }
+
+/* ── VIEWER TABLE ────────────────────────────────────── */
+.toolbar { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--surface); }
+.filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); font-size: 11px; font-family: 'Pretendard', sans-serif; cursor: pointer; transition: all 0.15s; }
+.filter-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.filter-btn.sel-active { border-color: var(--success); color: var(--success); background: var(--success-dim); }
+.filter-btn.rej-active { border-color: var(--danger); color: var(--danger); background: var(--danger-dim); }
+.search-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--text); font-size: 12px; font-family: 'Pretendard', sans-serif; outline: none; min-width: 160px; }
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--text-muted); }
+.table-wrap { overflow-x: auto; overflow-y: auto; height: calc(100vh - 220px); }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--text-sub); font-weight: 500; font-size: 10px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; z-index: 10; }
+thead th:first-child { width: 48px; text-align: center; }
+thead th:last-child { width: 130px; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:hover { background: var(--surface2); }
+tbody tr.row-sel { background: var(--success-dim); }
+tbody tr.row-rej { background: var(--danger-dim); opacity: 0.7; }
+td { padding: 10px 14px; color: var(--text); white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+td:first-child { text-align: center; }
+.row-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
+.action-cell { display: flex; gap: 5px; }
+.btn-sel, .btn-rej { padding: 4px 10px; border-radius: 6px; border: 1px solid; font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Pretendard', sans-serif; }
+.btn-sel { border-color: var(--success); color: var(--success); background: transparent; }
+.btn-sel:hover, .btn-sel.active { background: var(--success); color: #0f0f0f; }
+.btn-rej { border-color: var(--danger); color: var(--danger); background: transparent; }
+.btn-rej:hover, .btn-rej.active { background: var(--danger); color: #fff; }
+.btn-sel:disabled, .btn-rej:disabled { opacity: 0.35; cursor: not-allowed; }
+.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 14px; z-index: 100; }
+.bstats { display: flex; gap: 18px; }
+.bstat { font-size: 12px; color: var(--text-sub); }
+.bstat strong { font-weight: 600; }
+.bstat.sel strong { color: var(--success); }
+.bstat.rej strong { color: var(--danger); }
+.prog-wrap { flex: 1; max-width: 240px; background: var(--border); border-radius: 10px; height: 5px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.4s; }
+
+/* ── RESULT ──────────────────────────────────────────── */
+.camp-tabs, .adv-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+.camp-tab, .adv-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); font-size: 12px; font-family: 'Pretendard', sans-serif; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+.camp-tab:hover, .adv-tab:hover { border-color: var(--text-muted); color: var(--text); }
+.camp-tab.active, .adv-tab.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.dot-ok { background: var(--success); }
+.dot-pending { background: var(--text-muted); }
+.rtable-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+.rtable { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+.rtable th { background: var(--surface2); color: var(--text-sub); font-weight: 500; font-size: 10px; padding: 10px 13px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+.rtable th.private { color: var(--danger); }
+.rtable td { padding: 10px 13px; color: var(--text); max-width: 200px; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--border); }
+.rtable tr:last-child td { border-bottom: none; }
+.rtable tr:hover td { background: var(--surface2); }
+.btn-kakao { padding: 3px 9px; border-radius: 6px; border: none; background: #FEE500; color: #3C1E1E; font-size: 10px; font-weight: 700; cursor: pointer; font-family: 'Pretendard', sans-serif; white-space: nowrap; }
+.conf-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; background: var(--success-dim); border: 1px solid var(--success); color: var(--success); font-size: 11px; font-weight: 600; }
+.pend-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; }
+
+/* ── DELETE CARD ─────────────────────────────────────── */
+.delete-card { background: var(--surface); border: 1px solid var(--danger-dim); border-radius: var(--radius); padding: 22px; }
+.del-confirm { background: var(--danger-dim); border: 1px solid var(--danger); border-radius: 10px; padding: 14px 18px; margin-top: 12px; display: none; }
+.del-confirm.show { display: block; }
+.del-confirm p { font-size: 13px; color: var(--danger); margin-bottom: 10px; }
+
+/* ── PROFILE ─────────────────────────────────────────── */
+.profile-sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+/* ── TOAST ───────────────────────────────────────────── */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-size: 13px; display: flex; align-items: center; gap: 8px; transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--danger); }
+.toast.success-t { border-color: var(--success); }
+
+.empty { text-align: center; padding: 28px; color: var(--text-muted); font-size: 13px; }
+.loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
+.error-page { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; gap: 14px; color: var(--text-sub); text-align: center; }
+.error-code { font-family: 'DM Mono', monospace; font-size: 42px; color: var(--danger); }
+.pb { padding-bottom: 70px; }
 </style>
 </head>
 <body>
@@ -154,7 +272,8 @@ td:first-child{text-align:center}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const FC = {
   apiKey:"AIzaSyA0dUb1p0wAWZHvDPlmG_WO3QJ7xhSYJ5s",
@@ -164,52 +283,413 @@ const FC = {
   messagingSenderId:"235741797636",
   appId:"1:235741797636:web:5e9c9cf83751fc0504c451"
 };
-const db = getFirestore(initializeApp(FC));
+const app = initializeApp(FC);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-// ── ROUTER ────────────────────────────────────────────────
+// ── THEME ─────────────────────────────────────────────
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+window.toggleTheme = function() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+};
+
+// ── ROUTER ────────────────────────────────────────────
 const params = new URLSearchParams(location.search);
-const PAGE = params.get('page') || 'admin';
+const PAGE = params.get('page') || 'login';
 const CAMP_ID = params.get('c');
 const TOKEN = params.get('t');
 
 function go(page, extra='') { location.href = `${location.pathname}?page=${page}${extra}`; }
 function url(page, extra='') { return `${location.pathname}?page=${page}${extra}`; }
 
-// ── TOAST ─────────────────────────────────────────────────
+// ── TOAST ─────────────────────────────────────────────
 let toastTimer;
-window.toast = function(icon, msg, type='success') {
+window.toast = function(icon, msg, type='') {
   const el = document.getElementById('toast');
   document.getElementById('ti').textContent = icon;
   document.getElementById('tm').textContent = msg;
   el.className = `toast show ${type}`;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 };
 
-// ── CELL RENDER ───────────────────────────────────────────
+// ── CELL RENDER ───────────────────────────────────────
 function cell(v) {
   if (!v) return '-';
   return String(v).replace(/(https?:\/\/[^\s]+)/g, u =>
     `<a href="${u}" target="_blank" style="color:var(--accent);text-decoration:underline">${u}</a>`);
 }
 
-// ══════════════════════════════════════════════════════════
-// MAIN ROUTER
-// ══════════════════════════════════════════════════════════
-async function main() {
+// ── THEME TOGGLE BUTTON ───────────────────────────────
+function themeBtn() {
+  return `<button class="theme-toggle" onclick="toggleTheme()" title="테마 변경"></button>`;
+}
 
-if (PAGE === 'admin') {
-  let campId = null, rows = [], headers = [], advs = [];
+// ── AUTH STATE ────────────────────────────────────────
+let currentUser = null;
+let currentUserData = null;
 
+async function getUserData(uid) {
+  const d = await getDoc(doc(db, 'users', uid));
+  return d.exists() ? d.data() : null;
+}
+
+// ── HEADER ────────────────────────────────────────────
+function renderHeader(userData) {
+  const role = userData?.role;
+  const isSuper = role === 'super';
+  const isAgency = role === 'agency';
+  const roleMap = { super: '총관리자', agency: '대행사', advertiser: '광고주' };
+  const badgeClass = { super: 'badge-super', agency: 'badge-agency', advertiser: 'badge-adv' };
+
+  return `<header>
+    <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>관리</span></div></div>
+    <div class="header-right">
+      ${(isSuper || isAgency) ? `<a class="nav-btn ${PAGE==='admin'?'active':''}" href="${url('admin')}">🗂 관리</a>` : ''}
+      ${isSuper ? `<a class="nav-btn ${PAGE==='result'?'active':''}" href="${url('result')}">📋 결과</a>` : ''}
+      ${isSuper ? `<a class="nav-btn ${PAGE==='members'?'active':''}" href="${url('members')}">👥 회원</a>` : ''}
+      ${userData ? `<a class="nav-btn ${PAGE==='profile'?'active':''}" href="${url('profile')}">⚙ 내정보</a>` : ''}
+      ${themeBtn()}
+      ${userData ? `<span class="badge ${badgeClass[role]||''}">${roleMap[role]||''}</span>` : ''}
+      ${userData ? `<button class="btn btn-ghost btn-sm" onclick="window._logout()">로그아웃</button>` : ''}
+    </div>
+  </header>`;
+}
+
+window._logout = async function() {
+  await signOut(auth);
+  go('login');
+};
+
+// ══════════════════════════════════════════════════════
+// LOGIN PAGE
+// ══════════════════════════════════════════════════════
+async function renderLogin() {
   document.getElementById('root').innerHTML = `
     <header>
       <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>관리</span></div></div>
-      <div class="header-nav">
-        <a class="nav-btn active" href="${url('admin')}">🗂 관리자</a>
-        <a class="nav-btn" href="${url('result')}">📋 결과확인</a>
-      </div>
-      <span class="badge badge-admin">ADMIN</span>
+      <div class="header-right">${themeBtn()}</div>
     </header>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <h2>로그인</h2>
+        <p class="auth-sub">계정이 없으신가요? <a onclick="go('register')">회원가입</a></p>
+        <div class="field" style="margin-bottom:12px"><label>이메일</label><input class="input" id="lemail" type="email" placeholder="이메일 입력"></div>
+        <div class="field" style="margin-bottom:16px"><label>비밀번호</label><input class="input" id="lpw" type="password" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')window._login()"></div>
+        <button class="btn btn-accent btn-full" onclick="window._login()">로그인</button>
+        <button class="auth-link" onclick="go('register')">회원가입 →</button>
+      </div>
+    </div>`;
+}
+
+window._login = async function() {
+  const email = document.getElementById('lemail').value.trim();
+  const pw = document.getElementById('lpw').value;
+  if (!email || !pw) { toast('⚠️','이메일과 비밀번호를 입력하세요','error'); return; }
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pw);
+    const ud = await getUserData(cred.user.uid);
+    if (!ud) { await signOut(auth); toast('⚠️','계정 정보를 찾을 수 없습니다','error'); return; }
+    if (ud.status === 'pending') { await signOut(auth); toast('⚠️','승인 대기 중입니다. 관리자에게 문의하세요','error'); return; }
+    if (ud.role === 'advertiser') { go('viewer', `&c=${ud.campId||''}&t=${ud.token||''}`); return; }
+    go('admin');
+  } catch(e) {
+    toast('❌','이메일 또는 비밀번호가 올바르지 않습니다','error');
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// REGISTER PAGE
+// ══════════════════════════════════════════════════════
+async function renderRegister() {
+  document.getElementById('root').innerHTML = `
+    <header>
+      <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>관리</span></div></div>
+      <div class="header-right">${themeBtn()}</div>
+    </header>
+    <div class="auth-wrap">
+      <div class="auth-card" style="max-width:440px">
+        <h2>회원가입</h2>
+        <p class="auth-sub">이미 계정이 있으신가요? <a onclick="go('login')">로그인</a></p>
+        <div class="field" style="margin-bottom:6px"><label>가입 유형 선택 *</label></div>
+        <div class="type-grid" id="typeGrid">
+          <div class="type-card" onclick="selectType('agency')" id="t-agency">
+            <div class="tc-icon">🏢</div>
+            <div class="tc-name">대행사</div>
+            <div class="tc-desc">체험단 캠페인 운영</div>
+          </div>
+          <div class="type-card" onclick="selectType('advertiser')" id="t-advertiser">
+            <div class="tc-icon">📢</div>
+            <div class="tc-name">광고주</div>
+            <div class="tc-desc">체험단 선정 참여</div>
+          </div>
+        </div>
+        <div class="input-grid2" style="margin-bottom:12px">
+          <div class="field"><label>이름 *</label><input class="input" id="rname" placeholder="이름"></div>
+          <div class="field"><label>회사명</label><input class="input" id="rcompany" placeholder="회사명"></div>
+        </div>
+        <div class="field" style="margin-bottom:12px"><label>이메일 *</label><input class="input" id="remail" type="email" placeholder="이메일"></div>
+        <div class="input-grid2" style="margin-bottom:16px">
+          <div class="field"><label>비밀번호 *</label><input class="input" id="rpw" type="password" placeholder="6자 이상"></div>
+          <div class="field"><label>비밀번호 확인 *</label><input class="input" id="rpw2" type="password" placeholder="재입력"></div>
+        </div>
+        <button class="btn btn-accent btn-full" onclick="window._register()">가입 신청</button>
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:10px">가입 후 관리자 승인이 필요할 수 있습니다</p>
+      </div>
+    </div>`;
+}
+
+let selectedType = '';
+window.selectType = function(type) {
+  selectedType = type;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(`t-${type}`)?.classList.add('selected');
+};
+
+window._register = async function() {
+  if (!selectedType) { toast('⚠️','가입 유형을 선택하세요','error'); return; }
+  const name = document.getElementById('rname').value.trim();
+  const company = document.getElementById('rcompany').value.trim();
+  const email = document.getElementById('remail').value.trim();
+  const pw = document.getElementById('rpw').value;
+  const pw2 = document.getElementById('rpw2').value;
+  if (!name || !email || !pw) { toast('⚠️','필수 항목을 입력하세요','error'); return; }
+  if (pw !== pw2) { toast('⚠️','비밀번호가 일치하지 않습니다','error'); return; }
+  if (pw.length < 6) { toast('⚠️','비밀번호는 6자 이상이어야 합니다','error'); return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pw);
+    const status = selectedType === 'advertiser' ? 'pending' : 'pending';
+    await setDoc(doc(db, 'users', cred.user.uid), {
+      uid: cred.user.uid, name, company, email, role: selectedType,
+      status, createdAt: serverTimestamp()
+    });
+    await signOut(auth);
+    toast('✅','가입 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다','success-t');
+    setTimeout(() => go('login'), 2500);
+  } catch(e) {
+    if (e.code === 'auth/email-already-in-use') toast('❌','이미 사용 중인 이메일입니다','error');
+    else toast('❌','가입 중 오류가 발생했습니다','error');
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// MEMBERS PAGE (총관리자 전용)
+// ══════════════════════════════════════════════════════
+async function renderMembers(userData) {
+  if (userData?.role !== 'super') { go('login'); return; }
+  document.getElementById('root').innerHTML = renderHeader(userData) + `
+    <main>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:16px;font-weight:700">회원 관리</div>
+          <button class="btn btn-accent btn-sm" onclick="window._showAddMember()">+ 회원 추가</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <input class="search-input" style="flex:1;min-width:160px" id="msearch" placeholder="이름 또는 이메일 검색..." oninput="window._filterMembers()">
+          <button class="filter-btn active" id="fall" onclick="window._setMFilter('all')">전체</button>
+          <button class="filter-btn" id="fagency" onclick="window._setMFilter('agency')">대행사</button>
+          <button class="filter-btn" id="fadv" onclick="window._setMFilter('advertiser')">광고주</button>
+          <button class="filter-btn" id="fpending" onclick="window._setMFilter('pending')" style="color:var(--danger);border-color:var(--danger-dim)">승인대기</button>
+        </div>
+        <div id="memberList"><div class="loading">불러오는 중...</div></div>
+      </div>
+    </main>
+    <div class="card" id="addMemberModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:400px;z-index:200;box-shadow:0 8px 40px rgba(0,0,0,0.4)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-weight:700">회원 직접 추가</div>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('addMemberModal').style.display='none'">✕</button>
+      </div>
+      <div class="type-grid" id="addTypeGrid">
+        <div class="type-card" onclick="window._selectAddType('agency')" id="at-agency"><div class="tc-icon">🏢</div><div class="tc-name">대행사</div></div>
+        <div class="type-card" onclick="window._selectAddType('advertiser')" id="at-advertiser"><div class="tc-icon">📢</div><div class="tc-name">광고주</div></div>
+      </div>
+      <div class="input-grid2" style="margin-bottom:10px">
+        <div class="field"><label>이름</label><input class="input" id="am-name" placeholder="이름"></div>
+        <div class="field"><label>회사명</label><input class="input" id="am-company" placeholder="회사명"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px"><label>이메일</label><input class="input" id="am-email" type="email" placeholder="이메일"></div>
+      <div class="field" style="margin-bottom:14px"><label>임시 비밀번호</label><input class="input" id="am-pw" type="text" placeholder="6자 이상"></div>
+      <button class="btn btn-accent btn-full" onclick="window._addMember()">추가</button>
+    </div>
+    <div id="modalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199" onclick="document.getElementById('addMemberModal').style.display='none';document.getElementById('modalBg').style.display='none'"></div>`;
+
+  await loadMembers();
+}
+
+let allMembers = [], mFilter = 'all';
+async function loadMembers() {
+  const snap = await getDocs(collection(db, 'users'));
+  allMembers = [];
+  snap.forEach(d => allMembers.push(d.data()));
+  allMembers.sort((a,b) => (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+  window._filterMembers();
+}
+
+window._setMFilter = function(f) {
+  mFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`f${f}`)?.classList.add('active');
+  window._filterMembers();
+};
+
+window._filterMembers = function() {
+  const q = document.getElementById('msearch')?.value.toLowerCase() || '';
+  let list = allMembers;
+  if (mFilter === 'pending') list = list.filter(m => m.status === 'pending');
+  else if (mFilter !== 'all') list = list.filter(m => m.role === mFilter && m.status !== 'pending');
+  if (q) list = list.filter(m => m.name?.toLowerCase().includes(q) || m.email?.toLowerCase().includes(q));
+  renderMemberList(list);
+};
+
+function renderMemberList(list) {
+  const el = document.getElementById('memberList');
+  if (!list.length) { el.innerHTML = '<div class="empty">회원이 없습니다</div>'; return; }
+  const roleMap = { super:'총관리자', agency:'대행사', advertiser:'광고주' };
+  const badgeClass = { super:'badge-super', agency:'badge-agency', advertiser:'badge-adv' };
+  const avClass = { super:'av-super', agency:'av-agency', advertiser:'av-adv' };
+  el.innerHTML = list.map(m => {
+    const isPending = m.status === 'pending';
+    return `<div class="member-row" style="${isPending?'border-color:var(--danger)':''}">
+      <div class="member-avatar ${isPending?'av-pending':avClass[m.role]||'av-agency'}">${(m.name||'?')[0]}</div>
+      <div class="member-info">
+        <div class="member-name">${m.name||'-'} ${m.company?`<span style="font-size:11px;color:var(--text-muted)">(${m.company})</span>`:''}</div>
+        <div class="member-email">${m.email||'-'}</div>
+      </div>
+      ${isPending
+        ? `<span class="badge badge-pending">승인대기</span>
+           <button class="btn btn-sm" style="color:var(--success);border:1px solid var(--success);background:transparent" onclick="window._approve('${m.uid}')">승인</button>
+           <button class="btn btn-danger btn-sm" onclick="window._deleteUser('${m.uid}')">거절</button>`
+        : `<span class="badge ${badgeClass[m.role]||''}">${roleMap[m.role]||m.role}</span>
+           <button class="btn btn-ghost btn-sm" onclick="window._editRole('${m.uid}','${m.role}')">권한변경</button>
+           ${m.role!=='super'?`<button class="btn btn-danger btn-sm" onclick="window._deleteUser('${m.uid}')">삭제</button>`:''}`
+      }
+    </div>`;
+  }).join('');
+}
+
+window._approve = async function(uid) {
+  await setDoc(doc(db,'users',uid), { status:'active' }, { merge:true });
+  toast('✅','승인되었습니다','success-t');
+  await loadMembers(); window._filterMembers();
+};
+
+window._deleteUser = async function(uid) {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+  await deleteDoc(doc(db,'users',uid));
+  toast('🗑️','삭제되었습니다');
+  allMembers = allMembers.filter(m => m.uid !== uid);
+  window._filterMembers();
+};
+
+window._editRole = async function(uid, curRole) {
+  const roles = ['agency','advertiser','super'];
+  const labels = { agency:'대행사', advertiser:'광고주', super:'총관리자' };
+  const next = roles[(roles.indexOf(curRole)+1)%roles.length];
+  if (!confirm(`권한을 "${labels[next]}"으로 변경하시겠습니까?`)) return;
+  await setDoc(doc(db,'users',uid), { role:next }, { merge:true });
+  toast('✅','권한이 변경되었습니다','success-t');
+  await loadMembers(); window._filterMembers();
+};
+
+let addType = '';
+window._showAddMember = function() {
+  document.getElementById('addMemberModal').style.display='block';
+  document.getElementById('modalBg').style.display='block';
+};
+window._selectAddType = function(t) {
+  addType=t;
+  document.querySelectorAll('#addTypeGrid .type-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById(`at-${t}`)?.classList.add('selected');
+};
+window._addMember = async function() {
+  if (!addType) { toast('⚠️','유형을 선택하세요','error'); return; }
+  const name=document.getElementById('am-name').value.trim();
+  const company=document.getElementById('am-company').value.trim();
+  const email=document.getElementById('am-email').value.trim();
+  const pw=document.getElementById('am-pw').value;
+  if (!name||!email||!pw) { toast('⚠️','필수 항목을 입력하세요','error'); return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pw);
+    await setDoc(doc(db,'users',cred.user.uid), { uid:cred.user.uid, name, company, email, role:addType, status:'active', createdAt:serverTimestamp() });
+    await signOut(auth);
+    // re-login as super
+    toast('✅',`${name} 회원이 추가되었습니다`,'success-t');
+    document.getElementById('addMemberModal').style.display='none';
+    document.getElementById('modalBg').style.display='none';
+    await loadMembers(); window._filterMembers();
+  } catch(e) {
+    toast('❌','추가 중 오류: '+e.message,'error');
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// PROFILE PAGE
+// ══════════════════════════════════════════════════════
+async function renderProfile(userData) {
+  const roleMap = { super:'총관리자', agency:'대행사', advertiser:'광고주' };
+  const badgeClass = { super:'badge-super', agency:'badge-agency', advertiser:'badge-adv' };
+  document.getElementById('root').innerHTML = renderHeader(userData) + `
+    <main>
+      <div class="card" style="max-width:500px;margin:0 auto">
+        <div style="font-size:16px;font-weight:700;margin-bottom:20px">내 정보 수정</div>
+        <div class="section-title">기본 정보</div>
+        <div class="input-grid2" style="margin-bottom:12px">
+          <div class="field"><label>이름</label><input class="input" id="pname" value="${userData?.name||''}"></div>
+          <div class="field"><label>회사명</label><input class="input" id="pcompany" value="${userData?.company||''}"></div>
+        </div>
+        <div class="field" style="margin-bottom:12px"><label>이메일</label><input class="input" value="${userData?.email||''}" disabled style="opacity:0.5"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:20px">
+          <span style="font-size:13px;color:var(--text-sub)">가입 유형</span>
+          <span class="badge ${badgeClass[userData?.role]||''}">${roleMap[userData?.role]||'-'}</span>
+        </div>
+        <hr class="profile-sep">
+        <div class="section-title">비밀번호 변경</div>
+        <div class="field" style="margin-bottom:12px"><label>현재 비밀번호</label><input class="input" id="pcurpw" type="password" placeholder="현재 비밀번호"></div>
+        <div class="input-grid2" style="margin-bottom:20px">
+          <div class="field"><label>새 비밀번호</label><input class="input" id="pnewpw" type="password" placeholder="6자 이상"></div>
+          <div class="field"><label>비밀번호 확인</label><input class="input" id="pnewpw2" type="password" placeholder="재입력"></div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-accent" style="flex:1" onclick="window._saveProfile()">저장</button>
+          <button class="btn btn-danger btn-sm" onclick="window._logout()">로그아웃</button>
+        </div>
+      </div>
+    </main>`;
+}
+
+window._saveProfile = async function() {
+  const name = document.getElementById('pname').value.trim();
+  const company = document.getElementById('pcompany').value.trim();
+  const curpw = document.getElementById('pcurpw').value;
+  const newpw = document.getElementById('pnewpw').value;
+  const newpw2 = document.getElementById('pnewpw2').value;
+  if (!name) { toast('⚠️','이름을 입력하세요','error'); return; }
+  await setDoc(doc(db,'users',currentUser.uid), { name, company }, { merge:true });
+  if (newpw) {
+    if (newpw !== newpw2) { toast('⚠️','비밀번호가 일치하지 않습니다','error'); return; }
+    if (!curpw) { toast('⚠️','현재 비밀번호를 입력하세요','error'); return; }
+    try {
+      const cred = EmailAuthProvider.credential(currentUser.email, curpw);
+      await reauthenticateWithCredential(currentUser, cred);
+      await updatePassword(currentUser, newpw);
+      toast('✅','정보와 비밀번호가 변경되었습니다','success-t');
+    } catch(e) { toast('❌','현재 비밀번호가 올바르지 않습니다','error'); return; }
+  } else {
+    toast('✅','정보가 저장되었습니다','success-t');
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// ADMIN PAGE
+// ══════════════════════════════════════════════════════
+async function renderAdmin(userData) {
+  let campId=null, rows=[], headers=[], advs=[];
+
+  document.getElementById('root').innerHTML = renderHeader(userData) + `
     <main>
       <div class="steps">
         <div class="step active" id="s1"><div class="step-num">1</div>캠페인</div>
@@ -264,7 +744,7 @@ if (PAGE === 'admin') {
         <div class="adv-list" id="advList"><div class="empty">광고주를 추가하면 고유 링크가 생성됩니다</div></div>
         <div class="row" style="margin-top:12px">
           <input class="input" id="aname" placeholder="광고주 이름" onkeydown="if(event.key==='Enter')window._aa()">
-          <input class="input" id="amax" placeholder="선정인원 (미입력시 제한없음)" type="number" min="1" style="max-width:190px" onkeydown="if(event.key==='Enter')window._aa()">
+          <input class="input" id="amax" placeholder="선정인원 (미입력시 제한없음)" type="number" min="1" style="max-width:180px" onkeydown="if(event.key==='Enter')window._aa()">
           <button class="btn btn-accent" onclick="window._aa()">+ 링크 생성</button>
         </div>
       </div>
@@ -282,9 +762,9 @@ if (PAGE === 'admin') {
       </div>
     </main>`;
 
-  function setStep(n){for(let i=1;i<=5;i++){const e=document.getElementById(`s${i}`);e.className='step'+(i<n?' done':i===n?' active':'');}}
-  function en(id){const s=document.getElementById(id);s.style.opacity='1';s.style.pointerEvents='';}
-  function dis(id){const s=document.getElementById(id);s.style.opacity='0.4';s.style.pointerEvents='none';}
+  function setStep(n){for(let i=1;i<=5;i++){const e=document.getElementById(`s${i}`);if(e)e.className='step'+(i<n?' done':i===n?' active':'');}}
+  function en(id){const s=document.getElementById(id);if(s){s.style.opacity='1';s.style.pointerEvents='';}}
+  function dis(id){const s=document.getElementById(id);if(s){s.style.opacity='0.4';s.style.pointerEvents='none';}}
 
   async function loadCamps() {
     const snap = await getDocs(collection(db,'campaigns'));
@@ -292,24 +772,24 @@ if (PAGE === 'admin') {
     snap.forEach(d => camps.push({id:d.id,...d.data()}));
     camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     const list = document.getElementById('campList');
+    if (!list) return;
     if (!camps.length) { list.innerHTML='<div class="empty">캠페인이 없습니다. 새 캠페인을 생성하세요.</div>'; return; }
     list.innerHTML = camps.map(c => {
       const d = c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString('ko-KR') : '';
       return `<div class="camp-row ${campId===c.id?'active':''}" onclick="window._sc('${c.id}')">
         <div class="camp-name">${c.name}</div>
-        <div class="camp-meta">${c.totalRows||0}명 · 광고주 ${c.advCount||0}명</div>
-        <div class="camp-meta">${d}</div>
+        <div class="camp-meta">${c.totalRows||0}명 · 광고주 ${c.advCount||0}명 · ${d}</div>
       </div>`;
     }).join('');
   }
 
   window._cc = async function() {
-    const name = document.getElementById('cname').value.trim();
+    const name = document.getElementById('cname')?.value.trim();
     if (!name) { toast('⚠️','캠페인 이름을 입력하세요','error'); return; }
     const id = 'camp_'+Date.now();
     await setDoc(doc(db,'campaigns',id),{name,createdAt:serverTimestamp(),totalRows:0,advCount:0});
     document.getElementById('cname').value='';
-    toast('✅',`"${name}" 캠페인이 생성되었습니다`);
+    toast('✅',`"${name}" 캠페인이 생성되었습니다`,'success-t');
     await loadCamps();
     window._sc(id);
   };
@@ -325,28 +805,30 @@ if (PAGE === 'admin') {
     const as = await getDocs(collection(db,'campaigns',id,'advertisers'));
     as.forEach(d=>advs.push({id:d.id,...d.data()}));
     await loadCamps();
-    en('sec2'); document.getElementById('sec5').style.display='block';
-    document.getElementById('dconf').classList.remove('show');
+    en('sec2'); const s5=document.getElementById('sec5'); if(s5)s5.style.display='block';
+    const dc=document.getElementById('dconf'); if(dc)dc.classList.remove('show');
     if (rows.length) {
       showUok(data.name,rows.length,headers.length);
       renderStats(); renderPreview();
       renderCols(data.visibleHeaders||null);
       en('sec4'); renderAdvs(); setStep(4);
     } else {
-      document.getElementById('uzone').style.display='';
-      document.getElementById('uok').classList.remove('show');
-      document.getElementById('stats').style.display='none';
-      document.getElementById('sec3').style.display='none';
+      const uz=document.getElementById('uzone'); if(uz)uz.style.display='';
+      const uo=document.getElementById('uok'); if(uo)uo.classList.remove('show');
+      const st=document.getElementById('stats'); if(st)st.style.display='none';
+      const s3=document.getElementById('sec3'); if(s3)s3.style.display='none';
       dis('sec4'); setStep(2);
     }
   };
 
   // Upload
   const uz = document.getElementById('uzone');
-  uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
-  uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
-  uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');if(e.dataTransfer.files[0])pfile(e.dataTransfer.files[0]);});
-  document.getElementById('ufile').addEventListener('change',e=>{if(e.target.files[0])pfile(e.target.files[0]);});
+  if (uz) {
+    uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
+    uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
+    uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');if(e.dataTransfer.files[0])pfile(e.dataTransfer.files[0]);});
+    document.getElementById('ufile')?.addEventListener('change',e=>{if(e.target.files[0])pfile(e.target.files[0]);});
+  }
 
   async function pfile(file) {
     if (!campId){toast('⚠️','먼저 캠페인을 선택하세요','error');return;}
@@ -357,49 +839,51 @@ if (PAGE === 'admin') {
         const json=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
         if(!json.length){toast('❌','데이터가 없습니다','error');return;}
         headers=Object.keys(json[0]); rows=json;
-        toast('⏳','데이터 저장 중...','success');
+        toast('⏳','데이터 저장 중...','');
         for(let i=0;i<json.length;i++) await setDoc(doc(db,'campaigns',campId,'rows',`row_${i}`),{...json[i],_index:i});
         await setDoc(doc(db,'campaigns',campId),{totalRows:json.length,headers},{merge:true});
         showUok(file.name,json.length,headers.length);
         renderStats(); renderPreview(); renderCols(null); setStep(3);
-        toast('✅',`${json.length}명 데이터가 저장되었습니다`);
+        toast('✅',`${json.length}명 데이터가 저장되었습니다`,'success-t');
       }catch(err){toast('❌','파일을 읽을 수 없습니다','error');}
     };
     reader.readAsArrayBuffer(file);
   }
 
   function showUok(name,r,c){
-    document.getElementById('uzone').style.display='none';
-    document.getElementById('uok').classList.add('show');
-    document.getElementById('ufname').textContent=name;
-    document.getElementById('ufinfo').textContent=`${r}개 응답 · ${c}개 항목`;
-    document.getElementById('stats').style.display='block';
+    const uz=document.getElementById('uzone'); if(uz)uz.style.display='none';
+    const uo=document.getElementById('uok'); if(uo)uo.classList.add('show');
+    const fn=document.getElementById('ufname'); if(fn)fn.textContent=name;
+    const fi=document.getElementById('ufinfo'); if(fi)fi.textContent=`${r}개 응답 · ${c}개 항목`;
+    const st=document.getElementById('stats'); if(st)st.style.display='block';
   }
 
   window._ru=function(){
     rows=[];headers=[];
-    document.getElementById('uzone').style.display='';
-    document.getElementById('uok').classList.remove('show');
-    document.getElementById('stats').style.display='none';
-    document.getElementById('ufile').value='';
-    document.getElementById('sec3').style.display='none';
+    const uz=document.getElementById('uzone'); if(uz)uz.style.display='';
+    const uo=document.getElementById('uok'); if(uo)uo.classList.remove('show');
+    const st=document.getElementById('stats'); if(st)st.style.display='none';
+    const uf=document.getElementById('ufile'); if(uf)uf.value='';
+    const s3=document.getElementById('sec3'); if(s3)s3.style.display='none';
     dis('sec4'); setStep(2);
   };
 
   function renderStats(){
-    document.getElementById('st0').textContent=rows.length;
-    document.getElementById('st1').textContent=headers.length;
-    document.getElementById('st2').textContent=advs.length;
+    const t=document.getElementById('st0'); if(t)t.textContent=rows.length;
+    const c=document.getElementById('st1'); if(c)c.textContent=headers.length;
+    const a=document.getElementById('st2'); if(a)a.textContent=advs.length;
   }
   function renderPreview(){
+    const table=document.getElementById('ptable'); if(!table)return;
     let h='<thead><tr>'+headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
     rows.slice(0,5).forEach(r=>{h+='<tr>'+headers.map(k=>`<td title="${r[k]}">${r[k]||'-'}</td>`).join('')+'</tr>';});
-    document.getElementById('ptable').innerHTML=h+'</tbody>';
+    table.innerHTML=h+'</tbody>';
   }
 
   function renderCols(saved){
-    document.getElementById('sec3').style.display='block';
-    document.getElementById('colchecks').innerHTML=headers.map(h=>{
+    const s3=document.getElementById('sec3'); if(s3)s3.style.display='block';
+    const cc=document.getElementById('colchecks'); if(!cc)return;
+    cc.innerHTML=headers.map(h=>{
       const chk=saved?saved.includes(h):true;
       return `<label><input type="checkbox" value="${h}" ${chk?'checked':''}> ${h}</label>`;
     }).join('');
@@ -409,28 +893,28 @@ if (PAGE === 'admin') {
     const checked=[...document.querySelectorAll('#colchecks input[type=checkbox]:checked')].map(c=>c.value);
     if(!checked.length){toast('⚠️','최소 1개 항목을 선택하세요','error');return;}
     await setDoc(doc(db,'campaigns',campId),{visibleHeaders:checked},{merge:true});
-    en('sec4'); renderAdvs(); setStep(4); toast('✅','항목이 저장되었습니다');
+    en('sec4'); renderAdvs(); setStep(4); toast('✅','항목이 저장되었습니다','success-t');
   };
 
   function getAdvLink(token){return `${location.origin}${location.pathname}?page=viewer&c=${campId}&t=${token}`;}
 
   window._aa=async function(){
-    const name=document.getElementById('aname').value.trim();
-    const max=parseInt(document.getElementById('amax').value)||0;
+    const name=document.getElementById('aname')?.value.trim();
+    const max=parseInt(document.getElementById('amax')?.value)||0;
     if(!name){toast('⚠️','광고주 이름을 입력하세요','error');return;}
     if(advs.find(a=>a.name===name)){toast('⚠️','이미 있는 광고주입니다','error');return;}
     const token=Math.random().toString(36).substr(2,10)+Date.now().toString(36);
     await setDoc(doc(db,'campaigns',campId,'advertisers',token),{name,token,maxSelect:max,createdAt:new Date().toISOString()});
     await setDoc(doc(db,'campaigns',campId),{advCount:advs.length+1},{merge:true});
     advs.push({id:token,name,token,maxSelect:max});
-    document.getElementById('aname').value='';
-    document.getElementById('amax').value='';
-    document.getElementById('st2').textContent=advs.length;
-    renderAdvs(); setStep(5); toast('✅',`${name} 링크가 생성되었습니다`);
+    const an=document.getElementById('aname'); if(an)an.value='';
+    const am=document.getElementById('amax'); if(am)am.value='';
+    const st2=document.getElementById('st2'); if(st2)st2.textContent=advs.length;
+    renderAdvs(); setStep(5); toast('✅',`${name} 링크가 생성되었습니다`,'success-t');
   };
 
   function renderAdvs(){
-    const list=document.getElementById('advList');
+    const list=document.getElementById('advList'); if(!list)return;
     if(!advs.length){list.innerHTML='<div class="empty">광고주를 추가하면 고유 링크가 생성됩니다</div>';return;}
     list.innerHTML=advs.map((a,i)=>{
       const lk=getAdvLink(a.token);
@@ -440,7 +924,7 @@ if (PAGE === 'admin') {
         <div class="adv-link" title="${lk}">${lk}</div>
         <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${lk}').then(()=>toast('✅','링크 복사됨'))">복사</button>
         <button class="btn btn-ghost btn-sm" onclick="window.open('${lk}','_blank')">열기</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--danger)" onclick="window._ra('${a.token}','${a.name}')">삭제</button>
+        <button class="btn btn-danger btn-sm" onclick="window._ra('${a.token}','${a.name}')">삭제</button>
       </div>`;
     }).join('');
   }
@@ -451,17 +935,17 @@ if (PAGE === 'admin') {
     renderAdvs(); toast('🗑️',`${name} 링크가 삭제되었습니다`);
   };
 
-  window._dconf=function(){document.getElementById('dconf').classList.add('show');};
+  window._dconf=function(){const d=document.getElementById('dconf');if(d)d.classList.add('show');};
   window._del=async function(){
     if(!campId)return;
-    for(const sub of['rows','advertisers']){
+    for(const sub of['rows','advertisers','selections','confirmed']){
       const snap=await getDocs(collection(db,'campaigns',campId,sub));
       for(const d of snap.docs) await deleteDoc(d.ref);
     }
     await deleteDoc(doc(db,'campaigns',campId));
     campId=null;rows=[];headers=[];advs=[];
-    document.getElementById('sec5').style.display='none';
-    document.getElementById('sec3').style.display='none';
+    const s5=document.getElementById('sec5');if(s5)s5.style.display='none';
+    const s3=document.getElementById('sec3');if(s3)s3.style.display='none';
     dis('sec2');dis('sec4');window._ru();setStep(1);
     toast('🗑️','캠페인이 삭제되었습니다');
     await loadCamps();
@@ -470,16 +954,13 @@ if (PAGE === 'admin') {
   await loadCamps();
 }
 
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // VIEWER PAGE
-// ══════════════════════════════════════════════════════════
-else if (PAGE === 'viewer') {
+// ══════════════════════════════════════════════════════
+async function renderViewer(userData) {
   let allData=[], visHeaders=[], adv=null, sels={}, filter='all', search='', isConf=false, maxSel=0;
-
   document.getElementById('root').innerHTML=`<div class="loading">데이터 불러오는 중...</div>`;
-
   if (!CAMP_ID||!TOKEN){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">404</div><p>링크가 올바르지 않습니다</p></div>`;return;}
-
   try{
     const advDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'advertisers',TOKEN));
     if(!advDoc.exists()){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">404</div><p>유효하지 않은 링크입니다</p></div>`;return;}
@@ -495,36 +976,33 @@ else if (PAGE === 'viewer') {
     sels=selDoc.exists()?selDoc.data().selections||{}:{};
     const confDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'confirmed',TOKEN));
     isConf=confDoc.exists();
-  }catch(e){
-    document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">!</div><p>데이터를 불러올 수 없습니다</p></div>`;return;
-  }
+  }catch(e){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">!</div><p>데이터를 불러올 수 없습니다</p></div>`;return;}
 
-  function renderViewer(){
+  function renderViewer2(){
     const selCnt=Object.values(sels).filter(v=>v==='selected').length;
     const rejCnt=Object.values(sels).filter(v=>v==='rejected').length;
     const total=allData.length;
     const pct=total?Math.round((selCnt+rejCnt)/total*100):0;
     document.getElementById('root').innerHTML=`
       <header>
-        <div class="logo"><div class="logo-dot"></div><div class="adv-name-badge" style="font-size:14px;font-weight:600">${adv.name} · 체험단 선정</div></div>
-        <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
-        <span style="font-size:11px;color:var(--text-sub)">${selCnt+rejCnt}/${total} 검토됨</span>
-        ${maxSel>0?`<span style="font-size:11px;color:${selCnt>=maxSel?'var(--danger)':'var(--success)'}">선정 ${selCnt}/${maxSel}명</span>`:''}
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost btn-sm" onclick="window._dl()">⬇ 다운로드</button>
-          ${isConf
-            ?`<button class="btn btn-success btn-sm">✅ 명단확정됨</button>`
-            :`<button class="btn btn-accent btn-sm" onclick="window._conf()">✔ 명단 확정</button>`}
+        <div class="logo"><div class="logo-dot"></div><div style="font-size:13px;font-weight:600">${adv.name} · 체험단 선정</div></div>
+        <div class="header-right">
+          <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:11px;color:var(--text-sub)">${selCnt+rejCnt}/${total}</span>
+          ${maxSel>0?`<span style="font-size:11px;color:${selCnt>=maxSel?'var(--danger)':'var(--success)'}">선정 ${selCnt}/${maxSel}명</span>`:''}
+          ${themeBtn()}
+          <button class="btn btn-ghost btn-sm" onclick="window._dlv()">⬇</button>
+          ${isConf?`<button class="btn btn-success btn-sm">✅ 확정됨</button>`:`<button class="btn btn-accent btn-sm" onclick="window._confv()">✔ 명단 확정</button>`}
         </div>
       </header>
       <div class="toolbar">
         <div style="display:flex;gap:6px;flex:1;flex-wrap:wrap">
-          <button class="filter-btn ${filter==='all'?'active':''}" onclick="window._sf('all')">전체 ${total}</button>
-          <button class="filter-btn ${filter==='pending'?'active':''}" onclick="window._sf('pending')">미검토 ${total-selCnt-rejCnt}</button>
-          <button class="filter-btn ${filter==='selected'?'sel-active':''}" onclick="window._sf('selected')">선정 ${selCnt}</button>
-          <button class="filter-btn ${filter==='rejected'?'rej-active':''}" onclick="window._sf('rejected')">탈락 ${rejCnt}</button>
+          <button class="filter-btn ${filter==='all'?'active':''}" onclick="window._sfv('all')">전체 ${total}</button>
+          <button class="filter-btn ${filter==='pending'?'active':''}" onclick="window._sfv('pending')">미검토 ${total-selCnt-rejCnt}</button>
+          <button class="filter-btn ${filter==='selected'?'sel-active':''}" onclick="window._sfv('selected')">선정 ${selCnt}</button>
+          <button class="filter-btn ${filter==='rejected'?'rej-active':''}" onclick="window._sfv('rejected')">탈락 ${rejCnt}</button>
         </div>
-        <input class="search-input" placeholder="🔍 검색..." value="${search}" oninput="search=this.value;window._rt()" id="si">
+        <input class="search-input" placeholder="🔍 검색..." value="${search}" oninput="search=this.value;window._rtv()" id="si">
       </div>
       <div class="table-wrap pb" id="tw"></div>
       <div class="bottom-bar">
@@ -534,19 +1012,16 @@ else if (PAGE === 'viewer') {
           <div class="bstat rej">탈락 <strong>${rejCnt}명</strong></div>
         </div>
         <div style="display:flex;gap:8px">
-          ${isConf
-            ?`<span style="font-size:12px;color:var(--success);padding:8px 0">✅ 명단이 확정되었습니다</span>`
-            :`<button class="btn btn-ghost btn-sm" onclick="window._rst()">전체초기화</button>
-              <button class="btn btn-accent btn-sm" onclick="window._conf()">✔ 명단 확정</button>`}
+          ${isConf?`<span style="font-size:12px;color:var(--success)">✅ 명단이 확정되었습니다</span>`:`<button class="btn btn-ghost btn-sm" onclick="window._rstv()">전체초기화</button><button class="btn btn-accent btn-sm" onclick="window._confv()">✔ 명단 확정</button>`}
         </div>
       </div>`;
-    window._rt();
+    window._rtv();
   }
 
-  window._rt=function(){
-    const tw=document.getElementById('tw'); if(!tw)return;
+  window._rtv=function(){
+    const tw=document.getElementById('tw');if(!tw)return;
     let filtered=allData.map((r,i)=>({r,i}));
-    if(filter!=='all') filtered=filtered.filter(({i})=>(sels[i]||null)===(filter==='pending'?null:filter));
+    if(filter!=='all')filtered=filtered.filter(({i})=>(sels[i]||null)===(filter==='pending'?null:filter));
     if(search.trim()){const q=search.trim().toLowerCase();filtered=filtered.filter(({r})=>visHeaders.some(h=>String(r[h]||'').toLowerCase().includes(q)));}
     if(!filtered.length){tw.innerHTML=`<div class="empty" style="padding:60px">🔍 조건에 맞는 체험단이 없습니다</div>`;return;}
     let html=`<table><thead><tr><th>#</th>${visHeaders.map(h=>`<th>${h}</th>`).join('')}<th>선정여부</th></tr></thead><tbody>`;
@@ -556,75 +1031,66 @@ else if (PAGE === 'viewer') {
         <td><span class="row-num">${i+1}</span></td>
         ${visHeaders.map(h=>`<td title="${r[h]||''}">${cell(r[h])}</td>`).join('')}
         <td><div class="action-cell">
-          <button class="btn-sel ${st==='selected'?'active':''}" onclick="window._ss(${i},'selected')" ${isConf?'disabled':''}>✓ 선정</button>
-          <button class="btn-rej ${st==='rejected'?'active':''}" onclick="window._ss(${i},'rejected')" ${isConf?'disabled':''}>✗ 탈락</button>
+          <button class="btn-sel ${st==='selected'?'active':''}" onclick="window._ssv(${i},'selected')" ${isConf?'disabled':''}>✓ 선정</button>
+          <button class="btn-rej ${st==='rejected'?'active':''}" onclick="window._ssv(${i},'rejected')" ${isConf?'disabled':''}>✗ 탈락</button>
         </div></td>
       </tr>`;
     });
     tw.innerHTML=html+'</tbody></table>';
   };
 
-  window._sf=function(f){filter=f;renderViewer();const si=document.getElementById('si');if(si){si.focus();}};
+  window._sfv=function(f){filter=f;renderViewer2();const si=document.getElementById('si');if(si)si.focus();};
 
-  window._ss=async function(i,status){
+  window._ssv=async function(i,status){
     if(isConf){toast('⚠️','명단이 확정되어 수정할 수 없습니다');return;}
     const sc=Object.values(sels).filter(v=>v==='selected').length;
     if(status==='selected'&&sels[i]!=='selected'&&maxSel>0&&sc>=maxSel){toast('⚠️',`선정 인원 제한(${maxSel}명)에 도달했습니다`);return;}
     if(sels[i]===status)delete sels[i]; else sels[i]=status;
     await setDoc(doc(db,'campaigns',CAMP_ID,'selections',TOKEN),{selections:sels,updatedAt:serverTimestamp()});
-    renderViewer();
+    renderViewer2();
   };
 
-  window._rst=async function(){
+  window._rstv=async function(){
     if(!confirm('모든 선정/탈락 표시를 초기화할까요?'))return;
     sels={};
     await setDoc(doc(db,'campaigns',CAMP_ID,'selections',TOKEN),{selections:{},updatedAt:serverTimestamp()});
-    renderViewer();
+    renderViewer2();
   };
 
-  window._conf=async function(){
+  window._confv=async function(){
     const sc=Object.values(sels).filter(v=>v==='selected').length;
     if(!sc){toast('⚠️','선정된 체험단이 없습니다');return;}
     if(!confirm(`선정 ${sc}명으로 명단을 확정하시겠습니까?`))return;
     await setDoc(doc(db,'campaigns',CAMP_ID,'confirmed',TOKEN),{
-      advertiserName:adv.name,token:TOKEN,confirmedAt:serverTimestamp(),
+      advertiserName:adv.name, token:TOKEN, confirmedAt:serverTimestamp(),
       selectedIndices:Object.keys(sels).filter(i=>sels[i]==='selected').map(Number)
     });
-    isConf=true;
-    toast('✅','명단이 확정되어 관리자에게 전송되었습니다');
-    setTimeout(()=>renderViewer(),400);
+    isConf=true; // ← 버그 수정: 즉시 반영
+    toast('✅','명단이 확정되어 관리자에게 전송되었습니다','success-t');
+    setTimeout(()=>renderViewer2(), 300);
   };
 
-  window._dl=function(){
+  window._dlv=function(){
     const rows2=allData.filter((_,i)=>sels[i]==='selected').map((r,idx)=>{
-      const o={순번:idx+1}; visHeaders.forEach(h=>o[h]=r[h]); return o;
+      const o={순번:idx+1};visHeaders.forEach(h=>o[h]=r[h]);return o;
     });
     if(!rows2.length){toast('⚠️','선정된 체험단이 없습니다');return;}
     const ws=XLSX.utils.json_to_sheet(rows2);
     const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'선정결과');
     XLSX.writeFile(wb,`${adv.name}_선정결과_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast('✅',`${rows2.length}명 결과를 다운로드했습니다`);
+    toast('✅',`${rows2.length}명 결과를 다운로드했습니다`,'success-t');
   };
 
-  renderViewer();
+  renderViewer2();
 }
 
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // RESULT PAGE
-// ══════════════════════════════════════════════════════════
-else if (PAGE === 'result') {
+// ══════════════════════════════════════════════════════
+async function renderResult(userData) {
   let camps=[], selCampId=null, campData={}, allData=[], advs=[], confMap={}, selToken=null;
-
-  document.getElementById('root').innerHTML=`
-    <header>
-      <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>결과확인</span></div></div>
-      <div class="header-nav">
-        <a class="nav-btn" href="${url('admin')}">🗂 관리자</a>
-        <a class="nav-btn active" href="${url('result')}">📋 결과확인</a>
-      </div>
-      <span class="badge badge-admin">ADMIN</span>
-    </header>
+  document.getElementById('root').innerHTML = renderHeader(userData) + `
     <main>
       <div class="card">
         <div class="section-title">캠페인 선택</div>
@@ -643,14 +1109,13 @@ else if (PAGE === 'result') {
     snap.forEach(d=>camps.push({id:d.id,...d.data()}));
     camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     renderCampTabs();
-    if(camps.length) await selCamp(camps[0].id);
-    else document.getElementById('ctabs').innerHTML='<div class="empty">캠페인이 없습니다</div>';
+    if(camps.length)await selCamp(camps[0].id);
+    else{const ct=document.getElementById('ctabs');if(ct)ct.innerHTML='<div class="empty">캠페인이 없습니다</div>';}
   }
 
   function renderCampTabs(){
-    document.getElementById('ctabs').innerHTML=camps.map(c=>
-      `<button class="camp-tab ${selCampId===c.id?'active':''}" onclick="window._rc('${c.id}')">${c.name}</button>`
-    ).join('');
+    const el=document.getElementById('ctabs');if(!el)return;
+    el.innerHTML=camps.map(c=>`<button class="camp-tab ${selCampId===c.id?'active':''}" onclick="window._rsc('${c.id}')">${c.name}</button>`).join('');
   }
 
   async function selCamp(id){
@@ -665,23 +1130,22 @@ else if (PAGE === 'result') {
     const cs=await getDocs(collection(db,'campaigns',id,'confirmed'));
     cs.forEach(d=>confMap[d.id]=d.data());
     renderCampTabs();
-    document.getElementById('advArea').style.display='block';
-    renderAdvTabs();
-    if(advs.length) await selAdv(advs[0].token);
-    else document.getElementById('rcontent').innerHTML='<div class="empty">등록된 광고주가 없습니다</div>';
+    const aa=document.getElementById('advArea');if(aa)aa.style.display='block';
+    renderAdvTabs2();
+    if(advs.length)await selAdv(advs[0].token);
+    else{const rc=document.getElementById('rcontent');if(rc)rc.innerHTML='<div class="empty">등록된 광고주가 없습니다</div>';}
   }
 
-  function renderAdvTabs(){
-    document.getElementById('atabs').innerHTML=advs.map(a=>
-      `<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._ra2('${a.token}')">
-        <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
-        ${a.name}${confMap[a.token]?' ✓':''}
-      </button>`
-    ).join('');
+  function renderAdvTabs2(){
+    const el=document.getElementById('atabs');if(!el)return;
+    el.innerHTML=advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
+      <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
+      ${a.name}${confMap[a.token]?' ✓':''}
+    </button>`).join('');
   }
 
   async function selAdv(token){
-    selToken=token; renderAdvTabs();
+    selToken=token; renderAdvTabs2();
     const a=advs.find(x=>x.token===token);
     const conf=confMap[token];
     const allHeaders=campData.headers||[];
@@ -693,9 +1157,10 @@ else if (PAGE === 'result') {
       if(sd.exists()){const s=sd.data().selections||{};selIdx=Object.keys(s).filter(i=>s[i]==='selected').map(Number);}
     }
     const selRows=selIdx.map(i=>({r:allData[i],i}));
-    const confAt=conf?new Date(conf.confirmedAt?.seconds*1000).toLocaleString('ko-KR'):null;
+    const confAt=conf&&conf.confirmedAt?new Date(conf.confirmedAt.seconds*1000).toLocaleString('ko-KR'):'';
     window._curRows=selRows; window._curAdv=a; window._allHeaders=allHeaders;
-    document.getElementById('rcontent').innerHTML=`
+    const rc=document.getElementById('rcontent');if(!rc)return;
+    rc.innerHTML=`
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
         <div>
           <div style="font-size:15px;font-weight:700">${a.name}</div>
@@ -703,30 +1168,24 @@ else if (PAGE === 'result') {
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           ${conf?`<div class="conf-badge">✅ 확정완료 · ${confAt}</div>`:'<div class="pend-badge">⏳ 미확정</div>'}
-          ${selRows.length?`<button class="btn btn-accent btn-sm" onclick="window._dlr()">⬇ 엑셀 다운로드</button>`:''}
+          ${selRows.length?`<button class="btn btn-accent btn-sm" onclick="window._dlr()">⬇ 엑셀</button>`:''}
         </div>
       </div>
       ${!selRows.length
         ?'<div class="empty" style="padding:40px">🔍 선정된 체험단이 없습니다</div>'
         :`<div class="rtable-wrap"><table class="rtable">
-          <thead><tr>
-            <th>#</th>
-            ${allHeaders.map(h=>`<th class="${h===kakaoCol?'private':''}">${h}${h===kakaoCol?' 🔒':''}</th>`).join('')}
-            ${kakaoCol?'<th>카카오 전송</th>':''}
-          </tr></thead>
-          <tbody>
-            ${selRows.map(({r},idx)=>`<tr>
-              <td><span class="row-num">${idx+1}</span></td>
-              ${allHeaders.map(h=>`<td title="${r[h]||''}">${cell(r[h])}</td>`).join('')}
-              ${kakaoCol?`<td style="display:flex;align-items:center;gap:6px">${r[kakaoCol]?`<span style="font-family:'DM Mono',monospace;font-size:11px">${r[kakaoCol]}</span><button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
-            </tr>`).join('')}
-          </tbody>
+          <thead><tr><th>#</th>${allHeaders.map(h=>`<th class="${h===kakaoCol?'private':''}">${h}${h===kakaoCol?' 🔒':''}</th>`).join('')}${kakaoCol?'<th>카카오</th>':''}</tr></thead>
+          <tbody>${selRows.map(({r},idx)=>`<tr>
+            <td><span class="row-num">${idx+1}</span></td>
+            ${allHeaders.map(h=>`<td title="${r[h]||''}">${cell(r[h])}</td>`).join('')}
+            ${kakaoCol?`<td>${r[kakaoCol]?`<button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
+          </tr>`).join('')}</tbody>
         </table></div>`
       }`;
   }
 
-  window._rc=async function(id){await selCamp(id);};
-  window._ra2=async function(t){await selAdv(t);};
+  window._rsc=async function(id){await selCamp(id);};
+  window._rsa=async function(t){await selAdv(t);};
   window._dlr=function(){
     const rows=window._curRows; const a=window._curAdv; const h=window._allHeaders;
     if(!rows||!rows.length)return;
@@ -735,13 +1194,43 @@ else if (PAGE === 'result') {
     const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'선정결과');
     XLSX.writeFile(wb,`${a.name}_최종결과_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast('✅',`${rows.length}명 최종 결과를 다운로드했습니다`);
+    toast('✅',`${rows.length}명 최종 결과를 다운로드했습니다`,'success-t');
   };
 
   await loadCamps2();
 }
 
-} // end main()
+// ══════════════════════════════════════════════════════
+// MAIN — AUTH STATE 확인 후 라우팅
+// ══════════════════════════════════════════════════════
+async function main() {
+  // viewer 페이지는 로그인 불필요 (링크 접속)
+  if (PAGE === 'viewer') {
+    await renderViewer(null);
+    return;
+  }
+  // login/register 페이지
+  if (PAGE === 'login') { await renderLogin(); return; }
+  if (PAGE === 'register') { await renderRegister(); return; }
+
+  // 나머지 페이지는 로그인 필요
+  document.getElementById('root').innerHTML = '<div class="loading">인증 확인 중...</div>';
+  
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { go('login'); return; }
+    currentUser = user;
+    currentUserData = await getUserData(user.uid);
+    if (!currentUserData) { await signOut(auth); go('login'); return; }
+    if (currentUserData.status === 'pending') { await signOut(auth); toast('⚠️','승인 대기 중입니다','error'); go('login'); return; }
+
+    if (PAGE === 'admin') await renderAdmin(currentUserData);
+    else if (PAGE === 'result') await renderResult(currentUserData);
+    else if (PAGE === 'members') await renderMembers(currentUserData);
+    else if (PAGE === 'profile') await renderProfile(currentUserData);
+    else go('admin');
+  });
+}
+
 main();
 </script>
 </body>
