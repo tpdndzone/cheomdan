@@ -769,8 +769,11 @@ async function renderAdmin(userData) {
 
   async function loadCamps() {
     const snap = await getDocs(collection(db,'campaigns'));
-    const camps = [];
+    let camps = [];
     snap.forEach(d => camps.push({id:d.id,...d.data()}));
+    if(userData.role !== 'super') {
+      camps = camps.filter(c => c.createdBy === currentUser.uid);
+    }
     camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     const list = document.getElementById('campList');
     if (!list) return;
