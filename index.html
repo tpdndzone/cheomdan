@@ -406,7 +406,12 @@ window._login = async function() {
       }
       go('viewer', `&c=${rc}&t=${rt}`); return;
     }
-    if (ud.role === 'advertiser') { go('viewer', `&c=${ud.campId||''}&t=${ud.token||''}`); return; }
+    if (ud.role === 'advertiser') {
+  if (ud.campId && ud.token) {
+    go('viewer', `&c=${ud.campId}&t=${ud.token}`); return;
+  }
+  go('advertiser-home'); return;
+}
     go('admin');
   } catch(e) {
     toast('❌','이메일 또는 비밀번호가 올바르지 않습니다','error');
