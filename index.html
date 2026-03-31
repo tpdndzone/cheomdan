@@ -396,6 +396,16 @@ window._login = async function() {
     const ud = await getUserData(cred.user.uid);
     if (!ud) { await signOut(auth); toast('⚠️','계정 정보를 찾을 수 없습니다','error'); return; }
     if (ud.status === 'pending') { await signOut(auth); toast('⚠️','승인 대기 중입니다. 관리자에게 문의하세요','error'); return; }
+    const redirect = params.get('redirect');
+    const rc = params.get('c');
+    const rt = params.get('t');
+    if (redirect === 'viewer' && rc && rt) {
+      // 광고주 계정에 campId, token 자동 저장
+      if (ud.role === 'advertiser') {
+        await setDoc(doc(db,'users',cred.user.uid), { campId:rc, token:rt }, { merge:true });
+      }
+      go('viewer', `&c=${rc}&t=${rt}`); return;
+    }
     if (ud.role === 'advertiser') { go('viewer', `&c=${ud.campId||''}&t=${ud.token||''}`); return; }
     go('admin');
   } catch(e) {
