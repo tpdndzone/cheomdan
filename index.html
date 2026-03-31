@@ -1390,6 +1390,7 @@ async function main() {
     if (currentUserData.status === 'pending') { await signOut(auth); toast('⚠️','승인 대기 중입니다','error'); go('login'); return; }
 
     if (PAGE === 'admin') await renderAdmin(currentUserData);
+    else if (PAGE === 'advertiser-home') await renderAdvertiserHome(currentUserData);
     else if (PAGE === 'result') await renderResult(currentUserData);
     else if (PAGE === 'members') await renderMembers(currentUserData);
     else if (PAGE === 'profile') await renderProfile(currentUserData);
