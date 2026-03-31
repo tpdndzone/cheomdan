@@ -1175,6 +1175,46 @@ async function renderViewer(userData) {
 }
 
 // ══════════════════════════════════════════════════════
+// ADVERTISER HOME PAGE
+// ══════════════════════════════════════════════════════
+async function renderAdvertiserHome(userData) {
+  document.getElementById('root').innerHTML = renderHeader(userData) + `
+    <main>
+      <div class="card" style="max-width:480px;margin:0 auto">
+        <div class="logo" style="margin-bottom:24px">
+          <div class="logo-dot"></div>
+          <div style="font-size:15px;font-weight:700">안녕하세요, ${userData.name}님 👋</div>
+        </div>
+        <p style="font-size:13px;color:var(--text-sub);margin-bottom:24px;line-height:1.7">대행사로부터 받은 체험단 선정 링크를 입력하시면<br>바로 리스트를 확인하실 수 있어요.</p>
+        <div class="section-title">선정 링크 입력</div>
+        <div class="row" style="margin-bottom:8px">
+          <input class="input" id="advLinkInput" placeholder="https://cheomdan.vercel.app/...">
+          <button class="btn btn-accent" onclick="window._goAdvLink()">입장</button>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);line-height:1.6">· 링크는 대행사에서 카카오톡 또는 이메일로 전달드립니다<br>· 링크가 없으신 경우 담당 대행사에 문의해주세요</p>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+        <div style="background:var(--surface2);border-radius:10px;padding:14px;font-size:12px;color:var(--text-sub);line-height:1.7">
+          <strong style="color:var(--text)">링크가 없으신가요?</strong><br>
+          체험단 선정 링크는 담당 대행사에서 개별적으로 발송해드립니다. 링크를 받지 못하셨다면 대행사 담당자에게 문의해주세요.
+        </div>
+      </div>
+    </main>`;
+}
+
+window._goAdvLink = function() {
+  const link = document.getElementById('advLinkInput').value.trim();
+  if (!link) { toast('⚠️','링크를 입력해주세요','error'); return; }
+  try {
+    const u = new URL(link);
+    const c = u.searchParams.get('c');
+    const t = u.searchParams.get('t');
+    if (!c || !t) { toast('⚠️','올바른 선정 링크가 아닙니다','error'); return; }
+    go('viewer', `&c=${c}&t=${t}`);
+  } catch(e) {
+    toast('⚠️','올바른 링크 형식이 아닙니다','error');
+  }
+};
+// ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
 // RESULT PAGE
 // ══════════════════════════════════════════════════════
