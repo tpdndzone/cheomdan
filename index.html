@@ -9,7 +9,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
 
-/* ── THEME VARIABLES ─────────────────────────────────── */
 :root {
   --bg: #0f0f0f;
   --surface: #181818;
@@ -54,7 +53,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; transition: background 0.2s, color 0.2s; }
 
-/* ── HEADER ──────────────────────────────────────────── */
 header { border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); backdrop-filter: blur(10px); z-index: 100; gap: 12px; }
 .logo { display: flex; align-items: center; gap: 8px; }
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
@@ -70,20 +68,16 @@ header { border-bottom: 1px solid var(--border); padding: 14px 24px; display: fl
 .badge-adv { color: var(--info); background: var(--info-dim); border: 1px solid var(--info); }
 .badge-pending { color: var(--danger); background: var(--danger-dim); border: 1px solid var(--danger); }
 
-/* ── THEME TOGGLE ────────────────────────────────────── */
 .theme-toggle { width: 36px; height: 20px; border-radius: 10px; background: var(--border); border: 1px solid var(--border); cursor: pointer; position: relative; transition: background 0.2s; display: flex; align-items: center; padding: 2px; }
 .theme-toggle::after { content: ''; width: 14px; height: 14px; border-radius: 50%; background: var(--text-sub); transition: transform 0.2s, background 0.2s; }
 [data-theme="light"] .theme-toggle { background: var(--accent-dim); border-color: var(--accent); }
 [data-theme="light"] .theme-toggle::after { transform: translateX(16px); background: var(--accent); }
 
-/* ── MAIN ────────────────────────────────────────────── */
 main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; }
 
-/* ── CARD ────────────────────────────────────────────── */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
 .section-title { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
 
-/* ── STEPS ───────────────────────────────────────────── */
 .steps { display: flex; }
 .step { flex: 1; padding: 10px 12px; font-size: 11px; color: var(--text-muted); border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 6px; }
 .step.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -92,7 +86,6 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .step.active .step-num { background: var(--accent); color: #0f0f0f; }
 .step.done .step-num { background: var(--success); color: #0f0f0f; }
 
-/* ── FORM ────────────────────────────────────────────── */
 .row { display: flex; gap: 10px; align-items: center; }
 .field { display: flex; flex-direction: column; gap: 5px; }
 .field label { font-size: 11px; color: var(--text-sub); }
@@ -101,7 +94,6 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .input::placeholder { color: var(--text-muted); }
 .input-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-/* ── BUTTONS ─────────────────────────────────────────── */
 .btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Pretendard', sans-serif; white-space: nowrap; }
 .btn-accent { background: var(--accent); color: #0f0f0f; }
 .btn-accent:hover { background: var(--accent-hover); }
@@ -113,34 +105,28 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .btn-sm { padding: 5px 11px; font-size: 11px; }
 .btn-full { width: 100%; justify-content: center; padding: 11px; }
 
-/* ── AUTH ────────────────────────────────────────────── */
 .auth-wrap { min-height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 400px; box-shadow: var(--shadow); }
 .auth-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
 .auth-card .auth-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 24px; }
 .auth-card .auth-sub a { color: var(--accent); cursor: pointer; text-decoration: none; }
-.auth-divider { text-align: center; font-size: 11px; color: var(--text-muted); margin: 16px 0; }
 .auth-link { width: 100%; text-align: center; font-size: 12px; color: var(--text-sub); cursor: pointer; background: none; border: none; font-family: 'Pretendard', sans-serif; margin-top: 12px; }
 .auth-link:hover { color: var(--text); }
 
-/* TYPE SELECT */
 .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.type-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.type-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 12px; cursor: pointer; transition: all 0.15s; }
 .type-card:hover { border-color: var(--text-muted); }
 .type-card.selected { border-color: var(--accent); background: var(--accent-dim); }
 .type-card .tc-icon { font-size: 22px; margin-bottom: 6px; }
 .type-card .tc-name { font-size: 13px; font-weight: 700; color: var(--text); }
-.type-card .tc-desc { font-size: 10px; color: var(--text-sub); margin-top: 2px; }
 .type-card.selected .tc-name { color: var(--accent); }
 
-/* ── CAMPAIGN LIST ───────────────────────────────────── */
 .camp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .camp-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.15s; }
 .camp-row:hover, .camp-row.active { border-color: var(--accent); background: var(--accent-dim); }
 .camp-name { flex: 1; font-weight: 600; font-size: 14px; }
 .camp-meta { font-size: 11px; color: var(--text-muted); }
 
-/* ── UPLOAD ──────────────────────────────────────────── */
 .upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 36px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
 .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: var(--accent-dim); }
 .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -152,32 +138,27 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .upload-ok strong { font-size: 13px; font-weight: 600; color: var(--success); }
 .upload-ok p { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
 
-/* ── STATS ───────────────────────────────────────────── */
 .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
 .stat-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
 .stat-box .num { font-size: 24px; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; }
 .stat-box .lbl { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
 
-/* ── PREVIEW TABLE ───────────────────────────────────── */
 .preview-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 10px; max-height: 180px; overflow-y: auto; }
 .ptable { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
 .ptable th { background: var(--surface2); color: var(--text-sub); font-weight: 500; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
 .ptable td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
 .ptable tr:last-child td { border-bottom: none; }
 
-/* ── COL CHECKS ──────────────────────────────────────── */
 .col-checks { display: flex; flex-wrap: wrap; gap: 8px; }
 .col-checks label { display: flex; align-items: center; gap: 7px; padding: 7px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 12px; }
 .col-checks input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; }
 
-/* ── ADVERTISER LIST ─────────────────────────────────── */
 .adv-list { display: flex; flex-direction: column; gap: 8px; }
 .adv-row { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; }
 .adv-idx { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); width: 20px; flex-shrink: 0; }
 .adv-name { flex: 1; font-weight: 500; font-size: 13px; }
 .adv-link { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* ── MEMBER LIST ─────────────────────────────────────── */
 .member-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
 .member-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .av-super { background: var(--accent-dim); color: var(--accent); }
@@ -188,8 +169,7 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .member-name { font-size: 13px; font-weight: 600; }
 .member-email { font-size: 11px; color: var(--text-sub); margin-top: 1px; }
 
-/* ── VIEWER TABLE ────────────────────────────────────── */
-.toolbar { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--surface); }
+/* RESULT / SELECTION TABLE */
 .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); font-size: 11px; font-family: 'Pretendard', sans-serif; cursor: pointer; transition: all 0.15s; }
 .filter-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 .filter-btn.sel-active { border-color: var(--success); color: var(--success); background: var(--success-dim); }
@@ -197,35 +177,7 @@ main { max-width: 960px; margin: 0 auto; padding: 28px 24px; display: flex; flex
 .search-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--text); font-size: 12px; font-family: 'Pretendard', sans-serif; outline: none; min-width: 160px; }
 .search-input:focus { border-color: var(--accent); }
 .search-input::placeholder { color: var(--text-muted); }
-.table-wrap { overflow-x: auto; overflow-y: auto; height: calc(100vh - 220px); }
-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-thead th { position: sticky; top: 0; background: var(--surface); color: var(--text-sub); font-weight: 500; font-size: 10px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; z-index: 10; }
-thead th:first-child { width: 48px; text-align: center; }
-thead th:last-child { width: 130px; }
-tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-tbody tr:hover { background: var(--surface2); }
-tbody tr.row-sel { background: var(--success-dim); }
-tbody tr.row-rej { background: var(--danger-dim); opacity: 0.7; }
-td { padding: 10px 14px; color: var(--text); white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
-td:first-child { text-align: center; }
-.row-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); }
-.action-cell { display: flex; gap: 5px; }
-.btn-sel, .btn-rej { padding: 4px 10px; border-radius: 6px; border: 1px solid; font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Pretendard', sans-serif; }
-.btn-sel { border-color: var(--success); color: var(--success); background: transparent; }
-.btn-sel:hover, .btn-sel.active { background: var(--success); color: #0f0f0f; }
-.btn-rej { border-color: var(--danger); color: var(--danger); background: transparent; }
-.btn-rej:hover, .btn-rej.active { background: var(--danger); color: #fff; }
-.btn-sel:disabled, .btn-rej:disabled { opacity: 0.35; cursor: not-allowed; }
-.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 14px; z-index: 100; }
-.bstats { display: flex; gap: 18px; }
-.bstat { font-size: 12px; color: var(--text-sub); }
-.bstat strong { font-weight: 600; }
-.bstat.sel strong { color: var(--success); }
-.bstat.rej strong { color: var(--danger); }
-.prog-wrap { flex: 1; max-width: 240px; background: var(--border); border-radius: 10px; height: 5px; overflow: hidden; }
-.prog-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.4s; }
 
-/* ── RESULT ──────────────────────────────────────────── */
 .camp-tabs, .adv-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
 .camp-tab, .adv-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); font-size: 12px; font-family: 'Pretendard', sans-serif; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
 .camp-tab:hover, .adv-tab:hover { border-color: var(--text-muted); color: var(--text); }
@@ -233,6 +185,7 @@ td:first-child { text-align: center; }
 .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .dot-ok { background: var(--success); }
 .dot-pending { background: var(--text-muted); }
+
 .rtable-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
 .rtable { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
 .rtable th { background: var(--surface2); color: var(--text-sub); font-weight: 500; font-size: 10px; padding: 10px 13px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
@@ -240,20 +193,27 @@ td:first-child { text-align: center; }
 .rtable td { padding: 10px 13px; color: var(--text); max-width: 200px; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid var(--border); }
 .rtable tr:last-child td { border-bottom: none; }
 .rtable tr:hover td { background: var(--surface2); }
+.rtable tr.row-sel td { background: var(--success-dim); }
+.rtable tr.row-rej td { background: var(--danger-dim); opacity: 0.7; }
+
+.btn-sel, .btn-rej { padding: 4px 10px; border-radius: 6px; border: 1px solid; font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Pretendard', sans-serif; }
+.btn-sel { border-color: var(--success); color: var(--success); background: transparent; }
+.btn-sel:hover, .btn-sel.active { background: var(--success); color: #0f0f0f; }
+.btn-rej { border-color: var(--danger); color: var(--danger); background: transparent; }
+.btn-rej:hover, .btn-rej.active { background: var(--danger); color: #fff; }
+.btn-sel:disabled, .btn-rej:disabled { opacity: 0.35; cursor: not-allowed; }
+
 .btn-kakao { padding: 3px 9px; border-radius: 6px; border: none; background: #FEE500; color: #3C1E1E; font-size: 10px; font-weight: 700; cursor: pointer; font-family: 'Pretendard', sans-serif; white-space: nowrap; }
 .conf-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; background: var(--success-dim); border: 1px solid var(--success); color: var(--success); font-size: 11px; font-weight: 600; }
 .pend-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; }
 
-/* ── DELETE CARD ─────────────────────────────────────── */
 .delete-card { background: var(--surface); border: 1px solid var(--danger-dim); border-radius: var(--radius); padding: 22px; }
 .del-confirm { background: var(--danger-dim); border: 1px solid var(--danger); border-radius: 10px; padding: 14px 18px; margin-top: 12px; display: none; }
 .del-confirm.show { display: block; }
 .del-confirm p { font-size: 13px; color: var(--danger); margin-bottom: 10px; }
 
-/* ── PROFILE ─────────────────────────────────────────── */
 .profile-sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
-/* ── TOAST ───────────────────────────────────────────── */
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-size: 13px; display: flex; align-items: center; gap: 8px; transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.error { border-color: var(--danger); }
@@ -263,7 +223,6 @@ td:first-child { text-align: center; }
 .loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
 .error-page { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; gap: 14px; color: var(--text-sub); text-align: center; }
 .error-code { font-family: 'DM Mono', monospace; font-size: 42px; color: var(--danger); }
-.pb { padding-bottom: 70px; }
 </style>
 </head>
 <body>
@@ -287,7 +246,6 @@ const app = initializeApp(FC);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// ── THEME ─────────────────────────────────────────────
 const savedTheme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
 window.toggleTheme = function() {
@@ -297,17 +255,14 @@ window.toggleTheme = function() {
   localStorage.setItem('theme', next);
 };
 
-// ── ROUTER ────────────────────────────────────────────
 const params = new URLSearchParams(location.search);
 const PAGE = params.get('page') || 'login';
 const CAMP_ID = params.get('c');
 const TOKEN = params.get('t');
 
-window.go = function(page, extra='') {
-location.href = `${location.pathname}?page=${page}${extra}`; }
+window.go = function(page, extra='') { location.href = `${location.pathname}?page=${page}${extra}`; }
 window.url = function(page, extra='') { return `${location.pathname}?page=${page}${extra}`; }
 
-// ── TOAST ─────────────────────────────────────────────
 let toastTimer;
 window.toast = function(icon, msg, type='') {
   const el = document.getElementById('toast');
@@ -318,19 +273,16 @@ window.toast = function(icon, msg, type='') {
   toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 };
 
-// ── CELL RENDER ───────────────────────────────────────
 function cell(v) {
   if (!v) return '-';
   return String(v).replace(/(https?:\/\/[^\s]+)/g, u =>
     `<a href="${u}" target="_blank" style="color:var(--accent);text-decoration:underline">${u}</a>`);
 }
 
-// ── THEME TOGGLE BUTTON ───────────────────────────────
 function themeBtn() {
   return `<button class="theme-toggle" onclick="toggleTheme()" title="테마 변경"></button>`;
 }
 
-// ── AUTH STATE ────────────────────────────────────────
 let currentUser = null;
 let currentUserData = null;
 
@@ -339,11 +291,11 @@ async function getUserData(uid) {
   return d.exists() ? d.data() : null;
 }
 
-// ── HEADER ────────────────────────────────────────────
 function renderHeader(userData) {
   const role = userData?.role;
   const isSuper = role === 'super';
   const isAgency = role === 'agency';
+  const isAdv = role === 'advertiser';
   const roleMap = { super: '총관리자', agency: '대행사', advertiser: '광고주' };
   const badgeClass = { super: 'badge-super', agency: 'badge-agency', advertiser: 'badge-adv' };
 
@@ -351,7 +303,7 @@ function renderHeader(userData) {
     <div class="logo"><div class="logo-dot"></div><div class="logo-text">체험단 <span>관리</span></div></div>
     <div class="header-right">
       ${(isSuper || isAgency) ? `<a class="nav-btn ${PAGE==='admin'?'active':''}" href="${url('admin')}">🗂 관리</a>` : ''}
-      ${(isSuper||isAgency) ? `<a class="nav-btn ${PAGE==='result'?'active':''}" href="${url('result')}">📋 결과</a>` : ''}
+      ${(isSuper || isAgency || isAdv) ? `<a class="nav-btn ${PAGE==='result'?'active':''}" href="${url('result')}">✔ 선정/결과</a>` : ''}
       ${isSuper ? `<a class="nav-btn ${PAGE==='members'?'active':''}" href="${url('members')}">👥 회원</a>` : ''}
       ${userData ? `<a class="nav-btn ${PAGE==='profile'?'active':''}" href="${url('profile')}">⚙ 내정보</a>` : ''}
       ${themeBtn()}
@@ -400,18 +352,12 @@ window._login = async function() {
     const rc = params.get('c');
     const rt = params.get('t');
     if (redirect === 'viewer' && rc && rt) {
-      // 광고주 계정에 campId, token 자동 저장
       if (ud.role === 'advertiser') {
         await setDoc(doc(db,'users',cred.user.uid), { campId:rc, token:rt }, { merge:true });
       }
-      go('viewer', `&c=${rc}&t=${rt}`); return;
+      go('result'); return;
     }
-    if (ud.role === 'advertiser') {
-  if (ud.campId && ud.token) {
-    go('viewer', `&c=${ud.campId}&t=${ud.token}`); return;
-  }
-  go('advertiser-home'); return;
-}
+    if (ud.role === 'advertiser') { go('result'); return; }
     go('admin');
   } catch(e) {
     toast('❌','이메일 또는 비밀번호가 올바르지 않습니다','error');
@@ -493,10 +439,7 @@ window.selectType = function(type) {
   selectedType = type;
   document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
   document.getElementById(`t-${type}`)?.classList.add('selected');
-
   const isAgency = type === 'agency';
-
-  // 대행사 카드
   document.getElementById('agency-active').style.display = isAgency ? 'block' : 'none';
   document.getElementById('agency-dim').style.display = isAgency ? 'none' : 'block';
   const tnAgency = document.getElementById('tn-agency');
@@ -507,8 +450,6 @@ window.selectType = function(type) {
     p.style.fontWeight = isAgency ? '500' : '400';
     p.style.color = isAgency ? 'var(--text)' : 'var(--text-sub)';
   });
-
-  // 광고주 카드
   document.getElementById('adv-active').style.display = isAgency ? 'none' : 'block';
   document.getElementById('adv-dim').style.display = isAgency ? 'block' : 'none';
   const tnAdv = document.getElementById('tn-advertiser');
@@ -562,7 +503,7 @@ window._register = async function() {
 };
 
 // ══════════════════════════════════════════════════════
-// MEMBERS PAGE (총관리자 전용)
+// MEMBERS PAGE
 // ══════════════════════════════════════════════════════
 async function renderMembers(userData) {
   if (userData?.role !== 'super') { go('login'); return; }
@@ -601,7 +542,6 @@ async function renderMembers(userData) {
       <button class="btn btn-accent btn-full" onclick="window._addMember()">추가</button>
     </div>
     <div id="modalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:199" onclick="document.getElementById('addMemberModal').style.display='none';document.getElementById('modalBg').style.display='none'"></div>`;
-
   await loadMembers();
 }
 
@@ -701,7 +641,6 @@ window._addMember = async function() {
     const cred = await createUserWithEmailAndPassword(auth, email, pw);
     await setDoc(doc(db,'users',cred.user.uid), { uid:cred.user.uid, name, company, email, role:addType, status:'active', createdAt:serverTimestamp() });
     await signOut(auth);
-    // re-login as super
     toast('✅',`${name} 회원이 추가되었습니다`,'success-t');
     document.getElementById('addMemberModal').style.display='none';
     document.getElementById('modalBg').style.display='none';
@@ -875,8 +814,7 @@ async function renderAdmin(userData) {
     const name = document.getElementById('cname')?.value.trim();
     if (!name) { toast('⚠️','캠페인 이름을 입력하세요','error'); return; }
     const id = 'camp_'+Date.now();
-    await setDoc(doc(db,'campaigns',id),{name,createdAt:serverTimestamp(),totalRows:0,advCount:0,createdBy:currentUser.uid}
-);
+    await setDoc(doc(db,'campaigns',id),{name,createdAt:serverTimestamp(),totalRows:0,advCount:0,createdBy:currentUser.uid});
     document.getElementById('cname').value='';
     toast('✅',`"${name}" 캠페인이 생성되었습니다`,'success-t');
     await loadCamps();
@@ -910,7 +848,6 @@ async function renderAdmin(userData) {
     }
   };
 
-  // Upload
   const uz = document.getElementById('uzone');
   if (uz) {
     uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
@@ -1044,216 +981,76 @@ async function renderAdmin(userData) {
 }
 
 // ══════════════════════════════════════════════════════
-// VIEWER PAGE
-// ══════════════════════════════════════════════════════
-async function renderViewer(userData) {
-  let allData=[], visHeaders=[], adv=null, sels={}, filter='all', search='', isConf=false, maxSel=0;
-  document.getElementById('root').innerHTML=`<div class="loading">데이터 불러오는 중...</div>`;
-  if (!CAMP_ID||!TOKEN){go('login',`&redirect=viewer&c=${CAMP_ID||''}&t=${TOKEN||''}`);return;}
-  try{
-    const advDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'advertisers',TOKEN));
-    if(!advDoc.exists()){go('login',`&redirect=viewer&c=${CAMP_ID}&t=${TOKEN}`);return;}
-    adv=advDoc.data(); maxSel=adv.maxSelect||0;
-    const campDoc=await getDoc(doc(db,'campaigns',CAMP_ID));
-    const campData=campDoc.data();
-    const allHeaders=campData.headers||[];
-    visHeaders=campData.visibleHeaders||allHeaders;
-    const rs=await getDocs(collection(db,'campaigns',CAMP_ID,'rows'));
-    rs.forEach(d=>allData.push(d.data()));
-    allData.sort((a,b)=>(a._index||0)-(b._index||0));
-    const selDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'selections',TOKEN));
-    sels=selDoc.exists()?selDoc.data().selections||{}:{};
-    const confDoc=await getDoc(doc(db,'campaigns',CAMP_ID,'confirmed',TOKEN));
-    isConf=confDoc.exists();
-  }catch(e){document.getElementById('root').innerHTML=`<div class="error-page"><div class="error-code">!</div><p>데이터를 불러올 수 없습니다</p></div>`;return;}
-
-  function renderViewer2(){
-    const selCnt=Object.values(sels).filter(v=>v==='selected').length;
-    const rejCnt=Object.values(sels).filter(v=>v==='rejected').length;
-    const total=allData.length;
-    const pct=total?Math.round((selCnt+rejCnt)/total*100):0;
-    document.getElementById('root').innerHTML=`
-      <header>
-        <div class="logo"><div class="logo-dot"></div><div style="font-size:13px;font-weight:600">${adv.name} · 체험단 선정</div></div>
-        <div class="header-right">
-          ${userData&&userData.role!=='advertiser'?`<a class="nav-btn" href="${url('admin')}">🗂 관리</a><a class="nav-btn" href="${url('result')}">📋 결과</a>`:''}
-          <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
-          <span style="font-size:11px;color:var(--text-sub)">${selCnt+rejCnt}/${total}</span>
-          ${maxSel>0?`<span style="font-size:11px;color:${selCnt>=maxSel?'var(--danger)':'var(--success)'}">선정 ${selCnt}/${maxSel}명</span>`:''}
-          ${themeBtn()}
-          <button class="btn btn-ghost btn-sm" onclick="window._dlv()">⬇</button>
-          ${isConf?`<button class="btn btn-success btn-sm">✅ 확정됨</button>`:`<button class="btn btn-accent btn-sm" onclick="window._confv()">✔ 명단 확정</button>`}
-        </div>
-      </header>
-      <div class="toolbar">
-        <div style="display:flex;gap:6px;flex:1;flex-wrap:wrap">
-          <button class="filter-btn ${filter==='all'?'active':''}" onclick="window._sfv('all')">전체 ${total}</button>
-          <button class="filter-btn ${filter==='pending'?'active':''}" onclick="window._sfv('pending')">미검토 ${total-selCnt-rejCnt}</button>
-          <button class="filter-btn ${filter==='selected'?'sel-active':''}" onclick="window._sfv('selected')">선정 ${selCnt}</button>
-          <button class="filter-btn ${filter==='rejected'?'rej-active':''}" onclick="window._sfv('rejected')">탈락 ${rejCnt}</button>
-        </div>
-        <input class="search-input" placeholder="🔍 검색..." value="${search}" oninput="search=this.value;window._rtv()" id="si">
-      </div>
-      <div class="table-wrap pb" id="tw"></div>
-      <div class="bottom-bar">
-        <div class="bstats">
-          <div class="bstat">총 <strong>${total}명</strong></div>
-          <div class="bstat sel">선정 <strong>${selCnt}명${maxSel>0?` / ${maxSel}명`:''}</strong></div>
-          <div class="bstat rej">탈락 <strong>${rejCnt}명</strong></div>
-        </div>
-        <div style="display:flex;gap:8px">
-          ${isConf?`<span style="font-size:12px;color:var(--success)">✅ 명단이 확정되었습니다</span>`:`<button class="btn btn-ghost btn-sm" onclick="window._rstv()">전체초기화</button><button class="btn btn-accent btn-sm" onclick="window._confv()">✔ 명단 확정</button>`}
-        </div>
-      </div>`;
-    window._rtv();
-  }
-
-  window._rtv=function(){
-    const tw=document.getElementById('tw');if(!tw)return;
-    let filtered=allData.map((r,i)=>({r,i}));
-    if(filter!=='all')filtered=filtered.filter(({i})=>(sels[i]||null)===(filter==='pending'?null:filter));
-    if(search.trim()){const q=search.trim().toLowerCase();filtered=filtered.filter(({r})=>visHeaders.some(h=>String(r[h]||'').toLowerCase().includes(q)));}
-    if(!filtered.length){tw.innerHTML=`<div class="empty" style="padding:60px">🔍 조건에 맞는 체험단이 없습니다</div>`;return;}
-    let html=`<table><thead><tr><th>#</th>${visHeaders.map(h=>`<th>${h}</th>`).join('')}<th>선정여부</th></tr></thead><tbody>`;
-    filtered.forEach(({r,i})=>{
-      const st=sels[i]||null;
-      html+=`<tr class="${st==='selected'?'row-sel':st==='rejected'?'row-rej':''}">
-        <td><span class="row-num">${i+1}</span></td>
-        ${visHeaders.map(h=>`<td title="${r[h]||''}">${cell(r[h])}</td>`).join('')}
-        <td><div class="action-cell">
-          <button class="btn-sel ${st==='selected'?'active':''}" onclick="window._ssv(${i},'selected')" ${isConf?'disabled':''}>✓ 선정</button>
-          <button class="btn-rej ${st==='rejected'?'active':''}" onclick="window._ssv(${i},'rejected')" ${isConf?'disabled':''}>✗ 탈락</button>
-        </div></td>
-      </tr>`;
-    });
-    tw.innerHTML=html+'</tbody></table>';
-  };
-
-  window._sfv=function(f){filter=f;renderViewer2();const si=document.getElementById('si');if(si)si.focus();};
-
-  window._ssv=async function(i,status){
-    if(isConf){toast('⚠️','명단이 확정되어 수정할 수 없습니다');return;}
-    const sc=Object.values(sels).filter(v=>v==='selected').length;
-    if(status==='selected'&&sels[i]!=='selected'&&maxSel>0&&sc>=maxSel){toast('⚠️',`선정 인원 제한(${maxSel}명)에 도달했습니다`);return;}
-    if(sels[i]===status)delete sels[i]; else sels[i]=status;
-    await setDoc(doc(db,'campaigns',CAMP_ID,'selections',TOKEN),{selections:sels,updatedAt:serverTimestamp()});
-    renderViewer2();
-  };
-
-  window._rstv=async function(){
-    if(!confirm('모든 선정/탈락 표시를 초기화할까요?'))return;
-    sels={};
-    await setDoc(doc(db,'campaigns',CAMP_ID,'selections',TOKEN),{selections:{},updatedAt:serverTimestamp()});
-    renderViewer2();
-  };
-
-  window._confv=async function(){
-    const sc=Object.values(sels).filter(v=>v==='selected').length;
-    if(!sc){toast('⚠️','선정된 체험단이 없습니다');return;}
-    if(!confirm(`선정 ${sc}명으로 명단을 확정하시겠습니까?`))return;
-    await setDoc(doc(db,'campaigns',CAMP_ID,'confirmed',TOKEN),{
-      advertiserName:adv.name, token:TOKEN, confirmedAt:serverTimestamp(),
-      selectedIndices:Object.keys(sels).filter(i=>sels[i]==='selected').map(Number)
-    });
-    isConf=true; // ← 버그 수정: 즉시 반영
-    toast('✅','명단이 확정되어 관리자에게 전송되었습니다','success-t');
-    setTimeout(()=>renderViewer2(), 300);
-  };
-
-  window._dlv=function(){
-    const rows2=allData.filter((_,i)=>sels[i]==='selected').map((r,idx)=>{
-      const o={순번:idx+1};visHeaders.forEach(h=>o[h]=r[h]);return o;
-    });
-    if(!rows2.length){toast('⚠️','선정된 체험단이 없습니다');return;}
-    const ws=XLSX.utils.json_to_sheet(rows2);
-    const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,'선정결과');
-    XLSX.writeFile(wb,`${adv.name}_선정결과_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast('✅',`${rows2.length}명 결과를 다운로드했습니다`,'success-t');
-  };
-
-  renderViewer2();
-}
-
-// ══════════════════════════════════════════════════════
-// ADVERTISER HOME PAGE
-// ══════════════════════════════════════════════════════
-async function renderAdvertiserHome(userData) {
-  document.getElementById('root').innerHTML = renderHeader(userData) + `
-    <main>
-      <div class="card" style="max-width:480px;margin:0 auto">
-        <div class="logo" style="margin-bottom:24px">
-          <div class="logo-dot"></div>
-          <div style="font-size:15px;font-weight:700">안녕하세요, ${userData.name}님 👋</div>
-        </div>
-        <p style="font-size:13px;color:var(--text-sub);margin-bottom:24px;line-height:1.7">대행사로부터 받은 체험단 선정 링크를 입력하시면<br>바로 리스트를 확인하실 수 있어요.</p>
-        <div class="section-title">선정 링크 입력</div>
-        <div class="row" style="margin-bottom:8px">
-          <input class="input" id="advLinkInput" placeholder="https://cheomdan.vercel.app/...">
-          <button class="btn btn-accent" onclick="window._goAdvLink()">입장</button>
-        </div>
-        <p style="font-size:11px;color:var(--text-muted);line-height:1.6">· 링크는 대행사에서 카카오톡 또는 이메일로 전달드립니다<br>· 링크가 없으신 경우 담당 대행사에 문의해주세요</p>
-        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
-        <div style="background:var(--surface2);border-radius:10px;padding:14px;font-size:12px;color:var(--text-sub);line-height:1.7">
-          <strong style="color:var(--text)">링크가 없으신가요?</strong><br>
-          체험단 선정 링크는 담당 대행사에서 개별적으로 발송해드립니다. 링크를 받지 못하셨다면 대행사 담당자에게 문의해주세요.
-        </div>
-      </div>
-    </main>`;
-}
-
-window._goAdvLink = async function() {
-  const link = document.getElementById('advLinkInput').value.trim();
-  if (!link) { toast('⚠️','링크를 입력해주세요','error'); return; }
-  try {
-    const u = new URL(link);
-    const c = u.searchParams.get('c');
-    const t = u.searchParams.get('t');
-    if (!c || !t) { toast('⚠️','올바른 선정 링크가 아닙니다','error'); return; }
-    await setDoc(doc(db,'users',currentUser.uid), { campId:c, token:t }, { merge:true });
-    go('viewer', `&c=${c}&t=${t}`);
-  } catch(e) {
-    toast('⚠️','올바른 링크 형식이 아닙니다','error');
-  }
-};
-// ══════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════
-// RESULT PAGE
+// RESULT / SELECTION PAGE (통합)
 // ══════════════════════════════════════════════════════
 async function renderResult(userData) {
-  let camps=[], selCampId=null, campData={}, allData=[], advs=[], confMap={}, selMap={}, selToken=null, curFilter='all';
-  document.getElementById('root').innerHTML = renderHeader(userData) + `
-    <main>
-      <div class="card">
-        <div class="section-title">캠페인 선택</div>
-        <div class="camp-tabs" id="ctabs"><div class="loading">불러오는 중...</div></div>
-        <div id="advArea" style="display:none">
-          <div class="section-title" style="margin-top:20px">광고주 선택</div>
-          <div class="adv-tabs" id="atabs"></div>
-          <div id="rcontent"></div>
-        </div>
-      </div>
-    </main>`;
+  const isAdv = userData?.role === 'advertiser';
+  const isSuper = userData?.role === 'super';
+  const isAgency = userData?.role === 'agency';
 
-  async function loadCamps2(){
-    const snap=await getDocs(collection(db,'campaigns'));
-    camps=[];
-    snap.forEach(d=>camps.push({id:d.id,...d.data()}));
-    if(userData.role==='agency'){
-      camps=camps.filter(c=>c.createdBy===currentUser.uid);
+  let camps=[], selCampId=null, campData={}, allData=[], advs=[], confMap={}, selMap={}, selToken=null, curFilter='all', curSels={}, curIsConf=false;
+
+  document.getElementById('root').innerHTML = renderHeader(userData) + `<main><div class="card" id="mainCard"><div class="loading">불러오는 중...</div></div></main>`;
+
+  async function loadData() {
+    if (isAdv) {
+      // 광고주: 연결된 캠페인만
+      if (!userData.campId || !userData.token) {
+        document.getElementById('mainCard').innerHTML = `
+          <div style="font-size:15px;font-weight:700;margin-bottom:20px">안녕하세요, ${userData.name}님 👋</div>
+          <p style="font-size:13px;color:var(--text-sub);margin-bottom:20px;line-height:1.7">대행사로부터 받은 체험단 선정 링크를 입력하시면 바로 리스트를 확인하실 수 있어요.</p>
+          <div class="section-title">선정 링크 입력</div>
+          <div class="row" style="margin-bottom:8px">
+            <input class="input" id="advLinkInput" placeholder="https://cheomdan.vercel.app/...">
+            <button class="btn btn-accent" onclick="window._goAdvLink()">입장</button>
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);line-height:1.6">· 링크는 대행사에서 카카오톡 또는 이메일로 전달드립니다<br>· 링크가 없으신 경우 담당 대행사에 문의해주세요</p>
+          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+          <div style="background:var(--surface2);border-radius:10px;padding:14px;font-size:12px;color:var(--text-sub);line-height:1.7">
+            <strong style="color:var(--text)">링크가 없으신가요?</strong><br>
+            체험단 선정 링크는 담당 대행사에서 개별적으로 발송해드립니다. 링크를 받지 못하셨다면 대행사 담당자에게 문의해주세요.
+          </div>`;
+        return;
+      }
+      // 연결된 캠페인 로드
+      const cd = await getDoc(doc(db,'campaigns',userData.campId));
+      if (!cd.exists()) { document.getElementById('mainCard').innerHTML='<div class="empty">연결된 캠페인을 찾을 수 없습니다</div>'; return; }
+      campData = cd.data();
+      const rs = await getDocs(collection(db,'campaigns',userData.campId,'rows'));
+      rs.forEach(d=>allData.push(d.data()));
+      allData.sort((a,b)=>(a._index||0)-(b._index||0));
+      const advDoc = await getDoc(doc(db,'campaigns',userData.campId,'advertisers',userData.token));
+      if (advDoc.exists()) advs = [{id:advDoc.id,...advDoc.data()}];
+      const confDoc = await getDoc(doc(db,'campaigns',userData.campId,'confirmed',userData.token));
+      if (confDoc.exists()) confMap[userData.token] = confDoc.data();
+      const selDoc = await getDoc(doc(db,'campaigns',userData.campId,'selections',userData.token));
+      if (selDoc.exists()) selMap[userData.token] = selDoc.data().selections||{};
+      selCampId = userData.campId;
+      renderAdvView(userData.token);
+    } else {
+      // 슈퍼/대행사: 캠페인 목록 로드
+      const snap = await getDocs(collection(db,'campaigns'));
+      camps = [];
+      snap.forEach(d=>camps.push({id:d.id,...d.data()}));
+      if (isAgency) camps = camps.filter(c=>c.createdBy===currentUser.uid);
+      camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+      if (!camps.length) { document.getElementById('mainCard').innerHTML='<div class="empty">캠페인이 없습니다</div>'; return; }
+      await selCamp(camps[0].id);
     }
-    camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    renderCampTabs();
-    if(camps.length) await selCamp(camps[0].id);
-    else{const ct=document.getElementById('ctabs');if(ct)ct.innerHTML='<div class="empty">캠페인이 없습니다</div>';}
   }
 
-  function renderCampTabs(){
-    const el=document.getElementById('ctabs');if(!el)return;
-    el.innerHTML=camps.map(c=>`<button class="camp-tab ${selCampId===c.id?'active':''}" onclick="window._rsc('${c.id}')">${c.name}</button>`).join('');
+  function renderCampTabs() {
+    return camps.map(c=>`<button class="camp-tab ${selCampId===c.id?'active':''}" onclick="window._rsc('${c.id}')">${c.name}</button>`).join('');
   }
 
-  async function selCamp(id){
+  function renderAdvTabs() {
+    return advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
+      <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
+      ${a.userName||'미연결'}${confMap[a.token]?' ✓':''}
+    </button>`).join('');
+  }
+
+  async function selCamp(id) {
     selCampId=id; selToken=null; allData=[]; advs=[]; confMap={}; selMap={};
     const cd=await getDoc(doc(db,'campaigns',id));
     campData=cd.data();
@@ -1272,54 +1069,64 @@ async function renderResult(userData) {
     cs.forEach(d=>confMap[d.id]=d.data());
     const ss=await getDocs(collection(db,'campaigns',id,'selections'));
     ss.forEach(d=>selMap[d.id]=d.data().selections||{});
-    renderCampTabs();
-    const aa=document.getElementById('advArea');if(aa)aa.style.display='block';
-    renderAdvTabs2();
-    if(advs.length) await selAdv(advs[0].token);
-    else{const rc=document.getElementById('rcontent');if(rc)rc.innerHTML='<div class="empty">등록된 광고주가 없습니다</div>';}
+    renderMainCard();
+    if(advs.length) renderAdvView(advs[0].token);
+    else { const rc=document.getElementById('rcontent'); if(rc)rc.innerHTML='<div class="empty">등록된 광고주가 없습니다</div>'; }
   }
 
-  function renderAdvTabs2(){
-    const el=document.getElementById('atabs');if(!el)return;
-    el.innerHTML=advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
-      <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
-      ${a.userName||'미연결'}${confMap[a.token]?' ✓':''}
-    </button>`).join('');
+  function renderMainCard() {
+    const mc = document.getElementById('mainCard');
+    if (!mc) return;
+    mc.innerHTML = `
+      <div class="section-title">캠페인 선택</div>
+      <div class="camp-tabs">${renderCampTabs()}</div>
+      <div class="section-title" style="margin-top:16px">광고주 선택</div>
+      <div class="adv-tabs" id="atabs">${renderAdvTabs()}</div>
+      <div id="rcontent"></div>`;
   }
 
-  async function selAdv(token){
-    selToken=token; curFilter='all'; renderAdvTabs2();
-    const a=advs.find(x=>x.token===token);
-    const conf=confMap[token];
-    const allHeaders=campData.headers||[];
-    const kakaoCol=allHeaders.find(h=>h.includes('카카오')||h.toLowerCase().includes('kakao'));
+  function renderAdvView(token) {
+    selToken = token;
+    // 탭 갱신
+    const atabs = document.getElementById('atabs');
+    if (atabs) atabs.innerHTML = renderAdvTabs();
 
-    let sels=selMap[token]||{};
-    if(conf && !Object.keys(sels).length){
-      const idxs=conf.selectedIndices||[];
+    const a = advs.find(x=>x.token===token);
+    if (!a) return;
+    const conf = confMap[token];
+    const allHeaders = campData.headers||[];
+    const visHeaders = isAdv ? (campData.visibleHeaders||allHeaders) : allHeaders;
+    const kakaoCol = allHeaders.find(h=>h.includes('카카오')||h.toLowerCase().includes('kakao'));
+
+    let sels = selMap[token]||{};
+    if (conf && !Object.keys(sels).length) {
+      const idxs = conf.selectedIndices||[];
       idxs.forEach(i=>sels[i]='selected');
     }
+    curSels = {...sels};
+    curIsConf = !!conf;
 
-    const selRows=allData.map((r,i)=>({r,i,status:sels[i]||'pending'}));
-    const selCnt=selRows.filter(x=>x.status==='selected').length;
-    const rejCnt=selRows.filter(x=>x.status==='rejected').length;
-    const pendCnt=selRows.filter(x=>x.status==='pending').length;
-    const confAt=conf&&conf.confirmedAt?new Date(conf.confirmedAt.seconds*1000).toLocaleString('ko-KR'):'';
+    const selRows = allData.map((r,i)=>({r,i,status:sels[i]||'pending'}));
+    const selCnt = selRows.filter(x=>x.status==='selected').length;
+    const rejCnt = selRows.filter(x=>x.status==='rejected').length;
+    const pendCnt = selRows.filter(x=>x.status==='pending').length;
+    const confAt = conf&&conf.confirmedAt?new Date(conf.confirmedAt.seconds*1000).toLocaleString('ko-KR'):'';
+    const maxSel = a.maxSelect||0;
 
-    window._curAllRows=selRows; window._curAdv=a; window._allHeaders=allHeaders; window._kakaoCol=kakaoCol;
+    window._curAllRows=selRows; window._curAdv=a; window._allHeaders=allHeaders; window._visHeaders=visHeaders; window._kakaoCol=kakaoCol; window._curCampId=selCampId; window._curToken=token;
 
-    const rc=document.getElementById('rcontent');if(!rc)return;
-    rc.innerHTML=`
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+    const rc = document.getElementById('rcontent');
+    if (!rc) return;
+
+    rc.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;margin-top:16px">
         <div>
-          <div style="font-size:15px;font-weight:700">${a.name}</div>
-          <div style="font-size:11px;color:var(--text-sub);margin-top:3px">총 ${allData.length}명${a.maxSelect?` · 최대 ${a.maxSelect}명`:''}</div>
+          <div style="font-size:15px;font-weight:700">${a.userName||a.name}</div>
+          <div style="font-size:11px;color:var(--text-sub);margin-top:3px">총 ${allData.length}명${maxSel?` · 최대 ${maxSel}명`:''}</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${conf
-            ?`<div class="conf-badge">✅ 확정완료 · ${confAt}</div>`
-            :`<div class="pend-badge">⏳ 미확정</div>`
-          }
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          ${conf?`<div class="conf-badge">✅ 확정완료 · ${confAt}</div>`:`<div class="pend-badge">⏳ 미확정</div>`}
+          ${!conf?`<button class="btn btn-accent btn-sm" onclick="window._confResult()">✔ 명단 확정</button>`:''}
           <button class="btn btn-ghost btn-sm" onclick="window._dlr()">⬇ 엑셀</button>
         </div>
       </div>
@@ -1331,11 +1138,12 @@ async function renderResult(userData) {
         <div class="stat-box"><div class="num" style="color:var(--text-muted)">${pendCnt}</div><div class="lbl">미검토</div></div>
       </div>
 
-      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="rfilters">
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center" id="rfilters">
         <button class="filter-btn ${curFilter==='all'?'active':''}" onclick="window._rfilt('all')">전체 ${allData.length}</button>
         <button class="filter-btn ${curFilter==='selected'?'sel-active':''}" onclick="window._rfilt('selected')">선정 ${selCnt}</button>
         <button class="filter-btn ${curFilter==='rejected'?'rej-active':''}" onclick="window._rfilt('rejected')">탈락 ${rejCnt}</button>
         <button class="filter-btn ${curFilter==='pending'?'active':''}" onclick="window._rfilt('pending')">미검토 ${pendCnt}</button>
+        <input class="search-input" id="rsearch" placeholder="🔍 검색..." style="margin-left:auto" oninput="window._rsearchFn()">
       </div>
 
       <div id="rtableWrap"></div>`;
@@ -1343,22 +1151,30 @@ async function renderResult(userData) {
     renderRTable();
   }
 
-  function renderRTable(){
-    const wrap=document.getElementById('rtableWrap');if(!wrap)return;
-    const rows=window._curAllRows||[];
-    const h=window._allHeaders||[];
-    const kakaoCol=window._kakaoCol;
-    let filtered=rows;
-    if(curFilter!=='all') filtered=rows.filter(x=>x.status===curFilter);
-    if(!filtered.length){wrap.innerHTML='<div class="empty" style="padding:32px">조건에 맞는 체험단이 없습니다</div>';return;}
+  function renderRTable() {
+    const wrap = document.getElementById('rtableWrap'); if(!wrap)return;
+    const rows = window._curAllRows||[];
+    const h = window._visHeaders||[];
+    const allH = window._allHeaders||[];
+    const kakaoCol = window._kakaoCol;
+    const conf = confMap[selToken];
+    const searchVal = document.getElementById('rsearch')?.value.toLowerCase()||'';
+
+    let filtered = rows;
+    if (curFilter!=='all') filtered = rows.filter(x=>x.status===curFilter);
+    if (searchVal) filtered = filtered.filter(({r})=>h.some(col=>String(r[col]||'').toLowerCase().includes(searchVal)));
+
+    if (!filtered.length) { wrap.innerHTML='<div class="empty" style="padding:32px">조건에 맞는 체험단이 없습니다</div>'; return; }
+
     wrap.innerHTML=`<div class="rtable-wrap"><table class="rtable">
       <thead><tr>
         <th>#</th>
-        ${h.map(col=>`<th class="${col===kakaoCol?'private':''}">${col}${col===kakaoCol?' 🔒':''}</th>`).join('')}
+        ${h.map(col=>`<th ${!isAdv&&col===kakaoCol?'class="private"':''}>${col}${!isAdv&&col===kakaoCol?' 🔒':''}</th>`).join('')}
         <th>상태</th>
-        ${kakaoCol?'<th>카카오</th>':''}
+        ${!isAdv&&kakaoCol?'<th>카카오</th>':''}
+        ${!conf?'<th>선정여부</th>':''}
       </tr></thead>
-      <tbody>${filtered.map(({r,i,status},idx)=>`<tr>
+      <tbody>${filtered.map(({r,i,status})=>`<tr class="${status==='selected'?'row-sel':status==='rejected'?'row-rej':''}">
         <td><span class="row-num">${i+1}</span></td>
         ${h.map(col=>`<td title="${r[col]||''}">${cell(r[col])}</td>`).join('')}
         <td>${
@@ -1368,18 +1184,24 @@ async function renderResult(userData) {
             ?'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;background:var(--danger-dim);color:var(--danger);font-size:10px;font-weight:600">✗ 탈락</span>'
             :'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;background:var(--surface2);color:var(--text-muted);font-size:10px">· 미검토</span>'
         }</td>
-        ${kakaoCol?`<td>${r[kakaoCol]?`<button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
+        ${!isAdv&&kakaoCol?`<td>${r[kakaoCol]?`<button class="btn-kakao" onclick="navigator.clipboard.writeText('${r[kakaoCol]}').then(()=>toast('✅','카카오톡 ID 복사됨'))">복사</button>`:'-'}</td>`:''}
+        ${!conf?`<td><div style="display:flex;gap:5px">
+          <button class="btn-sel ${status==='selected'?'active':''}" onclick="window._ssResult(${i},'selected')">✓ 선정</button>
+          <button class="btn-rej ${status==='rejected'?'active':''}" onclick="window._ssResult(${i},'rejected')">✗ 탈락</button>
+        </div></td>`:''}
       </tr>`).join('')}</tbody>
     </table></div>`;
   }
 
-  window._rfilt=function(f){
+  window._rsearchFn = function() { renderRTable(); };
+
+  window._rfilt = function(f) {
     curFilter=f;
     document.querySelectorAll('#rfilters .filter-btn').forEach(b=>b.className='filter-btn');
     const btns=document.querySelectorAll('#rfilters .filter-btn');
     const map=['all','selected','rejected','pending'];
-    btns.forEach((b,i)=>{
-      if(map[i]===f){
+    btns.forEach((b,idx)=>{
+      if(map[idx]===f){
         if(f==='selected') b.classList.add('sel-active');
         else if(f==='rejected') b.classList.add('rej-active');
         else b.classList.add('active');
@@ -1388,17 +1210,55 @@ async function renderResult(userData) {
     renderRTable();
   };
 
-  window._rsc=async function(id){await selCamp(id);};
-  window._rsa=async function(t){await selAdv(t);};
+  window._ssResult = async function(i, status) {
+    if (curIsConf) { toast('⚠️','명단이 확정되어 수정할 수 없습니다'); return; }
+    const campId = window._curCampId;
+    const token = window._curToken;
+    const a = advs.find(x=>x.token===token);
+    const maxSel = a?.maxSelect||0;
+    const sc = Object.values(curSels).filter(v=>v==='selected').length;
+    if (status==='selected'&&curSels[i]!=='selected'&&maxSel>0&&sc>=maxSel) { toast('⚠️',`선정 인원 제한(${maxSel}명)에 도달했습니다`); return; }
+    if (curSels[i]===status) delete curSels[i]; else curSels[i]=status;
+    await setDoc(doc(db,'campaigns',campId,'selections',token),{selections:curSels,updatedAt:serverTimestamp()});
+    selMap[token] = {...curSels};
+    // 화면 갱신
+    window._curAllRows = allData.map((r,idx)=>({r,i:idx,status:curSels[idx]||'pending'}));
+    renderRTable();
+    // 상태 카운트 갱신
+    const selCnt=Object.values(curSels).filter(v=>v==='selected').length;
+    const rejCnt=Object.values(curSels).filter(v=>v==='rejected').length;
+    const pendCnt=allData.length-selCnt-rejCnt;
+    document.querySelectorAll('#rfilters .filter-btn')[0].textContent=`전체 ${allData.length}`;
+    document.querySelectorAll('#rfilters .filter-btn')[1].textContent=`선정 ${selCnt}`;
+    document.querySelectorAll('#rfilters .filter-btn')[2].textContent=`탈락 ${rejCnt}`;
+    document.querySelectorAll('#rfilters .filter-btn')[3].textContent=`미검토 ${pendCnt}`;
+  };
 
-  window._dlr=function(){
-    const rows=window._curAllRows; const a=window._curAdv; const h=window._allHeaders;
-    if(!rows||!rows.length)return;
-    let filtered=rows;
-    if(curFilter!=='all') filtered=rows.filter(x=>x.status===curFilter);
-    if(!filtered.length){toast('⚠️','다운로드할 데이터가 없습니다');return;}
+  window._confResult = async function() {
+    const campId = window._curCampId;
+    const token = window._curToken;
+    const a = advs.find(x=>x.token===token);
+    const sc = Object.values(curSels).filter(v=>v==='selected').length;
+    if (!sc) { toast('⚠️','선정된 체험단이 없습니다'); return; }
+    if (!confirm(`선정 ${sc}명으로 명단을 확정하시겠습니까?`)) return;
+    await setDoc(doc(db,'campaigns',campId,'confirmed',token),{
+      advertiserName:a.name, token:token, confirmedAt:serverTimestamp(),
+      selectedIndices:Object.keys(curSels).filter(i=>curSels[i]==='selected').map(Number)
+    });
+    confMap[token] = { advertiserName:a.name, token, confirmedAt:{seconds:Date.now()/1000}, selectedIndices:Object.keys(curSels).filter(i=>curSels[i]==='selected').map(Number) };
+    curIsConf = true;
+    toast('✅','명단이 확정되었습니다','success-t');
+    renderAdvView(token);
+  };
+
+  window._dlr = function() {
+    const rows = window._curAllRows; const a = window._curAdv; const h = window._visHeaders;
+    if (!rows||!rows.length) return;
+    let filtered = rows;
+    if (curFilter!=='all') filtered = rows.filter(x=>x.status===curFilter);
+    if (!filtered.length) { toast('⚠️','다운로드할 데이터가 없습니다'); return; }
     const statusLabel={selected:'선정',rejected:'탈락',pending:'미검토'};
-    const data=filtered.map(({r,i,status},idx)=>{
+    const data = filtered.map(({r,i,status},idx)=>{
       const o={순번:idx+1,상태:statusLabel[status]||''};
       h.forEach(k=>o[k]=r[k]);
       return o;
@@ -1407,33 +1267,59 @@ async function renderResult(userData) {
     const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'결과');
     const filterName=curFilter==='all'?'전체':curFilter==='selected'?'선정':curFilter==='rejected'?'탈락':'미검토';
-    XLSX.writeFile(wb,`${a.name}_${filterName}_${new Date().toISOString().slice(0,10)}.xlsx`);
+    XLSX.writeFile(wb,`${a.userName||a.name}_${filterName}_${new Date().toISOString().slice(0,10)}.xlsx`);
     toast('✅',`${filtered.length}명 결과를 다운로드했습니다`,'success-t');
   };
 
-  await loadCamps2();
+  window._rsc = async function(id) { await selCamp(id); };
+  window._rsa = async function(t) { curFilter='all'; renderAdvView(t); };
+
+  window._goAdvLink = async function() {
+    const link = document.getElementById('advLinkInput')?.value.trim();
+    if (!link) { toast('⚠️','링크를 입력해주세요','error'); return; }
+    try {
+      const u = new URL(link);
+      const c = u.searchParams.get('c');
+      const t = u.searchParams.get('t');
+      if (!c || !t) { toast('⚠️','올바른 선정 링크가 아닙니다','error'); return; }
+      await setDoc(doc(db,'users',currentUser.uid), { campId:c, token:t }, { merge:true });
+      // 페이지 새로고침해서 연결된 캠페인 로드
+      location.reload();
+    } catch(e) {
+      toast('⚠️','올바른 링크 형식이 아닙니다','error');
+    }
+  };
+
+  await loadData();
 }
 
 // ══════════════════════════════════════════════════════
-// MAIN — AUTH STATE 확인 후 라우팅
+// MAIN
 // ══════════════════════════════════════════════════════
 async function main() {
-  // viewer 페이지는 로그인 불필요 (링크 접속)
+  // viewer URL 접속 시 result로 리다이렉트
   if (PAGE === 'viewer') {
     onAuthStateChanged(auth, async (user) => {
-      let ud = null;
-      if (user) { ud = await getUserData(user.uid); }
-      await renderViewer(ud);
+      if (!user) {
+        go('login', `&redirect=viewer&c=${CAMP_ID||''}&t=${TOKEN||''}`);
+        return;
+      }
+      const ud = await getUserData(user.uid);
+      if (!ud) { go('login'); return; }
+      // viewer URL의 c, t를 유저에 저장 후 result로
+      if (CAMP_ID && TOKEN && ud.role === 'advertiser') {
+        await setDoc(doc(db,'users',user.uid), { campId:CAMP_ID, token:TOKEN }, { merge:true });
+      }
+      go('result');
     });
     return;
   }
-  // login/register 페이지
+
   if (PAGE === 'login') { await renderLogin(); return; }
   if (PAGE === 'register') { await renderRegister(); return; }
 
-  // 나머지 페이지는 로그인 필요
   document.getElementById('root').innerHTML = '<div class="loading">인증 확인 중...</div>';
-  
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) { go('login'); return; }
     currentUser = user;
@@ -1442,7 +1328,6 @@ async function main() {
     if (currentUserData.status === 'pending') { await signOut(auth); toast('⚠️','승인 대기 중입니다','error'); go('login'); return; }
 
     if (PAGE === 'admin') await renderAdmin(currentUserData);
-    else if (PAGE === 'advertiser-home') await renderAdvertiserHome(currentUserData);
     else if (PAGE === 'result') await renderResult(currentUserData);
     else if (PAGE === 'members') await renderMembers(currentUserData);
     else if (PAGE === 'profile') await renderProfile(currentUserData);
