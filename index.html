@@ -353,7 +353,11 @@ window._login = async function() {
     const rt = params.get('t');
     if (redirect === 'viewer' && rc && rt) {
       if (ud.role === 'advertiser') {
-        await setDoc(doc(db,'users',cred.user.uid), { campId:rc, token:rt }, { merge:true });
+        const conns = ud.connections||[];
+        if (!conns.find(c=>c.campId===rc&&c.token===rt)) {
+          conns.push({campId:rc, token:rt});
+          await setDoc(doc(db,'users',cred.user.uid), { connections:conns }, { merge:true });
+        }
       }
       go('result'); return;
     }
@@ -480,8 +484,7 @@ window._register = async function() {
     const status = selectedType === 'advertiser' ? 'active' : 'pending';
     const userData = { uid:cred.user.uid, name, company, email, role:selectedType, status, createdAt:serverTimestamp() };
     if (selectedType === 'advertiser' && redirect === 'viewer' && rc && rt) {
-      userData.campId = rc;
-      userData.token = rt;
+      userData.connections = [{campId:rc, token:rt}];
     }
     await setDoc(doc(db,'users',cred.user.uid), userData);
     await signOut(auth);
@@ -992,10 +995,18 @@ async function renderResult(userData) {
 
   document.getElementById('root').innerHTML = renderHeader(userData) + `<main><div class="card" id="mainCard"><div class="loading">불러오는 중...</div></div></main>`;
 
+  // 슈퍼/대행사용 전체 광고주 맵
+  let allAdvMap = {}; // token -> adv info
+  // 광고주용 connections
+  let advConns = [];
+  let selConnIdx = 0;
+  let selAdvToken = null;
+
   async function loadData() {
     if (isAdv) {
-      // 광고주: 연결된 캠페인만
-      if (!userData.campId || !userData.token) {
+      // 광고주: connections 배열로 연결된 캠페인 목록
+      advConns = userData.connections||[];
+      if (!advConns.length) {
         document.getElementById('mainCard').innerHTML = `
           <div style="font-size:15px;font-weight:700;margin-bottom:20px">안녕하세요, ${userData.name}님 👋</div>
           <p style="font-size:13px;color:var(--text-sub);margin-bottom:20px;line-height:1.7">대행사로부터 받은 체험단 선정 링크를 입력하시면 바로 리스트를 확인하실 수 있어요.</p>
@@ -1012,77 +1023,181 @@ async function renderResult(userData) {
           </div>`;
         return;
       }
-      // 연결된 캠페인 로드
-      const cd = await getDoc(doc(db,'campaigns',userData.campId));
-      if (!cd.exists()) { document.getElementById('mainCard').innerHTML='<div class="empty">연결된 캠페인을 찾을 수 없습니다</div>'; return; }
-      campData = cd.data();
-      const rs = await getDocs(collection(db,'campaigns',userData.campId,'rows'));
-      rs.forEach(d=>allData.push(d.data()));
-      allData.sort((a,b)=>(a._index||0)-(b._index||0));
-      const advDoc = await getDoc(doc(db,'campaigns',userData.campId,'advertisers',userData.token));
-      if (advDoc.exists()) advs = [{id:advDoc.id,...advDoc.data()}];
-      const confDoc = await getDoc(doc(db,'campaigns',userData.campId,'confirmed',userData.token));
-      if (confDoc.exists()) confMap[userData.token] = confDoc.data();
-      const selDoc = await getDoc(doc(db,'campaigns',userData.campId,'selections',userData.token));
-      if (selDoc.exists()) selMap[userData.token] = selDoc.data().selections||{};
-      selCampId = userData.campId;
-      renderAdvView(userData.token);
+      // 연결된 캠페인 이름들 로드
+      const campNames = {};
+      for (const c of advConns) {
+        const cd = await getDoc(doc(db,'campaigns',c.campId));
+        if (cd.exists()) campNames[c.campId] = cd.data().name;
+      }
+      await selAdvConn(0, campNames);
     } else {
-      // 슈퍼/대행사: 캠페인 목록 로드
+      // 슈퍼/대행사: 모든 캠페인 로드 후 광고주별로 그룹핑
       const snap = await getDocs(collection(db,'campaigns'));
       camps = [];
       snap.forEach(d=>camps.push({id:d.id,...d.data()}));
       if (isAgency) camps = camps.filter(c=>c.createdBy===currentUser.uid);
       camps.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
       if (!camps.length) { document.getElementById('mainCard').innerHTML='<div class="empty">캠페인이 없습니다</div>'; return; }
-      await selCamp(camps[0].id);
+
+      // 모든 캠페인의 advertisers 로드
+      allAdvMap = {};
+      for (const camp of camps) {
+        const as = await getDocs(collection(db,'campaigns',camp.id,'advertisers'));
+        as.forEach(d=>{
+          const a = d.data();
+          if (!allAdvMap[a.token]) allAdvMap[a.token] = {...a, campsList:[]};
+          allAdvMap[a.token].campsList.push({campId:camp.id, campName:camp.name});
+        });
+      }
+      // 연결된 광고주 유저 정보 매핑
+      const us = await getDocs(query(collection(db,'users'),where('role','==','advertiser')));
+      us.forEach(d=>{
+        const ud = d.data();
+        const conns2 = ud.connections||[];
+        conns2.forEach(conn=>{
+          if (allAdvMap[conn.token]) {
+            allAdvMap[conn.token].userName = ud.company||ud.name;
+            allAdvMap[conn.token].linked = true;
+          }
+        });
+      });
+
+      renderAdvListView();
+      const firstToken = Object.keys(allAdvMap)[0];
+      if (firstToken) await selAdvFromMap(firstToken);
     }
   }
 
-  function renderCampTabs() {
-    return camps.map(c=>`<button class="camp-tab ${selCampId===c.id?'active':''}" onclick="window._rsc('${c.id}')">${c.name}</button>`).join('');
-  }
-
-  function renderAdvTabs() {
-    return advs.map(a=>`<button class="adv-tab ${selToken===a.token?'active':''}" onclick="window._rsa('${a.token}')">
-      <div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>
-      ${a.userName||'미연결'}${confMap[a.token]?' ✓':''}
-    </button>`).join('');
-  }
-
-  async function selCamp(id) {
-    selCampId=id; selToken=null; allData=[]; advs=[]; confMap={}; selMap={};
-    const cd=await getDoc(doc(db,'campaigns',id));
+  // 광고주용: connections 기반으로 캠페인 탭 + 내용 표시
+  async function selAdvConn(idx, campNames) {
+    selConnIdx = idx;
+    const conn = advConns[idx];
+    selCampId=conn.campId; allData=[]; advs=[]; confMap={}; selMap={};
+    const cd=await getDoc(doc(db,'campaigns',conn.campId));
+    if(!cd.exists()){return;}
     campData=cd.data();
-    const rs=await getDocs(collection(db,'campaigns',id,'rows'));
+    const rs=await getDocs(collection(db,'campaigns',conn.campId,'rows'));
     rs.forEach(d=>allData.push(d.data()));
     allData.sort((a,b)=>(a._index||0)-(b._index||0));
-    const as=await getDocs(collection(db,'campaigns',id,'advertisers'));
-    as.forEach(d=>advs.push({id:d.id,...d.data()}));
-    const us=await getDocs(query(collection(db,'users'),where('role','==','advertiser'),where('campId','==',id)));
-    us.forEach(d=>{
-      const ud=d.data();
-      const idx=advs.findIndex(a=>a.token===ud.token);
-      if(idx>=0){ advs[idx].userName=ud.company||ud.name; advs[idx].linked=true; }
-    });
-    const cs=await getDocs(collection(db,'campaigns',id,'confirmed'));
-    cs.forEach(d=>confMap[d.id]=d.data());
-    const ss=await getDocs(collection(db,'campaigns',id,'selections'));
-    ss.forEach(d=>selMap[d.id]=d.data().selections||{});
-    renderMainCard();
+    const advDoc=await getDoc(doc(db,'campaigns',conn.campId,'advertisers',conn.token));
+    if(advDoc.exists()) advs=[{id:advDoc.id,...advDoc.data()}];
+    const confDoc=await getDoc(doc(db,'campaigns',conn.campId,'confirmed',conn.token));
+    if(confDoc.exists()) confMap[conn.token]=confDoc.data();
+    const selDoc=await getDoc(doc(db,'campaigns',conn.campId,'selections',conn.token));
+    if(selDoc.exists()) selMap[conn.token]=selDoc.data().selections||{};
+
+    const mc=document.getElementById('mainCard');
+    if(!mc) return;
+    // campNames가 없으면 현재 campData에서
+    const names = campNames||{};
+    names[conn.campId] = campData.name;
+    mc.innerHTML=`
+      <div class="section-title">캠페인 선택</div>
+      <div class="camp-tabs">${advConns.map((c,i)=>`<button class="camp-tab ${i===idx?'active':''}" onclick="window._selConn(${i})">${names[c.campId]||c.campId}</button>`).join('')}</div>
+      <div id="rcontent" style="margin-top:8px"></div>`;
     if(advs.length) renderAdvView(advs[0].token);
-    else { const rc=document.getElementById('rcontent'); if(rc)rc.innerHTML='<div class="empty">등록된 광고주가 없습니다</div>'; }
+    else { const rc=document.getElementById('rcontent');if(rc)rc.innerHTML='<div class="empty">광고주 정보를 찾을 수 없습니다</div>'; }
   }
 
-  function renderMainCard() {
+  window._selConn = async function(idx) { await selAdvConn(idx, null); };
+
+  // 슈퍼/대행사용: 광고주 탭 먼저
+  function renderAdvListView() {
     const mc = document.getElementById('mainCard');
     if (!mc) return;
+    const linked = Object.values(allAdvMap).filter(a=>a.linked);
+    const unlinked = Object.values(allAdvMap).filter(a=>!a.linked);
     mc.innerHTML = `
-      <div class="section-title">캠페인 선택</div>
-      <div class="camp-tabs">${renderCampTabs()}</div>
-      <div class="section-title" style="margin-top:16px">광고주 선택</div>
-      <div class="adv-tabs" id="atabs">${renderAdvTabs()}</div>
+      <div class="section-title">광고주 선택</div>
+      <div class="adv-tabs" id="advMainTabs">
+        ${linked.map(a=>`<button class="adv-tab ${selAdvToken===a.token?'active':''}" onclick="window._selAdvMap('${a.token}')">
+          <div class="dot dot-ok"></div>${a.userName}
+        </button>`).join('')}
+        ${unlinked.length?`<button class="adv-tab ${selAdvToken==='__unlinked__'?'active':''}" onclick="window._selAdvMap('__unlinked__')">
+          <div class="dot dot-pending"></div>미연결 (${unlinked.length})
+        </button>`:''}
+      </div>
+      <div id="campTabsArea" style="margin-top:16px"></div>
       <div id="rcontent"></div>`;
+  }
+
+  async function selAdvFromMap(token) {
+    selAdvToken = token;
+    // 탭 active 갱신
+    document.querySelectorAll('#advMainTabs .adv-tab').forEach((b,i)=>{
+      b.classList.remove('active');
+    });
+    document.querySelectorAll('#advMainTabs .adv-tab').forEach(b=>{
+      if(b.textContent.includes(token==='__unlinked__'?'미연결':(allAdvMap[token]?.userName||'')) ) b.classList.add('active');
+    });
+
+    const campTabsArea = document.getElementById('campTabsArea');
+    if (!campTabsArea) return;
+
+    if (token === '__unlinked__') {
+      const unlinked = Object.values(allAdvMap).filter(a=>!a.linked);
+      const campIds = [...new Set(unlinked.map(a=>a.campsList[0]?.campId).filter(Boolean))];
+      campTabsArea.innerHTML = `<div class="section-title">캠페인 선택</div><div class="camp-tabs">${
+        campIds.map(cid=>{
+          const camp = camps.find(c=>c.id===cid);
+          return `<button class="camp-tab ${selCampId===cid?'active':''}" onclick="window._selCampUnlinked('${cid}')">${camp?.name||cid}</button>`;
+        }).join('')
+      }</div>`;
+      if (campIds.length) await selCampForAdv(campIds[0], '__unlinked__');
+    } else {
+      const a = allAdvMap[token];
+      campTabsArea.innerHTML = `<div class="section-title">캠페인 선택</div><div class="camp-tabs">${
+        a.campsList.map(c=>`<button class="camp-tab ${selCampId===c.campId?'active':''}" onclick="window._selCampLinked('${c.campId}','${token}')">${c.campName}</button>`).join('')
+      }</div>`;
+      if (a.campsList.length) await selCampForAdv(a.campsList[0].campId, token);
+    }
+  }
+
+  async function selCampForAdv(campId2, advToken) {
+    selCampId=campId2; selToken=null; allData=[]; advs=[]; confMap={}; selMap={};
+    // 캠페인 탭 active 갱신
+    document.querySelectorAll('#campTabsArea .camp-tab').forEach(b=>{
+      b.classList.toggle('active', b.textContent===(camps.find(c=>c.id===campId2)?.name||campId2));
+    });
+    const cd=await getDoc(doc(db,'campaigns',campId2));
+    campData=cd.data();
+    const rs=await getDocs(collection(db,'campaigns',campId2,'rows'));
+    rs.forEach(d=>allData.push(d.data()));
+    allData.sort((a,b)=>(a._index||0)-(b._index||0));
+
+    if (advToken === '__unlinked__') {
+      const as=await getDocs(collection(db,'campaigns',campId2,'advertisers'));
+      as.forEach(d=>{ const a=d.data(); if(!allAdvMap[a.token]?.linked) advs.push({id:d.id,...a}); });
+    } else {
+      const advDoc=await getDoc(doc(db,'campaigns',campId2,'advertisers',advToken));
+      if(advDoc.exists()) advs=[{id:advDoc.id,...advDoc.data(),userName:allAdvMap[advToken]?.userName}];
+    }
+    const cs=await getDocs(collection(db,'campaigns',campId2,'confirmed'));
+    cs.forEach(d=>confMap[d.id]=d.data());
+    const ss=await getDocs(collection(db,'campaigns',campId2,'selections'));
+    ss.forEach(d=>selMap[d.id]=d.data().selections||{});
+
+    const rc=document.getElementById('rcontent');
+    if(!rc) return;
+    if(!advs.length){rc.innerHTML='<div class="empty">광고주가 없습니다</div>';return;}
+    if(advs.length>1){
+      rc.innerHTML=`<div class="adv-tabs" style="margin-top:12px">${advs.map(a=>`<button class="adv-tab" onclick="window._rsa('${a.token}')"><div class="dot ${confMap[a.token]?'dot-ok':'dot-pending'}"></div>${a.userName||'미연결'}${confMap[a.token]?' ✓':''}</button>`).join('')}</div><div id="rcontent2"></div>`;
+      renderAdvView(advs[0].token);
+    } else {
+      renderAdvView(advs[0].token);
+    }
+  }
+
+  window._selAdvMap = async function(t) { await selAdvFromMap(t); };
+  window._selCampUnlinked = async function(cid) { await selCampForAdv(cid,'__unlinked__'); };
+  window._selCampLinked = async function(cid,t) { await selCampForAdv(cid,t); };
+
+  function renderCampTabs() { return ''; }
+  function renderAdvTabs() { return ''; }
+  function renderMainCard() {}
+
+  async function selCamp(id) {
+    await selCampForAdv(id, '__unlinked__');
   }
 
   function renderAdvView(token) {
@@ -1282,8 +1397,13 @@ async function renderResult(userData) {
       const c = u.searchParams.get('c');
       const t = u.searchParams.get('t');
       if (!c || !t) { toast('⚠️','올바른 선정 링크가 아닙니다','error'); return; }
-      await setDoc(doc(db,'users',currentUser.uid), { campId:c, token:t }, { merge:true });
-      // 페이지 새로고침해서 연결된 캠페인 로드
+      const udSnap = await getDoc(doc(db,'users',currentUser.uid));
+      const udData = udSnap.data();
+      const conns = udData.connections||[];
+      if (!conns.find(x=>x.campId===c&&x.token===t)) {
+        conns.push({campId:c, token:t});
+        await setDoc(doc(db,'users',currentUser.uid), { connections:conns }, { merge:true });
+      }
       location.reload();
     } catch(e) {
       toast('⚠️','올바른 링크 형식이 아닙니다','error');
@@ -1308,7 +1428,11 @@ async function main() {
       if (!ud) { go('login'); return; }
       // viewer URL의 c, t를 유저에 저장 후 result로
       if (CAMP_ID && TOKEN && ud.role === 'advertiser') {
-        await setDoc(doc(db,'users',user.uid), { campId:CAMP_ID, token:TOKEN }, { merge:true });
+        const conns = ud.connections||[];
+        if (!conns.find(c=>c.campId===CAMP_ID&&c.token===TOKEN)) {
+          conns.push({campId:CAMP_ID, token:TOKEN});
+          await setDoc(doc(db,'users',user.uid), { connections:conns }, { merge:true });
+        }
       }
       go('result');
     });
