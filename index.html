@@ -526,16 +526,30 @@ window._register = async function() {
   if (!name || !email || !pw) { toast('⚠️','필수 항목을 입력하세요','error'); return; }
   if (pw !== pw2) { toast('⚠️','비밀번호가 일치하지 않습니다','error'); return; }
   if (pw.length < 6) { toast('⚠️','비밀번호는 6자 이상이어야 합니다','error'); return; }
+  const redirect = params.get('redirect');
+  const rc = params.get('c');
+  const rt = params.get('t');
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pw);
     const status = selectedType === 'advertiser' ? 'active' : 'pending';
-    await setDoc(doc(db, 'users', cred.user.uid), {
-      uid: cred.user.uid, name, company, email, role: selectedType,
-      status, createdAt: serverTimestamp()
-    });
+    const userData = { uid:cred.user.uid, name, company, email, role:selectedType, status, createdAt:serverTimestamp() };
+    if (selectedType === 'advertiser' && redirect === 'viewer' && rc && rt) {
+      userData.campId = rc;
+      userData.token = rt;
+    }
+    await setDoc(doc(db,'users',cred.user.uid), userData);
     await signOut(auth);
-    toast('✅', selectedType === 'advertiser' ? '가입이 완료되었습니다. 바로 로그인하세요!' : '가입 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다', 'success-t');
-    setTimeout(() => go('login'), 2500);
+    if (selectedType === 'advertiser') {
+      toast('✅','가입이 완료되었습니다. 바로 로그인하세요!','success-t');
+      if (redirect === 'viewer' && rc && rt) {
+        setTimeout(() => go('login', `&redirect=viewer&c=${rc}&t=${rt}`), 2500);
+      } else {
+        setTimeout(() => go('login'), 2500);
+      }
+    } else {
+      toast('✅','가입 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다','success-t');
+      setTimeout(() => go('login'), 2500);
+    }
   } catch(e) {
     if (e.code === 'auth/email-already-in-use') toast('❌','이미 사용 중인 이메일입니다','error');
     else toast('❌','가입 중 오류가 발생했습니다','error');
