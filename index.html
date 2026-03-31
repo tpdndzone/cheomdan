@@ -787,7 +787,8 @@ async function renderAdmin(userData) {
     const name = document.getElementById('cname')?.value.trim();
     if (!name) { toast('⚠️','캠페인 이름을 입력하세요','error'); return; }
     const id = 'camp_'+Date.now();
-    await setDoc(doc(db,'campaigns',id),{name,createdAt:serverTimestamp(),totalRows:0,advCount:0});
+    await setDoc(doc(db,'campaigns',id),{name,createdAt:serverTimestamp(),totalRows:0,advCount:0,createdBy:currentUser.uid}
+);
     document.getElementById('cname').value='';
     toast('✅',`"${name}" 캠페인이 생성되었습니다`,'success-t');
     await loadCamps();
