@@ -1151,8 +1151,13 @@ async function renderResult(userData) {
     const allHeaders=campData.headers||[];
     const kakaoCol=allHeaders.find(h=>h.includes('카카오')||h.toLowerCase().includes('kakao'));
     let selIdx=[];
-    if(conf){selIdx=conf.selectedIndices||[];}
-    else{
+if(conf){
+      selIdx=conf.selectedIndices||[];
+      if(!selIdx.length){
+        const sd=await getDoc(doc(db,'campaigns',selCampId,'selections',token));
+        if(sd.exists()){const s=sd.data().selections||{};selIdx=Object.keys(s).filter(i=>s[i]==='selected').map(Number);}
+      }
+    } else {
       const sd=await getDoc(doc(db,'campaigns',selCampId,'selections',token));
       if(sd.exists()){const s=sd.data().selections||{};selIdx=Object.keys(s).filter(i=>s[i]==='selected').map(Number);}
     }
