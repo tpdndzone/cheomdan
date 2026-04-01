@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>창고 — 계정 관리</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c26;
+      --border: #2a2a3a; --accent: #c8f065; --accent2: #7b61ff;
+      --text: #e8e8f0; --muted: #6b6b80; --danger: #ff5f5f;
+      --warning: #f0a050; --success: #4caf82;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; pointer-events: none; z-index: 0; }
+    .container { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; padding: 40px 24px; }
+
+    /* 헤더 */
+    header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .logo span { color: var(--accent2); }
+    .badge { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+    .btn-workbench { background: transparent; border: 1px solid var(--accent); border-radius: 8px; padding: 10px 20px; color: var(--accent); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-workbench:hover { background: var(--accent); color: #0a0a0f; }
+
+    /* 탭 + 폴더 */
+    .nav-area { margin-bottom: 20px; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 0; }
+    .tab { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 18px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .tab:hover { border-color: var(--accent2); color: var(--accent2); }
+    .tab.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+    .tab.wishlist-tab { border-color: var(--warning); color: var(--warning); }
+    .tab.wishlist-tab.active { background: var(--warning); border-color: var(--warning); color: #0a0a0f; }
+    .folder-bar { display: none; flex-wrap: wrap; gap: 8px; padding: 14px 0 4px; border-top: 1px solid var(--border); margin-top: 12px; }
+    .folder-bar.open { display: flex; }
+    .folder-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .folder-chip:hover { border-color: var(--warning); color: var(--warning); }
+    .folder-chip.active { background: var(--warning); border-color: var(--warning); color: #0a0a0f; font-weight: 500; }
+    .folder-chip-add { border-color: var(--success); color: var(--success); }
+    .folder-chip-add:hover { background: var(--success); color: #0a0a0f; }
+
+    /* 툴바 */
+    .toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+    .search-box { flex: 1; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .search-box:focus { border-color: var(--accent2); }
+    .search-box::placeholder { color: var(--muted); }
+    .btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-green { border-color: var(--success); color: var(--success); }
+    .btn-green:hover { background: var(--success); color: #0a0a0f; }
+    .btn-red { border-color: var(--danger); color: var(--danger); }
+    .btn-red:hover { background: var(--danger); color: #fff; }
+
+    /* 컬럼 칩 */
+    .col-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+    .chip-label { font-size: 11px; color: var(--muted); }
+    .col-chip { padding: 4px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.2s; }
+    .col-chip.on { background: var(--surface2); border-color: var(--accent2); color: var(--text); }
+    .col-chip.custom-chip { border-color: var(--success); color: var(--success); }
+    .col-chip.custom-chip.on { background: rgba(76,175,130,0.15); }
+
+    /* 테이블 */
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .table-scroll { overflow-x: auto; max-height: 520px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
+    th { padding: 12px 14px; text-align: left; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    th.custom-th { color: var(--success); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    td { padding: 10px 14px; color: var(--text); vertical-align: middle; }
+    td.num { color: var(--accent); font-weight: 500; }
+    .url-btn { color: var(--accent2); text-decoration: none; font-size: 11px; padding: 2px 8px; border: 1px solid var(--accent2); border-radius: 4px; transition: all 0.2s; display: inline-block; white-space: nowrap; }
+    .url-btn:hover { background: var(--accent2); color: white; }
+    .email-chip { color: var(--warning); border: 1px solid rgba(240,160,80,0.4); border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; transition: all 0.2s; display: inline-block; }
+    .email-chip:hover { background: rgba(240,160,80,0.1); }
+    .cell-edit { cursor: pointer; border-radius: 4px; padding: 2px 4px; min-width: 60px; display: inline-block; }
+    .cell-edit:hover { background: rgba(123,97,255,0.15); }
+    .cell-edit input { background: var(--surface2); border: 1px solid var(--accent2); border-radius: 4px; padding: 3px 8px; font-size: 12px; color: var(--text); outline: none; font-family: 'DM Mono', monospace; min-width: 100px; }
+    .muted-val { color: var(--muted); font-size: 12px; }
+
+    /* 저장 버튼 드롭다운 */
+    .save-wrap { position: relative; display: inline-block; }
+    .save-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .save-btn:hover { border-color: var(--warning); color: var(--warning); }
+    .save-btn.saved { border-color: var(--success); color: var(--success); background: rgba(76,175,130,0.1); }
+    .save-menu { display: none; position: absolute; right: 0; top: calc(100% + 4px); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; min-width: 140px; z-index: 20; }
+    .save-menu.open { display: block; }
+    .save-menu-item { padding: 9px 14px; font-size: 12px; cursor: pointer; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.15s; white-space: nowrap; }
+    .save-menu-item:last-child { border-bottom: none; }
+    .save-menu-item:hover { background: var(--surface); }
+    .save-menu-item.in-folder { color: var(--success); }
+
+    /* 폴더뷰 헤더 */
+    .folder-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .folder-header-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+
+    /* 모달 */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 100; }
+    .modal { background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; min-width: 300px; }
+    .modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .modal input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; margin-bottom: 16px; }
+    .modal input:focus { border-color: var(--accent2); }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+
+    /* 토스트 */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--accent); transform: translateY(80px); opacity: 0; transition: all 0.3s ease; z-index: 200; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .empty-state { text-align: center; padding: 60px 40px; color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <div class="badge">창고</div>
+      <div class="logo">insta<span>store</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <div class="badge">계정 데이터 관리</div>
+      <a href="instaviewer.html" class="btn-workbench">← 작업대로 이동</a>
+    </div>
+  </header>
+
+  <!-- 탭 네비 -->
+  <div class="nav-area">
+    <div class="tabs">
+      <button class="tab active" id="tab-all" onclick="switchTab('all')">전체 목록</button>
+      <button class="tab wishlist-tab" id="tab-wishlist" onclick="toggleWishlist()">관심 목록 ▾</button>
+    </div>
+    <div class="folder-bar" id="folder-bar"></div>
+  </div>
+
+  <!-- 전체목록 뷰 -->
+  <div id="view-all">
+    <div class="toolbar">
+      <input class="search-box" id="searchBox" placeholder="검색..." oninput="doFilter(this.value)" />
+      <button class="btn btn-green" onclick="showAddCol()">+ 컬럼 추가</button>
+      <button class="btn" onclick="exportData()">↓ 내보내기</button>
+    </div>
+    <div class="col-chips" id="col-chips"></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table><thead><tr id="thead-all"></tr></thead><tbody id="tbody-all"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 폴더 뷰 -->
+  <div id="view-folder" style="display:none;">
+    <div class="folder-header">
+      <div class="folder-header-title" id="folder-view-title"></div>
+      <button class="btn btn-red" onclick="deleteFolder()">폴더 삭제</button>
+      <button class="btn" onclick="exportData(true)" style="margin-left:auto;">↓ 내보내기</button>
+    </div>
+    <div class="col-chips" id="col-chips-folder"></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table><thead><tr id="thead-folder"></tr></thead><tbody id="tbody-folder"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-area"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 상태 ──────────────────────────────────────────
+let data = [
+  { url:'https://instagram.com/mukstagram_a', username:'mukstagram_a', followers:48200, following:312, bio:'서울 맛집 탐방', email:'muk_a@gmail.com' },
+  { url:'https://youtube.com/@seoul_food_b',  username:'seoul_food_b',  followers:12800, following:890, bio:'성수 카페', email:'' },
+  { url:'https://tiktok.com/@tasty_c',        username:'tasty_c',        followers:5300,  following:421, bio:'먹을거 좋아해요', email:'tasty@naver.com' },
+  { url:'https://instagram.com/cafe_d',       username:'cafe_d',         followers:91000, following:204, bio:'카페 투어', email:'' },
+  { url:'https://clip.kakao.com/foodie_e',    username:'foodie_e',       followers:3100,  following:1200, bio:'', email:'food_e@gmail.com' },
+];
+
+let baseCols = ['url','username','followers','following','bio','email'];
+let colLabels = { url:'계정URL', username:'유저네임', followers:'팔로워수', following:'팔로잉수', bio:'소개(bio)', email:'이메일' };
+let colVisible = {};
+let customCols = [];
+let folders = [{ id:'f1', name:'A급', items:[] }, { id:'f2', name:'B급', items:[] }];
+let currentTab = 'all';
+let currentFolder = null;
+let filtered = [...data];
+let wishlistOpen = false;
+let openMenu = null;
+
+baseCols.forEach(c => colVisible[c] = true);
+
+// ── 플랫폼 감지 ───────────────────────────────────
+const PLATFORMS = [
+  { names:['instagram.com'], label:'인스타' }, { names:['youtube.com','youtu.be'], label:'유튜브' },
+  { names:['tiktok.com'], label:'틱톡' }, { names:['clip.kakao.com'], label:'클립' },
+  { names:['twitter.com','x.com'], label:'X' }, { names:['threads.net'], label:'스레드' },
+  { names:['facebook.com'], label:'페이스북' }, { names:['blog.naver.com','naver.com'], label:'네이버' },
+];
+function getPlatform(url) {
+  if (!url) return '링크';
+  const l = url.toLowerCase();
+  for (const p of PLATFORMS) if (p.names.some(n => l.includes(n))) return p.label;
+  return '링크';
+}
+
+// ── 컬럼 목록 ─────────────────────────────────────
+function getAllCols() { return [...baseCols, ...customCols.map(c=>c.key)]; }
+function getVisibleCols() { return getAllCols().filter(c => colVisible[c] !== false); }
+
+// ── 컬럼 칩 렌더 ──────────────────────────────────
+function renderChips(targetId) {
+  const wrap = document.getElementById(targetId);
+  if (!wrap) return;
+  wrap.innerHTML = '<span class="chip-label">컬럼:</span>' +
+    baseCols.map(c => `<span class="col-chip ${colVisible[c]!==false?'on':''}" onclick="toggleChip('${c}')">${colLabels[c]}</span>`).join('') +
+    customCols.map(c => `<span class="col-chip custom-chip ${colVisible[c.key]!==false?'on':''}" onclick="toggleChip('${c.key}')">${c.label}</span>`).join('');
+}
+function toggleChip(col) {
+  colVisible[col] = colVisible[col] === false ? true : false;
+  renderChips('col-chips');
+  renderChips('col-chips-folder');
+  if (currentTab === 'all') renderAll();
+  else renderFolder();
+}
+
+// ── 셀 렌더 ───────────────────────────────────────
+function renderCell(row, idx, col) {
+  const val = row[col] !== undefined ? row[col] : '';
+  if (col === 'url') {
+    return `<td onclick="startEdit(this,${idx},'${col}')">
+      ${val ? `<a class="url-btn" href="${val}" target="_blank" onclick="event.stopPropagation()">→ ${getPlatform(val)}</a>` : '<span class="muted-val">—</span>'}
+    </td>`;
+  }
+  if (col === 'email') {
+    return `<td onclick="startEdit(this,${idx},'${col}')">
+      ${val ? `<span class="email-chip" onclick="event.stopPropagation();copyEmail('${val}')">${val} 📋</span>` : '<span class="muted-val">—</span>'}
+    </td>`;
+  }
+  if (col === 'followers' || col === 'following') {
+    return `<td class="num" onclick="startEdit(this,${idx},'${col}')"><span class="cell-edit">${val ? Number(val).toLocaleString() : '<span class="muted-val">—</span>'}</span></td>`;
+  }
+  return `<td onclick="startEdit(this,${idx},'${col}')"><span class="cell-edit">${val || '<span class="muted-val">—</span>'}</span></td>`;
+}
+
+function startEdit(td, idx, col) {
+  const cur = data[idx][col] || '';
+  td.innerHTML = `<input value="${cur}" onblur="commitEdit(this,${idx},'${col}')" onkeydown="if(event.key==='Enter')this.blur()" />`;
+  td.querySelector('input').focus();
+}
+function commitEdit(input, idx, col) {
+  data[idx][col] = input.value;
+  if (currentTab === 'all') renderAll();
+  else renderFolder();
+  showToast('✅ 저장됨');
+}
+
+// ── 저장 버튼 ─────────────────────────────────────
+function renderSaveBtn(row) {
+  const inFolders = folders.filter(f => f.items.includes(row.username));
+  const isSaved = inFolders.length > 0;
+  return `<div class="save-wrap">
+    <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSaveMenu(event,'${row.username}')">
+      관심목록 저장 ${isSaved?'✓':''} ▾
+    </button>
+    <div class="save-menu" id="smenu-${row.username}">
+      ${folders.length
+        ? folders.map(f=>`<div class="save-menu-item ${f.items.includes(row.username)?'in-folder':''}" onclick="toggleFolderItem('${row.username}','${f.id}')">
+            ${f.items.includes(row.username)?'✓ ':''} ${f.name}
+          </div>`).join('')
+        : '<div class="save-menu-item muted-val">폴더를 먼저 추가하세요</div>'}
+    </div>
+  </div>`;
+}
+function toggleSaveMenu(e, username) {
+  e.stopPropagation();
+  const menu = document.getElementById('smenu-'+username);
+  if (openMenu && openMenu !== menu) openMenu.classList.remove('open');
+  menu.classList.toggle('open');
+  openMenu = menu.classList.contains('open') ? menu : null;
+}
+document.addEventListener('click', () => { if (openMenu) { openMenu.classList.remove('open'); openMenu = null; } });
+
+function toggleFolderItem(username, fid) {
+  const folder = folders.find(f=>f.id===fid);
+  if (!folder) return;
+  if (folder.items.includes(username)) folder.items = folder.items.filter(u=>u!==username);
+  else folder.items.push(username);
+  renderFolderBar();
+  renderAll();
+  if (currentTab === 'folder') renderFolder();
+  showToast(folder.items.includes(username) ? `✅ ${folder.name}에 저장됨` : `제거됨`);
+}
+
+// ── 전체목록 렌더 ─────────────────────────────────
+function renderAll() {
+  const cols = getVisibleCols();
+  document.getElementById('thead-all').innerHTML =
+    cols.map(c => { const isC=customCols.find(x=>x.key===c); return `<th class="${isC?'custom-th':''}">${isC?isC.label:colLabels[c]}</th>`; }).join('') + '<th>관심목록 저장</th>';
+  const rows = filtered;
+  document.getElementById('tbody-all').innerHTML = rows.length
+    ? rows.map(row => {
+        const idx = data.indexOf(row);
+        return `<tr>${cols.map(c=>renderCell(row,idx,c)).join('')}<td>${renderSaveBtn(row)}</td></tr>`;
+      }).join('')
+    : `<tr><td colspan="${cols.length+1}" class="empty-state">검색 결과가 없습니다</td></tr>`;
+}
+
+// ── 폴더뷰 렌더 ───────────────────────────────────
+function renderFolder() {
+  if (!currentFolder) return;
+  document.getElementById('folder-view-title').textContent = `🗂 ${currentFolder.name}  (${currentFolder.items.length}개)`;
+  const cols = getVisibleCols();
+  document.getElementById('thead-folder').innerHTML =
+    cols.map(c => { const isC=customCols.find(x=>x.key===c); return `<th class="${isC?'custom-th':''}">${isC?isC.label:colLabels[c]}</th>`; }).join('') + '<th></th>';
+  const rows = data.filter(r => currentFolder.items.includes(r.username));
+  document.getElementById('tbody-folder').innerHTML = rows.length
+    ? rows.map(row => {
+        const idx = data.indexOf(row);
+        return `<tr>${cols.map(c=>renderCell(row,idx,c)).join('')}
+          <td><button class="btn btn-red" style="font-size:11px;padding:4px 10px;" onclick="toggleFolderItem('${row.username}','${currentFolder.id}')">제거</button></td></tr>`;
+      }).join('')
+    : `<tr><td colspan="${cols.length+1}" class="empty-state">저장된 계정이 없습니다</td></tr>`;
+  renderChips('col-chips-folder');
+}
+
+// ── 탭 전환 ───────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  currentFolder = null;
+  wishlistOpen = false;
+  document.getElementById('tab-wishlist').textContent = '관심 목록 ▾';
+  document.getElementById('tab-wishlist').classList.remove('active');
+  document.getElementById('folder-bar').classList.remove('open');
+  document.getElementById('tab-all').classList.toggle('active', tab==='all');
+  document.getElementById('view-all').style.display = tab==='all' ? 'block' : 'none';
+  document.getElementById('view-folder').style.display = 'none';
+  if (tab === 'all') renderAll();
+}
+
+function toggleWishlist() {
+  wishlistOpen = !wishlistOpen;
+  const btn = document.getElementById('tab-wishlist');
+  btn.textContent = `관심 목록 ${wishlistOpen?'▴':'▾'}`;
+  btn.classList.toggle('active', wishlistOpen || currentTab==='folder');
+  document.getElementById('folder-bar').classList.toggle('open', wishlistOpen);
+  renderFolderBar();
+}
+
+function openFolder(fid) {
+  currentFolder = folders.find(f=>f.id===fid);
+  currentTab = 'folder';
+  document.getElementById('tab-all').classList.remove('active');
+  document.getElementById('tab-wishlist').classList.add('active');
+  document.getElementById('view-all').style.display = 'none';
+  document.getElementById('view-folder').style.display = 'block';
+  renderFolderBar();
+  renderFolder();
+}
+
+function renderFolderBar() {
+  const bar = document.getElementById('folder-bar');
+  bar.innerHTML = '<span style="font-size:11px;color:var(--muted);align-self:center;">폴더:</span>' +
+    folders.map(f=>`<span class="folder-chip ${currentFolder&&currentFolder.id===f.id?'active':''}" onclick="openFolder('${f.id}')">${f.name} <span style="opacity:0.6;font-size:10px;">${f.items.length}</span></span>`).join('') +
+    `<span class="folder-chip folder-chip-add" onclick="showAddFolder()">+ 폴더 추가</span>`;
+}
+
+function deleteFolder() {
+  if (!currentFolder) return;
+  if (!confirm(`"${currentFolder.name}" 폴더를 삭제할까요?`)) return;
+  folders = folders.filter(f=>f.id!==currentFolder.id);
+  switchTab('all');
+  showToast('폴더가 삭제됐습니다');
+}
+
+// ── 검색 ──────────────────────────────────────────
+function doFilter(q) {
+  filtered = q ? data.filter(r => Object.values(r).some(v=>String(v).toLowerCase().includes(q.toLowerCase()))) : [...data];
+  renderAll();
+}
+
+// ── 컬럼 추가 ─────────────────────────────────────
+function showAddCol() {
+  showModal('새 컬럼 추가', '컬럼 이름 (예: 카테고리, 검토여부)', name => {
+    const key = 'custom_'+Date.now();
+    customCols.push({ key, label: name });
+    colVisible[key] = true;
+    renderChips('col-chips');
+    renderChips('col-chips-folder');
+    renderAll();
+  });
+}
+
+// ── 폴더 추가 ─────────────────────────────────────
+function showAddFolder() {
+  showModal('새 폴더 추가', '폴더 이름 (예: A급, 먹스타그램)', name => {
+    folders.push({ id:'f'+Date.now(), name, items:[] });
+    renderFolderBar();
+    renderAll();
+    showToast(`✅ "${name}" 폴더 추가됨`);
+  });
+}
+
+// ── 내보내기 ──────────────────────────────────────
+function exportData(folderOnly) {
+  const rows = folderOnly && currentFolder ? data.filter(r=>currentFolder.items.includes(r.username)) : filtered;
+  const cols = getVisibleCols();
+  const out = rows.map(row => { const obj={}; cols.forEach(c=>{ obj[colLabels[c]||c]=row[c]||''; }); return obj; });
+  const ws = XLSX.utils.json_to_sheet(out);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `warehouse_${Date.now()}.xlsx`);
+  showToast(`✅ ${out.length}개 데이터 내보내기 완료!`);
+}
+
+// ── 유틸 ──────────────────────────────────────────
+function copyEmail(email) {
+  navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패'));
+}
+
+function showModal(title, placeholder, onConfirm) {
+  document.getElementById('modal-area').innerHTML = `
+    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">${title}</div>
+        <input id="modal-input" placeholder="${placeholder}" onkeydown="if(event.key==='Enter')confirmModal()" />
+        <div class="modal-btns">
+          <button class="btn" onclick="closeModal()">취소</button>
+          <button class="btn btn-green" onclick="confirmModal()">확인</button>
+        </div>
+      </div>
+    </div>`;
+  window._modalCb = onConfirm;
+  setTimeout(()=>document.getElementById('modal-input').focus(), 50);
+}
+function confirmModal() {
+  const val = document.getElementById('modal-input').value.trim();
+  if (!val) return;
+  closeModal();
+  if (window._modalCb) window._modalCb(val);
+}
+function closeModal() { document.getElementById('modal-area').innerHTML=''; }
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+
+// ── 초기화 ────────────────────────────────────────
+renderChips('col-chips');
+renderAll();
+</script>
+</body>
+</html>
