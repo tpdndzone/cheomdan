@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Insta Data Viewer — 작업대</title>
+  <title>작업대 — Insta Data Viewer</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
@@ -11,12 +11,12 @@
     :root {
       --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c26;
       --border: #2a2a3a; --accent: #c8f065; --accent2: #7b61ff;
-      --text: #e8e8f0; --muted: #6b6b80; --danger: #ff5f5f;
+      --text: #e8e8f0; --muted: #6b6b80; --danger: #ff5f5f; --success: #4caf82;
     }
     body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
     body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; pointer-events: none; z-index: 0; }
     .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 40px 24px; }
-    header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
     .logo { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
     .logo span { color: var(--accent); }
     .badge { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
@@ -39,6 +39,9 @@
     .btn:hover { border-color: var(--accent); color: var(--accent); }
     .btn-accent { background: var(--accent); border-color: var(--accent); color: #0a0a0f; font-weight: 500; }
     .btn-accent:hover { background: #b8e050; border-color: #b8e050; color: #0a0a0f; }
+    .btn-send { background: var(--surface); border: 1px solid var(--success); border-radius: 8px; padding: 10px 16px; color: var(--success); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-send:hover { background: var(--success); color: #0a0a0f; }
+    .btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
     .file-info { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; align-items: center; justify-content: space-between; gap: 16px; }
     .file-info.visible { display: flex; }
     .file-meta { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
@@ -47,24 +50,30 @@
     .file-stat b { color: var(--text); }
     .col-filter { display: none; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .col-filter.visible { display: flex; }
-    .col-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--surface); color: var(--muted); letter-spacing: 0.5px; }
+    .col-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--surface); color: var(--muted); }
     .col-chip.active { background: var(--accent); border-color: var(--accent); color: #0a0a0f; font-weight: 500; }
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
     .table-scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); }
-    th { padding: 14px 16px; text-align: left; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.2s; }
+    th { padding: 14px 16px; text-align: left; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.2s; }
     th:hover { color: var(--accent); }
-    th .sort-icon { margin-left: 4px; opacity: 0.4; }
-    th.sort-asc .sort-icon::after { content: ' ↑'; color: var(--accent); opacity: 1; }
-    th.sort-desc .sort-icon::after { content: ' ↓'; color: var(--accent); opacity: 1; }
+    th.sort-asc::after { content: ' ↑'; color: var(--accent); }
+    th.sort-desc::after { content: ' ↓'; color: var(--accent); }
     tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--surface2); }
-    td { padding: 12px 16px; color: var(--text); max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    tbody tr.selected { background: rgba(76,175,130,0.08); border-left: 2px solid var(--success); }
+    td { padding: 11px 16px; color: var(--text); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     td.num { color: var(--accent); font-weight: 500; text-align: right; }
     td a { color: var(--accent2); text-decoration: none; font-size: 12px; padding: 3px 10px; border: 1px solid var(--accent2); border-radius: 4px; transition: all 0.2s; display: inline-block; }
     td a:hover { background: var(--accent2); color: white; }
+    .send-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .send-btn:hover { border-color: var(--success); color: var(--success); }
+    .send-btn.sent { border-color: var(--success); color: var(--success); background: rgba(76,175,130,0.1); cursor: default; }
+    .chk { width: 14px; height: 14px; cursor: pointer; accent-color: var(--success); }
+    .email-chip { color: #f0a050; border: 1px solid #f0a05055; border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
+    .email-chip:hover { background: rgba(240,160,80,0.1); }
     .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); }
     .empty-state .icon { font-size: 40px; margin-bottom: 16px; }
     .empty-state p { font-size: 14px; }
@@ -76,9 +85,9 @@
     .page-btn:hover, .page-btn.active { border-color: var(--accent); color: var(--accent); }
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--accent); transform: translateY(80px); opacity: 0; transition: all 0.3s ease; z-index: 100; }
     .toast.show { transform: translateY(0); opacity: 1; }
-    .email-chip { color: #f0a050; border: 1px solid #f0a05055; border-radius: 4px; padding: 3px 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; display: inline-block; }
-    .email-chip:hover { background: #f0a05022; }
-    @media (max-width: 640px) { header { flex-direction: column; align-items: flex-start; gap: 8px; } .upload-zone { padding: 40px 20px; } }
+    .selected-bar { display: none; background: rgba(76,175,130,0.1); border: 1px solid var(--success); border-radius: 10px; padding: 12px 20px; margin-bottom: 16px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .selected-bar.visible { display: flex; }
+    .selected-info { font-size: 13px; color: var(--success); }
   </style>
 </head>
 <body>
@@ -104,7 +113,7 @@
   <div class="file-info" id="fileInfo">
     <div class="file-meta">
       <span class="file-name" id="fileName">—</span>
-      <span class="file-stat">총 <b id="totalCount">0</b>개 계정</span>
+      <span class="file-stat">총 <b id="totalCount">0</b>개</span>
       <span class="file-stat">표시 <b id="visibleCount">0</b>개</span>
     </div>
     <div style="display:flex;gap:8px;">
@@ -112,17 +121,27 @@
     </div>
   </div>
 
+  <!-- 선택 항목 바 -->
+  <div class="selected-bar" id="selectedBar">
+    <div class="selected-info" id="selectedInfo">0개 선택됨</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-send" onclick="sendSelectedToWarehouse()">🗄 선택 항목 창고로 보내기</button>
+      <button class="btn" onclick="clearSelection()" style="font-size:11px;padding:8px 12px;">선택 해제</button>
+    </div>
+  </div>
+
   <div class="controls" id="controls" style="display:none;">
-    <input type="text" class="search-box" id="searchBox" placeholder="유저네임 검색..."/>
-    <button class="btn" id="sortBtn" onclick="toggleSort()">↕ 정렬</button>
-    <button class="btn btn-accent" onclick="exportFiltered()">↓ 필터된 데이터 내보내기</button>
+    <input type="text" class="search-box" id="searchBox" placeholder="검색..."/>
+    <button class="btn" onclick="toggleSort()">↕ 정렬</button>
+    <button class="btn btn-accent" onclick="exportFiltered()">↓ 내보내기</button>
+    <button class="btn-send" onclick="sendAllToWarehouse()">🗄 전체 창고로 보내기</button>
   </div>
 
   <div class="col-filter" id="colFilter"></div>
 
   <div class="table-wrap" id="tableWrap" style="display:none;">
     <div class="table-scroll">
-      <table id="dataTable">
+      <table>
         <thead id="tableHead"></thead>
         <tbody id="tableBody"></tbody>
       </table>
@@ -140,30 +159,41 @@
 
 <script>
   let allData = [], columns = [], visibleCols = [], sortCol = null, sortDir = 'desc', currentPage = 1;
+  let selectedRows = new Set();
+  let sentRows = new Set();
   const PAGE_SIZE = 50;
+
   const URL_KEYWORDS = ['url', 'link', '링크', '주소', 'profile'];
   const NUM_KEYWORDS = ['팔로워', '팔로잉', 'followers', 'following', '게시물', 'posts', 'count', '수'];
   const PLATFORMS = [
-    { names: ['instagram.com'], label: '인스타' }, { names: ['youtube.com','youtu.be'], label: '유튜브' },
-    { names: ['tiktok.com'], label: '틱톡' }, { names: ['clip.kakao.com'], label: '클립' },
-    { names: ['twitter.com','x.com'], label: 'X' }, { names: ['threads.net'], label: '스레드' },
-    { names: ['facebook.com'], label: '페이스북' }, { names: ['blog.naver.com','naver.com'], label: '네이버' },
+    { names:['instagram.com'], label:'인스타' }, { names:['youtube.com','youtu.be'], label:'유튜브' },
+    { names:['tiktok.com'], label:'틱톡' }, { names:['clip.kakao.com'], label:'클립' },
+    { names:['twitter.com','x.com'], label:'X' }, { names:['threads.net'], label:'스레드' },
+    { names:['facebook.com'], label:'페이스북' }, { names:['blog.naver.com'], label:'네이버' },
   ];
-  function getPlatformLabel(url) {
+
+  function getPlatform(url) {
     if (!url) return '링크';
-    const lower = url.toLowerCase();
-    for (const p of PLATFORMS) { if (p.names.some(n => lower.includes(n))) return p.label; }
+    const l = url.toLowerCase();
+    for (const p of PLATFORMS) if (p.names.some(n => l.includes(n))) return p.label;
     return '링크';
   }
   function isUrlCol(col) { return URL_KEYWORDS.some(k => col.toLowerCase().includes(k)); }
   function isNumCol(col) { return NUM_KEYWORDS.some(k => col.toLowerCase().includes(k)); }
+
   const zone = document.getElementById('uploadZone');
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); const file = e.dataTransfer.files[0]; if (file) processFile(file); });
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); });
   zone.addEventListener('click', () => document.getElementById('fileInput').click());
   document.getElementById('fileInput').addEventListener('change', e => { if (e.target.files[0]) processFile(e.target.files[0]); });
-  function extractEmail(text) { if (!text) return ''; const match = String(text).match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/); return match ? match[0] : ''; }
+
+  function extractEmail(text) {
+    if (!text) return '';
+    const match = String(text).match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+    return match ? match[0] : '';
+  }
+
   function processFile(file) {
     const reader = new FileReader();
     reader.onload = e => {
@@ -172,8 +202,9 @@
       const json = XLSX.utils.sheet_to_json(ws, { defval: '' });
       if (!json.length) { showToast('⚠️ 데이터가 없습니다'); return; }
       const bioCol = Object.keys(json[0]).find(k => k.toLowerCase().includes('bio') || k.includes('소개'));
-      if (bioCol) { json.forEach(row => { row['이메일'] = extractEmail(row[bioCol]); }); }
-      allData = json; columns = Object.keys(json[0]); visibleCols = [...columns]; sortCol = null; currentPage = 1;
+      if (bioCol) json.forEach(row => { row['이메일'] = extractEmail(row[bioCol]); });
+      allData = json; columns = Object.keys(json[0]); visibleCols = [...columns];
+      sortCol = null; currentPage = 1; selectedRows = new Set(); sentRows = new Set();
       document.getElementById('fileName').textContent = file.name;
       document.getElementById('totalCount').textContent = allData.length.toLocaleString();
       document.getElementById('uploadZone').style.display = 'none';
@@ -185,73 +216,218 @@
     };
     reader.readAsArrayBuffer(file);
   }
+
   function renderColFilter() {
     const wrap = document.getElementById('colFilter');
     wrap.classList.add('visible');
-    wrap.innerHTML = '<span style="font-size:11px;color:var(--muted);align-self:center;margin-right:4px;">컬럼:</span>' + columns.map(col => `<div class="col-chip active" onclick="toggleCol('${col}', this)" data-col="${col}">${col}</div>`).join('');
+    wrap.innerHTML = '<span style="font-size:11px;color:var(--muted);align-self:center;margin-right:4px;">컬럼:</span>' +
+      columns.map(col => `<div class="col-chip active" onclick="toggleCol('${col}', this)">${col}</div>`).join('');
   }
+
   function toggleCol(col, el) {
     el.classList.toggle('active');
-    if (visibleCols.includes(col)) { visibleCols = visibleCols.filter(c => c !== col); }
-    else { visibleCols = columns.filter(c => visibleCols.includes(c) || c === col); }
+    if (visibleCols.includes(col)) visibleCols = visibleCols.filter(c => c !== col);
+    else visibleCols = columns.filter(c => visibleCols.includes(c) || c === col);
     renderTable();
   }
+
   function getFilteredData() {
     const q = document.getElementById('searchBox').value.toLowerCase().trim();
     let data = q ? allData.filter(row => Object.values(row).some(v => String(v).toLowerCase().includes(q))) : [...allData];
     if (sortCol) {
       data.sort((a, b) => {
-        let va = a[sortCol], vb = b[sortCol];
-        const na = parseFloat(String(va).replace(/,/g, '')), nb = parseFloat(String(vb).replace(/,/g, ''));
-        if (!isNaN(na) && !isNaN(nb)) return sortDir === 'asc' ? na - nb : nb - na;
-        return sortDir === 'asc' ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+        const na = parseFloat(String(a[sortCol]).replace(/,/g,'')), nb = parseFloat(String(b[sortCol]).replace(/,/g,''));
+        if (!isNaN(na) && !isNaN(nb)) return sortDir==='asc' ? na-nb : nb-na;
+        return sortDir==='asc' ? String(a[sortCol]).localeCompare(String(b[sortCol])) : String(b[sortCol]).localeCompare(String(a[sortCol]));
       });
     }
     return data;
   }
+
   function renderTable() {
     const data = getFilteredData();
     const total = data.length, totalPages = Math.ceil(total / PAGE_SIZE);
     if (currentPage > totalPages) currentPage = 1;
-    const pageData = data.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    const pageData = data.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
     document.getElementById('visibleCount').textContent = total.toLocaleString();
+
     const thead = document.getElementById('tableHead');
-    thead.innerHTML = `<tr>${visibleCols.map(col => `<th onclick="setSort('${col}')" class="${sortCol === col ? 'sort-' + sortDir : ''}">${col}<span class="sort-icon"></span></th>`).join('')}</tr>`;
+    thead.innerHTML = `<tr>
+      <th style="width:36px;"><input type="checkbox" class="chk" id="chk-all" onchange="toggleAll(this.checked)" /></th>
+      ${visibleCols.map(col => `<th onclick="setSort('${col}')" class="${sortCol===col?'sort-'+sortDir:''}">${col}</th>`).join('')}
+      <th>창고로 보내기</th>
+    </tr>`;
+
     const tbody = document.getElementById('tableBody');
-    if (!pageData.length) { document.getElementById('tableWrap').style.display = 'none'; document.getElementById('emptyState').style.display = 'block'; document.getElementById('pagination').innerHTML = ''; return; }
-    document.getElementById('tableWrap').style.display = 'block'; document.getElementById('emptyState').style.display = 'none';
-    tbody.innerHTML = pageData.map(row => `<tr>${visibleCols.map(col => {
-      const val = row[col] ?? '';
-      if (isUrlCol(col) && String(val).startsWith('http')) return `<td><a href="${val}" target="_blank" rel="noopener">→ ${getPlatformLabel(val)}</a></td>`;
-      if (isNumCol(col) && !isNaN(parseFloat(String(val).replace(/,/g, '')))) return `<td class="num">${Number(val).toLocaleString()}</td>`;
-      if (col === '이메일' && val) return `<td><span class="email-chip" onclick="copyEmail('${val}')" title="클릭하여 복사">${val} 📋</span></td>`;
-      return `<td title="${val}">${val}</td>`;
-    }).join('')}</tr>`).join('');
+    if (!pageData.length) {
+      document.getElementById('tableWrap').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'block';
+      return;
+    }
+    document.getElementById('tableWrap').style.display = 'block';
+    document.getElementById('emptyState').style.display = 'none';
+
+    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+
+    tbody.innerHTML = pageData.map((row, i) => {
+      const rowId = row[idCol] || i;
+      const isSel = selectedRows.has(rowId);
+      const isSent = sentRows.has(rowId);
+      return `<tr class="${isSel?'selected':''}">
+        <td><input type="checkbox" class="chk" ${isSel?'checked':''} onchange="toggleRow(this.checked,'${rowId}')" /></td>
+        ${visibleCols.map(col => {
+          const val = row[col] ?? '';
+          if (isUrlCol(col) && String(val).startsWith('http')) return `<td><a href="${val}" target="_blank" rel="noopener">→ ${getPlatform(val)}</a></td>`;
+          if (isNumCol(col) && !isNaN(parseFloat(String(val).replace(/,/g,'')))) return `<td class="num">${Number(val).toLocaleString()}</td>`;
+          if (col === '이메일' && val) return `<td><span class="email-chip" onclick="copyEmail('${val}')">${val} 📋</span></td>`;
+          return `<td title="${val}">${val}</td>`;
+        }).join('')}
+        <td>
+          <button class="send-btn ${isSent?'sent':''}" onclick="sendOneToWarehouse('${rowId}', this)" ${isSent?'disabled':''}>
+            ${isSent ? '✓ 전송됨' : '→ 창고로'}
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+
     renderPagination(total, totalPages);
+    updateSelectedBar();
   }
+
+  function toggleAll(checked) {
+    const data = getFilteredData();
+    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+    data.forEach((row, i) => {
+      const rowId = row[idCol] || i;
+      if (checked) selectedRows.add(rowId);
+      else selectedRows.delete(rowId);
+    });
+    renderTable();
+  }
+
+  function toggleRow(checked, rowId) {
+    if (checked) selectedRows.add(rowId);
+    else selectedRows.delete(rowId);
+    updateSelectedBar();
+    document.querySelectorAll('tbody tr').forEach(tr => {
+      const chk = tr.querySelector('.chk');
+      if (chk && chk.onchange) {
+        const id = chk.getAttribute('onchange').match(/'([^']+)'/)?.[1];
+        if (id === rowId) tr.classList.toggle('selected', checked);
+      }
+    });
+  }
+
+  function updateSelectedBar() {
+    const bar = document.getElementById('selectedBar');
+    const info = document.getElementById('selectedInfo');
+    if (selectedRows.size > 0) {
+      bar.classList.add('visible');
+      info.textContent = `${selectedRows.size}개 선택됨`;
+    } else {
+      bar.classList.remove('visible');
+    }
+  }
+
+  function clearSelection() { selectedRows.clear(); renderTable(); }
+
+  // ── 창고로 보내기 (Firebase 연동 전: localStorage 임시 저장) ──
+  function getWarehouseData() {
+    try { return JSON.parse(localStorage.getItem('warehouse_data') || '[]'); } catch { return []; }
+  }
+  function saveWarehouseData(data) { localStorage.setItem('warehouse_data', JSON.stringify(data)); }
+
+  function sendOneToWarehouse(rowId, btn) {
+    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+    const row = allData.find((r, i) => (r[idCol] || i) == rowId);
+    if (!row) return;
+    const warehouse = getWarehouseData();
+    const exists = warehouse.find(r => r[idCol] === row[idCol]);
+    if (!exists) warehouse.push({...row});
+    else Object.assign(exists, row);
+    saveWarehouseData(warehouse);
+    sentRows.add(rowId);
+    btn.textContent = '✓ 전송됨';
+    btn.classList.add('sent');
+    btn.disabled = true;
+    showToast(`✅ 창고로 보냈습니다!`);
+  }
+
+  function sendSelectedToWarehouse() {
+    if (!selectedRows.size) return;
+    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+    const warehouse = getWarehouseData();
+    let count = 0;
+    selectedRows.forEach(rowId => {
+      const row = allData.find((r, i) => (r[idCol] || i) == rowId);
+      if (!row) return;
+      const exists = warehouse.find(r => r[idCol] === row[idCol]);
+      if (!exists) warehouse.push({...row});
+      else Object.assign(exists, row);
+      sentRows.add(rowId);
+      count++;
+    });
+    saveWarehouseData(warehouse);
+    selectedRows.clear();
+    renderTable();
+    showToast(`✅ ${count}개를 창고로 보냈습니다!`);
+  }
+
+  function sendAllToWarehouse() {
+    if (!allData.length) return;
+    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+    const warehouse = getWarehouseData();
+    let count = 0;
+    getFilteredData().forEach(row => {
+      const exists = warehouse.find(r => r[idCol] === row[idCol]);
+      if (!exists) warehouse.push({...row});
+      else Object.assign(exists, row);
+      count++;
+    });
+    saveWarehouseData(warehouse);
+    allData.forEach((r, i) => sentRows.add(r[idCol] || i));
+    renderTable();
+    showToast(`✅ ${count}개 전체를 창고로 보냈습니다!`);
+  }
+
   function renderPagination(total, totalPages) {
     const pag = document.getElementById('pagination');
     if (totalPages <= 1) { pag.innerHTML = ''; return; }
-    const start = (currentPage - 1) * PAGE_SIZE + 1, end = Math.min(currentPage * PAGE_SIZE, total);
+    const start = (currentPage-1)*PAGE_SIZE+1, end = Math.min(currentPage*PAGE_SIZE, total);
     let pages = [];
-    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) pages.push(i);
-    pag.innerHTML = `<div class="page-info">${start.toLocaleString()} - ${end.toLocaleString()} / <b>${total.toLocaleString()}</b>개</div>
+    for (let i = Math.max(1, currentPage-2); i <= Math.min(totalPages, currentPage+2); i++) pages.push(i);
+    pag.innerHTML = `<div class="page-info">${start} - ${end} / <b>${total}</b>개</div>
       <div class="page-btns">
-        <button class="page-btn" onclick="goPage(1)" ${currentPage===1?'disabled':''}>«</button>
-        <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>
-        ${pages.map(p => `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')}
-        <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>
-        <button class="page-btn" onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>
+        <button class="page-btn" onclick="goPage(1)">«</button>
+        <button class="page-btn" onclick="goPage(${currentPage-1})">‹</button>
+        ${pages.map(p=>`<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')}
+        <button class="page-btn" onclick="goPage(${currentPage+1})">›</button>
+        <button class="page-btn" onclick="goPage(${totalPages})">»</button>
       </div>`;
   }
-  function goPage(p) { const data = getFilteredData(); const totalPages = Math.ceil(data.length / PAGE_SIZE); if (p < 1 || p > totalPages) return; currentPage = p; renderTable(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function setSort(col) { if (sortCol === col) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; } else { sortCol = col; sortDir = 'desc'; } currentPage = 1; renderTable(); }
-  function toggleSort() { if (!sortCol && columns.length) { const numCol = columns.find(c => isNumCol(c)); sortCol = numCol || columns[0]; sortDir = 'desc'; } else { sortDir = sortDir === 'desc' ? 'asc' : 'desc'; } currentPage = 1; renderTable(); }
-  document.getElementById('searchBox').addEventListener('input', () => { currentPage = 1; renderTable(); });
-  function exportFiltered() { const data = getFilteredData().map(row => { const obj = {}; visibleCols.forEach(c => obj[c] = row[c]); return obj; }); const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Sheet1'); XLSX.writeFile(wb, `filtered_${Date.now()}.xlsx`); showToast(`✅ ${data.length}개 데이터 내보내기 완료!`); }
-  function resetAll() { allData = []; columns = []; visibleCols = []; sortCol = null; currentPage = 1; document.getElementById('uploadZone').style.display = 'block'; document.getElementById('fileInfo').classList.remove('visible'); document.getElementById('controls').style.display = 'none'; document.getElementById('colFilter').classList.remove('visible'); document.getElementById('tableWrap').style.display = 'none'; document.getElementById('emptyState').style.display = 'none'; document.getElementById('fileInput').value = ''; document.getElementById('searchBox').value = ''; }
-  function copyEmail(email) { navigator.clipboard.writeText(email).then(() => { showToast(`📋 복사됨: ${email}`); }).catch(() => { showToast('⚠️ 복사 실패'); }); }
-  function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+  function goPage(p) { const d = getFilteredData(); const tp = Math.ceil(d.length/PAGE_SIZE); if (p<1||p>tp) return; currentPage=p; renderTable(); window.scrollTo({top:0,behavior:'smooth'}); }
+  function setSort(col) { if (sortCol===col) sortDir=sortDir==='asc'?'desc':'asc'; else { sortCol=col; sortDir='desc'; } currentPage=1; renderTable(); }
+  function toggleSort() { if (!sortCol && columns.length) { const n=columns.find(c=>isNumCol(c)); sortCol=n||columns[0]; sortDir='desc'; } else { sortDir=sortDir==='desc'?'asc':'desc'; } currentPage=1; renderTable(); }
+  document.getElementById('searchBox').addEventListener('input', () => { currentPage=1; renderTable(); });
+
+  function exportFiltered() {
+    const data = getFilteredData().map(row => { const obj={}; visibleCols.forEach(c=>obj[c]=row[c]); return obj; });
+    const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `export_${Date.now()}.xlsx`); showToast(`✅ ${data.length}개 내보내기 완료!`);
+  }
+
+  function resetAll() {
+    allData=[]; columns=[]; visibleCols=[]; sortCol=null; currentPage=1; selectedRows=new Set(); sentRows=new Set();
+    document.getElementById('uploadZone').style.display='block'; document.getElementById('fileInfo').classList.remove('visible');
+    document.getElementById('controls').style.display='none'; document.getElementById('colFilter').classList.remove('visible');
+    document.getElementById('tableWrap').style.display='none'; document.getElementById('emptyState').style.display='none';
+    document.getElementById('selectedBar').classList.remove('visible');
+    document.getElementById('fileInput').value=''; document.getElementById('searchBox').value='';
+  }
+
+  function copyEmail(email) { navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패')); }
+  function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 </script>
 </body>
 </html>
