@@ -38,7 +38,7 @@
     .folder-chip-add { border-color: var(--success); color: var(--success); }
     .folder-chip-add:hover { background: var(--success); color: #0a0a0f; }
     .toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-    .search-box { flex: 1; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .search-box { flex: 1; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; }
     .search-box:focus { border-color: var(--accent2); }
     .search-box::placeholder { color: var(--muted); }
     .btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
@@ -51,14 +51,11 @@
     .chip-label { font-size: 11px; color: var(--muted); }
     .col-chip { padding: 4px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.2s; }
     .col-chip.on { background: var(--surface2); border-color: var(--accent2); color: var(--text); }
-    .col-chip.custom-chip { border-color: var(--success); color: var(--success); }
-    .col-chip.custom-chip.on { background: rgba(76,175,130,0.15); }
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
     .table-scroll { overflow-x: auto; max-height: 520px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
     th { padding: 12px 14px; text-align: left; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-    th.custom-th { color: var(--success); }
     tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--surface2); }
@@ -67,7 +64,6 @@
     .url-btn { color: var(--accent2); text-decoration: none; font-size: 11px; padding: 2px 8px; border: 1px solid var(--accent2); border-radius: 4px; transition: all 0.2s; display: inline-block; white-space: nowrap; }
     .url-btn:hover { background: var(--accent2); color: white; }
     .email-chip { color: var(--warning); border: 1px solid rgba(240,160,80,0.4); border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
-    .email-chip:hover { background: rgba(240,160,80,0.1); }
     .cell-edit { cursor: pointer; border-radius: 4px; padding: 2px 4px; display: inline-block; }
     .cell-edit:hover { background: rgba(123,97,255,0.15); }
     .cell-edit input { background: var(--surface2); border: 1px solid var(--accent2); border-radius: 4px; padding: 3px 8px; font-size: 12px; color: var(--text); outline: none; font-family: 'DM Mono', monospace; min-width: 100px; }
@@ -80,7 +76,7 @@
     .save-btn.saved { border-color: var(--success); color: var(--success); background: rgba(76,175,130,0.1); }
     .save-menu { display: none; position: absolute; right: 0; top: calc(100% + 4px); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; min-width: 140px; z-index: 20; }
     .save-menu.open { display: block; }
-    .save-menu-item { padding: 9px 14px; font-size: 12px; cursor: pointer; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.15s; white-space: nowrap; }
+    .save-menu-item { padding: 9px 14px; font-size: 12px; cursor: pointer; color: var(--text); border-bottom: 1px solid var(--border); white-space: nowrap; }
     .save-menu-item:last-child { border-bottom: none; }
     .save-menu-item:hover { background: var(--surface); }
     .save-menu-item.in-folder { color: var(--success); }
@@ -95,7 +91,8 @@
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--accent); transform: translateY(80px); opacity: 0; transition: all 0.3s ease; z-index: 200; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .empty-state { text-align: center; padding: 60px 40px; color: var(--muted); font-size: 14px; }
-    .stat-bar { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+    .loading { text-align: center; padding: 60px 40px; color: var(--muted); font-size: 14px; }
+    .stat-bar { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
     .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-size: 12px; color: var(--muted); }
     .stat b { color: var(--accent); font-size: 20px; display: block; margin-bottom: 2px; font-family: 'Syne', sans-serif; }
   </style>
@@ -113,10 +110,8 @@
     </div>
   </header>
 
-  <!-- 통계 -->
-  <div class="stat-bar" id="stat-bar"></div>
+  <div class="stat-bar" id="stat-bar"><div class="loading">데이터 불러오는 중...</div></div>
 
-  <!-- 탭 -->
   <div class="nav-area">
     <div class="tabs">
       <button class="tab active" id="tab-all" onclick="switchTab('all')">전체 목록</button>
@@ -125,7 +120,6 @@
     <div class="folder-bar" id="folder-bar"></div>
   </div>
 
-  <!-- 전체목록 뷰 -->
   <div id="view-all">
     <div class="toolbar">
       <input class="search-box" id="searchBox" placeholder="검색..." oninput="doFilter(this.value)" />
@@ -136,12 +130,11 @@
     <div class="col-chips" id="col-chips"></div>
     <div class="table-wrap">
       <div class="table-scroll">
-        <table><thead><tr id="thead-all"></tr></thead><tbody id="tbody-all"></tbody></table>
+        <table><thead><tr id="thead-all"></tr></thead><tbody id="tbody-all"><tr><td class="loading">데이터 불러오는 중...</td></tr></tbody></table>
       </div>
     </div>
   </div>
 
-  <!-- 폴더 뷰 -->
   <div id="view-folder" style="display:none;">
     <div class="folder-header">
       <div class="folder-header-title" id="folder-view-title"></div>
@@ -157,347 +150,372 @@
 
   <div id="modal-area"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<script>
-// ── localStorage에서 데이터 로드 ──────────────────
-function getWarehouseData() {
-  try { return JSON.parse(localStorage.getItem('warehouse_data') || '[]'); } catch { return []; }
-}
-function saveWarehouseData(d) { localStorage.setItem('warehouse_data', JSON.stringify(d)); }
-function getFolders() {
-  try { return JSON.parse(localStorage.getItem('warehouse_folders') || '[]'); } catch { return []; }
-}
-function saveFolders(f) { localStorage.setItem('warehouse_folders', JSON.stringify(f)); }
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-let data = getWarehouseData();
-let folders = getFolders();
-let baseCols = [];
-let customCols = [];
-let colVisible = {};
-let currentTab = 'all';
-let currentFolder = null;
-let filtered = [];
-let wishlistOpen = false;
-let openMenu = null;
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0dUb1p0wAWZHvDPlmG_WO3QJ7xhSYJ5s",
+    authDomain: "dscrew-6da8c.firebaseapp.com",
+    projectId: "dscrew-6da8c",
+    storageBucket: "dscrew-6da8c.firebasestorage.app",
+    messagingSenderId: "235741797636",
+    appId: "1:235741797636:web:5e9c9cf83751fc0504c451",
+    measurementId: "G-60G8QVFVCL"
+  };
 
-// ── 컬럼 목록 자동 감지 ───────────────────────────
-function refreshCols() {
-  const allKeys = new Set();
-  data.forEach(row => Object.keys(row).forEach(k => allKeys.add(k)));
-  baseCols = [...allKeys];
-  baseCols.forEach(c => { if (colVisible[c] === undefined) colVisible[c] = true; });
-}
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-// ── 플랫폼 감지 ───────────────────────────────────
-const PLATFORMS = [
-  { names:['instagram.com'], label:'인스타' }, { names:['youtube.com','youtu.be'], label:'유튜브' },
-  { names:['tiktok.com'], label:'틱톡' }, { names:['clip.kakao.com'], label:'클립' },
-  { names:['twitter.com','x.com'], label:'X' }, { names:['threads.net'], label:'스레드' },
-  { names:['facebook.com'], label:'페이스북' }, { names:['blog.naver.com'], label:'네이버' },
-];
-function getPlatform(url) {
-  if (!url) return '링크';
-  const l = url.toLowerCase();
-  for (const p of PLATFORMS) if (p.names.some(n => l.includes(n))) return p.label;
-  return '링크';
-}
+  let data = [];
+  let folders = [];
+  let baseCols = [];
+  let customCols = [];
+  let colVisible = {};
+  let currentTab = 'all';
+  let currentFolder = null;
+  let filtered = [];
+  let wishlistOpen = false;
+  let openMenu = null;
 
-const URL_KEYS = ['url', 'link', '링크', '주소', 'profile'];
-const NUM_KEYS = ['팔로워', '팔로잉', 'followers', 'following', '게시물', 'posts', 'count', '수'];
-function isUrlCol(col) { return URL_KEYS.some(k => col.toLowerCase().includes(k)); }
-function isNumCol(col) { return NUM_KEYS.some(k => col.toLowerCase().includes(k)); }
-
-function getVisibleCols() {
-  return [...baseCols, ...customCols.map(c=>c.key)].filter(c => colVisible[c] !== false);
-}
-
-// ── 통계 바 ───────────────────────────────────────
-function renderStats() {
-  const total = data.length;
-  const folderCount = folders.length;
-  const savedCount = folders.reduce((acc, f) => acc + f.items.length, 0);
-  document.getElementById('stat-bar').innerHTML = `
-    <div class="stat"><b>${total.toLocaleString()}</b>전체 계정</div>
-    <div class="stat"><b>${folderCount}</b>관심 폴더</div>
-    <div class="stat"><b>${savedCount}</b>관심 저장</div>`;
-}
-
-// ── 컬럼 칩 ──────────────────────────────────────
-function renderChips() {
-  const wrap = document.getElementById('col-chips');
-  if (!wrap) return;
-  wrap.innerHTML = '<span class="chip-label">컬럼:</span>' +
-    baseCols.map(c => `<span class="col-chip ${colVisible[c]!==false?'on':''}" onclick="toggleChip('${c}')">${c}</span>`).join('') +
-    customCols.map(c => `<span class="col-chip custom-chip ${colVisible[c.key]!==false?'on':''}" onclick="toggleChip('${c.key}')">${c.label}</span>`).join('');
-}
-function toggleChip(col) {
-  colVisible[col] = colVisible[col] === false ? true : false;
-  renderChips();
-  if (currentTab === 'all') renderAll();
-  else renderFolder();
-}
-
-// ── 셀 렌더 ───────────────────────────────────────
-function getIdKey() {
-  return baseCols.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || baseCols[0];
-}
-
-function renderCell(row, col) {
-  const idx = data.indexOf(row);
-  const val = row[col] !== undefined ? row[col] : '';
-  if (isUrlCol(col) && String(val).startsWith('http')) {
-    return `<td onclick="startEdit(this,${idx},'${col}')">
-      ${val ? `<a class="url-btn" href="${val}" target="_blank" onclick="event.stopPropagation()">→ ${getPlatform(val)}</a>` : '<span class="muted-val">—</span>'}
-    </td>`;
+  const PLATFORMS = [
+    { names:['instagram.com'], label:'인스타' }, { names:['youtube.com','youtu.be'], label:'유튜브' },
+    { names:['tiktok.com'], label:'틱톡' }, { names:['clip.kakao.com'], label:'클립' },
+    { names:['twitter.com','x.com'], label:'X' }, { names:['threads.net'], label:'스레드' },
+    { names:['facebook.com'], label:'페이스북' }, { names:['blog.naver.com'], label:'네이버' },
+  ];
+  function getPlatform(url) {
+    if (!url) return '링크';
+    const l = url.toLowerCase();
+    for (const p of PLATFORMS) if (p.names.some(n => l.includes(n))) return p.label;
+    return '링크';
   }
-  if (col === '이메일' || col.toLowerCase().includes('email')) {
-    return `<td onclick="startEdit(this,${idx},'${col}')">
-      ${val ? `<span class="email-chip" onclick="event.stopPropagation();copyEmail('${val}')">${val} 📋</span>` : '<span class="muted-val">—</span>'}
-    </td>`;
+  const URL_KEYS = ['url', 'link', '링크', '주소', 'profile'];
+  const NUM_KEYS = ['팔로워', '팔로잉', 'followers', 'following', '게시물', 'posts', 'count', '수'];
+  function isUrlCol(col) { return URL_KEYS.some(k => col.toLowerCase().includes(k)); }
+  function isNumCol(col) { return NUM_KEYS.some(k => col.toLowerCase().includes(k)); }
+
+  function getIdKey() { return baseCols.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || baseCols[0] || 'id'; }
+
+  function refreshCols() {
+    const allKeys = new Set();
+    data.forEach(row => Object.keys(row).forEach(k => { if (k !== '__id') allKeys.add(k); }));
+    baseCols = [...allKeys];
+    baseCols.forEach(c => { if (colVisible[c] === undefined) colVisible[c] = true; });
   }
-  if (isNumCol(col)) {
-    return `<td class="num" onclick="startEdit(this,${idx},'${col}')"><span class="cell-edit">${val ? Number(val).toLocaleString() : '<span class="muted-val">—</span>'}</span></td>`;
+
+  // ── Firebase 데이터 로드 ───────────────────────────
+  async function loadData() {
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer'));
+      data = snap.docs.map(d => ({ ...d.data(), __id: d.id }));
+      const fSnap = await getDocs(collection(db, 'instaviewer_folders'));
+      folders = fSnap.docs.map(d => ({ ...d.data(), id: d.id }));
+      refreshCols();
+      filtered = [...data];
+      renderStats();
+      renderChips();
+      renderAll();
+      renderFolderBar();
+    } catch(e) {
+      showToast('❌ 데이터 로드 실패: ' + e.message);
+    }
   }
-  return `<td onclick="startEdit(this,${idx},'${col}')"><span class="cell-edit">${val || '<span class="muted-val">—</span>'}</span></td>`;
-}
 
-function startEdit(td, idx, col) {
-  const cur = data[idx][col] || '';
-  td.innerHTML = `<input value="${cur}" onblur="commitEdit(this,${idx},'${col}')" onkeydown="if(event.key==='Enter')this.blur()" />`;
-  td.querySelector('input').focus();
-}
-function commitEdit(input, idx, col) {
-  data[idx][col] = input.value;
-  saveWarehouseData(data);
-  if (currentTab === 'all') renderAll();
-  else renderFolder();
-  showToast('✅ 수정됨');
-}
+  // ── 통계 ──────────────────────────────────────────
+  function renderStats() {
+    document.getElementById('stat-bar').innerHTML = `
+      <div class="stat"><b>${data.length.toLocaleString()}</b>전체 계정</div>
+      <div class="stat"><b>${folders.length}</b>관심 폴더</div>
+      <div class="stat"><b>${folders.reduce((a,f)=>a+f.items.length,0)}</b>관심 저장</div>`;
+  }
 
-// ── 삭제 ──────────────────────────────────────────
-function deleteRow(idx) {
-  if (!confirm('이 계정을 창고에서 삭제할까요?')) return;
-  const idKey = getIdKey();
-  const username = data[idx][idKey];
-  data.splice(idx, 1);
-  folders.forEach(f => { f.items = f.items.filter(u => u !== username); });
-  saveWarehouseData(data);
-  saveFolders(folders);
-  refreshCols(); filtered = [...data];
-  renderStats(); renderAll();
-  showToast('🗑 삭제됐습니다');
-}
+  // ── 컬럼 칩 ──────────────────────────────────────
+  function renderChips() {
+    const wrap = document.getElementById('col-chips');
+    if (!wrap) return;
+    wrap.innerHTML = '<span class="chip-label">컬럼:</span>' +
+      baseCols.map(c => `<span class="col-chip ${colVisible[c]!==false?'on':''}" onclick="toggleChip('${c}')">${c}</span>`).join('') +
+      customCols.map(c => `<span class="col-chip ${colVisible[c.key]!==false?'on':''}" onclick="toggleChip('${c.key}')">${c.label}</span>`).join('');
+  }
+  window.toggleChip = function(col) {
+    colVisible[col] = colVisible[col] === false ? true : false;
+    renderChips();
+    if (currentTab === 'all') renderAll(); else renderFolder();
+  };
 
-function clearAll() {
-  if (!confirm(`창고의 전체 데이터(${data.length}개)를 삭제할까요?`)) return;
-  data = []; folders = [];
-  saveWarehouseData(data); saveFolders(folders);
-  refreshCols(); filtered = [];
-  renderStats(); renderChips(); renderAll(); renderFolderBar();
-  showToast('🗑 전체 삭제됐습니다');
-}
+  function getVisibleCols() {
+    return [...baseCols, ...customCols.map(c=>c.key)].filter(c => colVisible[c] !== false);
+  }
 
-// ── 관심목록 저장 버튼 ────────────────────────────
-function renderSaveBtn(row) {
-  const idKey = getIdKey();
-  const username = row[idKey];
-  const inFolders = folders.filter(f => f.items.includes(username));
-  return `<div class="save-wrap">
-    <button class="save-btn ${inFolders.length?'saved':''}" onclick="toggleSaveMenu(event,'${username}')">
-      관심목록 ${inFolders.length?'✓':''} ▾
-    </button>
-    <div class="save-menu" id="smenu-${username}">
-      ${folders.length
-        ? folders.map(f=>`<div class="save-menu-item ${f.items.includes(username)?'in-folder':''}" onclick="toggleFolderItem('${username}','${f.id}')">
-            ${f.items.includes(username)?'✓ ':''} ${f.name}
-          </div>`).join('')
-        : '<div class="save-menu-item muted-val">폴더를 먼저 추가하세요</div>'}
-    </div>
-  </div>`;
-}
+  // ── 셀 렌더 ───────────────────────────────────────
+  function renderCell(row, col) {
+    const val = row[col] !== undefined ? row[col] : '';
+    const docId = row.__id;
+    if (isUrlCol(col) && String(val).startsWith('http')) {
+      return `<td onclick="startEdit(this,'${docId}','${col}')">
+        ${val ? `<a class="url-btn" href="${val}" target="_blank" onclick="event.stopPropagation()">→ ${getPlatform(val)}</a>` : '<span class="muted-val">—</span>'}
+      </td>`;
+    }
+    if (col === '이메일' || col.toLowerCase().includes('email')) {
+      return `<td onclick="startEdit(this,'${docId}','${col}')">
+        ${val ? `<span class="email-chip" onclick="event.stopPropagation();copyEmail('${val}')">${val} 📋</span>` : '<span class="muted-val">—</span>'}
+      </td>`;
+    }
+    if (isNumCol(col)) {
+      return `<td class="num" onclick="startEdit(this,'${docId}','${col}')"><span class="cell-edit">${val ? Number(val).toLocaleString() : '<span class="muted-val">—</span>'}</span></td>`;
+    }
+    return `<td onclick="startEdit(this,'${docId}','${col}')"><span class="cell-edit">${val || '<span class="muted-val">—</span>'}</span></td>`;
+  }
 
-function toggleSaveMenu(e, username) {
-  e.stopPropagation();
-  const menu = document.getElementById('smenu-'+username);
-  if (openMenu && openMenu !== menu) openMenu.classList.remove('open');
-  menu.classList.toggle('open');
-  openMenu = menu.classList.contains('open') ? menu : null;
-}
-document.addEventListener('click', () => { if (openMenu) { openMenu.classList.remove('open'); openMenu=null; } });
+  window.startEdit = function(td, docId, col) {
+    const row = data.find(r => r.__id === docId);
+    const cur = row ? (row[col] || '') : '';
+    td.innerHTML = `<input value="${cur}" onblur="commitEdit(this,'${docId}','${col}')" onkeydown="if(event.key==='Enter')this.blur()" />`;
+    td.querySelector('input').focus();
+  };
 
-function toggleFolderItem(username, fid) {
-  const folder = folders.find(f=>f.id===fid);
-  if (!folder) return;
-  if (folder.items.includes(username)) folder.items = folder.items.filter(u=>u!==username);
-  else folder.items.push(username);
-  saveFolders(folders);
-  renderStats(); renderFolderBar(); renderAll();
-  if (currentTab === 'folder') renderFolder();
-}
+  window.commitEdit = async function(input, docId, col) {
+    const val = input.value;
+    const row = data.find(r => r.__id === docId);
+    if (row) {
+      row[col] = val;
+      try {
+        await updateDoc(doc(db, 'instaviewer', docId), { [col]: val });
+        showToast('✅ 수정됨');
+      } catch(e) { showToast('❌ 수정 실패: ' + e.message); }
+    }
+    if (currentTab === 'all') renderAll(); else renderFolder();
+  };
 
-// ── 전체목록 렌더 ─────────────────────────────────
-function renderAll() {
-  const cols = getVisibleCols();
-  document.getElementById('thead-all').innerHTML =
-    cols.map(c => { const isC=customCols.find(x=>x.key===c); return `<th class="${isC?'custom-th':''}">${isC?isC.label:c}</th>`; }).join('') +
-    '<th>관심목록</th><th>삭제</th>';
+  // ── 삭제 ──────────────────────────────────────────
+  window.deleteRow = async function(docId) {
+    if (!confirm('이 계정을 창고에서 삭제할까요?')) return;
+    try {
+      await deleteDoc(doc(db, 'instaviewer', docId));
+      const idKey = getIdKey();
+      const row = data.find(r => r.__id === docId);
+      const username = row ? row[idKey] : null;
+      data = data.filter(r => r.__id !== docId);
+      if (username) {
+        folders.forEach(f => { f.items = f.items.filter(u => u !== username); });
+        for (const f of folders) await setDoc(doc(db, 'instaviewer_folders', f.id), f);
+      }
+      filtered = filtered.filter(r => r.__id !== docId);
+      refreshCols(); renderStats(); renderAll();
+      showToast('🗑 삭제됐습니다');
+    } catch(e) { showToast('❌ 삭제 실패: ' + e.message); }
+  };
 
-  document.getElementById('tbody-all').innerHTML = filtered.length
-    ? filtered.map(row => {
-        const idx = data.indexOf(row);
-        return `<tr>${cols.map(c=>renderCell(row,c)).join('')}
-          <td>${renderSaveBtn(row)}</td>
-          <td><button class="del-btn" onclick="deleteRow(${idx})">삭제</button></td></tr>`;
-      }).join('')
-    : `<tr><td colspan="${cols.length+2}" class="empty-state">${data.length===0 ? '창고가 비어있습니다. 작업대에서 데이터를 보내주세요!' : '검색 결과가 없습니다'}</td></tr>`;
-}
+  window.clearAll = async function() {
+    if (!confirm(`창고의 전체 데이터(${data.length}개)를 삭제할까요?`)) return;
+    try {
+      for (const row of data) await deleteDoc(doc(db, 'instaviewer', row.__id));
+      for (const f of folders) await deleteDoc(doc(db, 'instaviewer_folders', f.id));
+      data = []; folders = []; filtered = [];
+      refreshCols(); renderStats(); renderChips(); renderAll(); renderFolderBar();
+      showToast('🗑 전체 삭제됐습니다');
+    } catch(e) { showToast('❌ 삭제 실패: ' + e.message); }
+  };
 
-// ── 폴더뷰 렌더 ───────────────────────────────────
-function renderFolder() {
-  if (!currentFolder) return;
-  document.getElementById('folder-view-title').textContent = `🗂 ${currentFolder.name}  (${currentFolder.items.length}개)`;
-  const cols = getVisibleCols();
-  document.getElementById('thead-folder').innerHTML =
-    cols.map(c => { const isC=customCols.find(x=>x.key===c); return `<th class="${isC?'custom-th':''}">${isC?isC.label:c}</th>`; }).join('') + '<th>삭제</th>';
-  const rows = data.filter(r => currentFolder.items.includes(r[getIdKey()]));
-  document.getElementById('tbody-folder').innerHTML = rows.length
-    ? rows.map(row => {
-        const idx = data.indexOf(row);
-        return `<tr>${cols.map(c=>renderCell(row,c)).join('')}
-          <td><button class="del-btn" onclick="removeFolderItem('${row[getIdKey()]}')">제거</button></td></tr>`;
-      }).join('')
-    : `<tr><td colspan="${cols.length+1}" class="empty-state">저장된 계정이 없습니다</td></tr>`;
-}
-
-function removeFolderItem(username) {
-  if (!currentFolder) return;
-  currentFolder.items = currentFolder.items.filter(u=>u!==username);
-  saveFolders(folders);
-  renderStats(); renderFolderBar(); renderFolder();
-}
-
-// ── 탭 전환 ───────────────────────────────────────
-function switchTab(tab) {
-  currentTab = tab; currentFolder = null;
-  wishlistOpen = false;
-  document.getElementById('tab-wishlist').textContent = '관심 목록 ▾';
-  document.getElementById('tab-wishlist').classList.remove('active');
-  document.getElementById('folder-bar').classList.remove('open');
-  document.getElementById('tab-all').classList.toggle('active', tab==='all');
-  document.getElementById('view-all').style.display = 'block';
-  document.getElementById('view-folder').style.display = 'none';
-  renderAll();
-}
-
-function toggleWishlist() {
-  wishlistOpen = !wishlistOpen;
-  const btn = document.getElementById('tab-wishlist');
-  btn.textContent = `관심 목록 ${wishlistOpen?'▴':'▾'}`;
-  btn.classList.toggle('active', wishlistOpen || currentTab==='folder');
-  document.getElementById('folder-bar').classList.toggle('open', wishlistOpen);
-  renderFolderBar();
-}
-
-function openFolder(fid) {
-  currentFolder = folders.find(f=>f.id===fid);
-  currentTab = 'folder';
-  document.getElementById('tab-all').classList.remove('active');
-  document.getElementById('tab-wishlist').classList.add('active');
-  document.getElementById('view-all').style.display = 'none';
-  document.getElementById('view-folder').style.display = 'block';
-  renderFolderBar(); renderFolder();
-}
-
-function renderFolderBar() {
-  const bar = document.getElementById('folder-bar');
-  bar.innerHTML = '<span style="font-size:11px;color:var(--muted);align-self:center;">폴더:</span>' +
-    folders.map(f=>`<span class="folder-chip ${currentFolder&&currentFolder.id===f.id?'active':''}" onclick="openFolder('${f.id}')">${f.name} <span style="opacity:0.6;font-size:10px;">${f.items.length}</span></span>`).join('') +
-    `<span class="folder-chip folder-chip-add" onclick="showAddFolder()">+ 폴더 추가</span>`;
-}
-
-function deleteFolder() {
-  if (!currentFolder) return;
-  if (!confirm(`"${currentFolder.name}" 폴더를 삭제할까요?`)) return;
-  folders = folders.filter(f=>f.id!==currentFolder.id);
-  saveFolders(folders);
-  switchTab('all'); showToast('폴더가 삭제됐습니다');
-}
-
-// ── 검색 ──────────────────────────────────────────
-function doFilter(q) {
-  filtered = q ? data.filter(r => Object.values(r).some(v=>String(v).toLowerCase().includes(q.toLowerCase()))) : [...data];
-  renderAll();
-}
-
-// ── 컬럼 추가 ─────────────────────────────────────
-function showAddCol() {
-  showModal('새 컬럼 추가', '컬럼 이름 (예: 카테고리, 검토여부)', name => {
-    const key = name;
-    if (!baseCols.includes(key)) { baseCols.push(key); colVisible[key] = true; }
-    renderChips(); renderAll();
-  });
-}
-
-function showAddFolder() {
-  showModal('새 폴더 추가', '폴더 이름 (예: A급, 먹스타그램)', name => {
-    folders.push({ id:'f'+Date.now(), name, items:[] });
-    saveFolders(folders);
-    renderStats(); renderFolderBar(); renderAll();
-    showToast(`✅ "${name}" 폴더 추가됨`);
-  });
-}
-
-// ── 내보내기 ──────────────────────────────────────
-function exportData(folderOnly) {
-  const rows = folderOnly && currentFolder ? data.filter(r=>currentFolder.items.includes(r[getIdKey()])) : filtered;
-  const cols = getVisibleCols();
-  const out = rows.map(row => { const obj={}; cols.forEach(c=>{ obj[c]=row[c]||''; }); return obj; });
-  const ws = XLSX.utils.json_to_sheet(out); const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  XLSX.writeFile(wb, `warehouse_${Date.now()}.xlsx`);
-  showToast(`✅ ${out.length}개 내보내기 완료!`);
-}
-
-// ── 유틸 ──────────────────────────────────────────
-function copyEmail(email) { navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패')); }
-function showModal(title, placeholder, onConfirm) {
-  document.getElementById('modal-area').innerHTML = `
-    <div class="modal-bg" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-        <div class="modal-title">${title}</div>
-        <input id="modal-input" placeholder="${placeholder}" onkeydown="if(event.key==='Enter')confirmModal()" />
-        <div class="modal-btns">
-          <button class="btn" onclick="closeModal()">취소</button>
-          <button class="btn btn-green" onclick="confirmModal()">확인</button>
-        </div>
+  // ── 관심목록 저장 버튼 ────────────────────────────
+  function renderSaveBtn(row) {
+    const idKey = getIdKey();
+    const username = row[idKey];
+    const inFolders = folders.filter(f => f.items && f.items.includes(username));
+    return `<div class="save-wrap">
+      <button class="save-btn ${inFolders.length?'saved':''}" onclick="toggleSaveMenu(event,'${username}')">
+        관심목록 ${inFolders.length?'✓':''} ▾
+      </button>
+      <div class="save-menu" id="smenu-${username}">
+        ${folders.length
+          ? folders.map(f=>`<div class="save-menu-item ${f.items&&f.items.includes(username)?'in-folder':''}" onclick="toggleFolderItem('${username}','${f.id}')">
+              ${f.items&&f.items.includes(username)?'✓ ':''} ${f.name}
+            </div>`).join('')
+          : '<div class="save-menu-item muted-val">폴더를 먼저 추가하세요</div>'}
       </div>
     </div>`;
-  window._modalCb = onConfirm;
-  setTimeout(()=>document.getElementById('modal-input').focus(), 50);
-}
-function confirmModal() { const val=document.getElementById('modal-input').value.trim(); if(!val)return; closeModal(); if(window._modalCb)window._modalCb(val); }
-function closeModal() { document.getElementById('modal-area').innerHTML=''; }
-function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
-
-// ── 초기화 ────────────────────────────────────────
-refreshCols();
-filtered = [...data];
-renderStats();
-renderChips();
-renderAll();
-renderFolderBar();
-
-// 작업대에서 보낸 데이터 감지 (같은 브라우저)
-window.addEventListener('storage', e => {
-  if (e.key === 'warehouse_data') {
-    data = getWarehouseData();
-    refreshCols(); filtered = [...data];
-    renderStats(); renderChips(); renderAll();
-    showToast('✅ 작업대에서 새 데이터가 도착했습니다!');
   }
-});
+
+  window.toggleSaveMenu = function(e, username) {
+    e.stopPropagation();
+    const menu = document.getElementById('smenu-'+username);
+    if (openMenu && openMenu !== menu) openMenu.classList.remove('open');
+    menu.classList.toggle('open');
+    openMenu = menu.classList.contains('open') ? menu : null;
+  };
+  document.addEventListener('click', () => { if (openMenu) { openMenu.classList.remove('open'); openMenu=null; } });
+
+  window.toggleFolderItem = async function(username, fid) {
+    const folder = folders.find(f=>f.id===fid);
+    if (!folder) return;
+    if (!folder.items) folder.items = [];
+    if (folder.items.includes(username)) folder.items = folder.items.filter(u=>u!==username);
+    else folder.items.push(username);
+    try {
+      await setDoc(doc(db, 'instaviewer_folders', fid), folder);
+      renderStats(); renderFolderBar(); renderAll();
+      if (currentTab === 'folder') renderFolder();
+    } catch(e) { showToast('❌ 저장 실패: ' + e.message); }
+  };
+
+  // ── 전체목록 렌더 ─────────────────────────────────
+  function renderAll() {
+    const cols = getVisibleCols();
+    document.getElementById('thead-all').innerHTML =
+      cols.map(c=>`<th>${c}</th>`).join('') + '<th>관심목록</th><th>삭제</th>';
+    document.getElementById('tbody-all').innerHTML = filtered.length
+      ? filtered.map(row => `<tr>
+          ${cols.map(c=>renderCell(row,c)).join('')}
+          <td>${renderSaveBtn(row)}</td>
+          <td><button class="del-btn" onclick="deleteRow('${row.__id}')">삭제</button></td>
+        </tr>`).join('')
+      : `<tr><td colspan="${cols.length+2}" class="empty-state">${data.length===0?'창고가 비어있습니다. 작업대에서 데이터를 보내주세요!':'검색 결과가 없습니다'}</td></tr>`;
+  }
+
+  // ── 폴더뷰 렌더 ───────────────────────────────────
+  function renderFolder() {
+    if (!currentFolder) return;
+    document.getElementById('folder-view-title').textContent = `🗂 ${currentFolder.name}  (${(currentFolder.items||[]).length}개)`;
+    const cols = getVisibleCols();
+    document.getElementById('thead-folder').innerHTML = cols.map(c=>`<th>${c}</th>`).join('') + '<th>제거</th>';
+    const idKey = getIdKey();
+    const rows = data.filter(r => currentFolder.items && currentFolder.items.includes(r[idKey]));
+    document.getElementById('tbody-folder').innerHTML = rows.length
+      ? rows.map(row=>`<tr>
+          ${cols.map(c=>renderCell(row,c)).join('')}
+          <td><button class="del-btn" onclick="removeFolderItem('${row[idKey]}')">제거</button></td>
+        </tr>`).join('')
+      : `<tr><td colspan="${cols.length+1}" class="empty-state">저장된 계정이 없습니다</td></tr>`;
+  }
+
+  window.removeFolderItem = async function(username) {
+    if (!currentFolder) return;
+    currentFolder.items = (currentFolder.items||[]).filter(u=>u!==username);
+    try {
+      await setDoc(doc(db, 'instaviewer_folders', currentFolder.id), currentFolder);
+      renderStats(); renderFolderBar(); renderFolder();
+    } catch(e) { showToast('❌ 실패: ' + e.message); }
+  };
+
+  // ── 탭 전환 ───────────────────────────────────────
+  window.switchTab = function(tab) {
+    currentTab = tab; currentFolder = null;
+    wishlistOpen = false;
+    document.getElementById('tab-wishlist').textContent = '관심 목록 ▾';
+    document.getElementById('tab-wishlist').classList.remove('active');
+    document.getElementById('folder-bar').classList.remove('open');
+    document.getElementById('tab-all').classList.add('active');
+    document.getElementById('view-all').style.display = 'block';
+    document.getElementById('view-folder').style.display = 'none';
+    renderAll();
+  };
+
+  window.toggleWishlist = function() {
+    wishlistOpen = !wishlistOpen;
+    const btn = document.getElementById('tab-wishlist');
+    btn.textContent = `관심 목록 ${wishlistOpen?'▴':'▾'}`;
+    btn.classList.toggle('active', wishlistOpen || currentTab==='folder');
+    document.getElementById('folder-bar').classList.toggle('open', wishlistOpen);
+    renderFolderBar();
+  };
+
+  window.openFolder = function(fid) {
+    currentFolder = folders.find(f=>f.id===fid);
+    currentTab = 'folder';
+    document.getElementById('tab-all').classList.remove('active');
+    document.getElementById('tab-wishlist').classList.add('active');
+    document.getElementById('view-all').style.display = 'none';
+    document.getElementById('view-folder').style.display = 'block';
+    renderFolderBar(); renderFolder();
+  };
+
+  function renderFolderBar() {
+    document.getElementById('folder-bar').innerHTML =
+      '<span style="font-size:11px;color:var(--muted);align-self:center;">폴더:</span>' +
+      folders.map(f=>`<span class="folder-chip ${currentFolder&&currentFolder.id===f.id?'active':''}" onclick="openFolder('${f.id}')">${f.name} <span style="opacity:0.6;font-size:10px;">${(f.items||[]).length}</span></span>`).join('') +
+      `<span class="folder-chip folder-chip-add" onclick="showAddFolder()">+ 폴더 추가</span>`;
+  }
+
+  window.deleteFolder = async function() {
+    if (!currentFolder) return;
+    if (!confirm(`"${currentFolder.name}" 폴더를 삭제할까요?`)) return;
+    try {
+      await deleteDoc(doc(db, 'instaviewer_folders', currentFolder.id));
+      folders = folders.filter(f=>f.id!==currentFolder.id);
+      currentFolder = null;
+      switchTab('all'); renderStats();
+      showToast('폴더가 삭제됐습니다');
+    } catch(e) { showToast('❌ 실패: ' + e.message); }
+  };
+
+  // ── 검색 ──────────────────────────────────────────
+  window.doFilter = function(q) {
+    filtered = q ? data.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(q.toLowerCase()))) : [...data];
+    renderAll();
+  };
+
+  // ── 컬럼 추가 ─────────────────────────────────────
+  window.showAddCol = function() {
+    showModal('새 컬럼 추가', '컬럼 이름 (예: 카테고리, 검토여부)', name => {
+      if (!baseCols.includes(name)) { baseCols.push(name); colVisible[name] = true; }
+      renderChips(); renderAll();
+    });
+  };
+
+  window.showAddFolder = function() {
+    showModal('새 폴더 추가', '폴더 이름 (예: A급, 먹스타그램)', async name => {
+      const fid = 'f' + Date.now();
+      const folder = { id: fid, name, items: [] };
+      try {
+        await setDoc(doc(db, 'instaviewer_folders', fid), folder);
+        folders.push(folder);
+        renderStats(); renderFolderBar(); renderAll();
+        showToast(`✅ "${name}" 폴더 추가됨`);
+      } catch(e) { showToast('❌ 실패: ' + e.message); }
+    });
+  };
+
+  // ── 내보내기 ──────────────────────────────────────
+  window.exportData = function(folderOnly) {
+    const idKey = getIdKey();
+    const rows = folderOnly && currentFolder
+      ? data.filter(r=>currentFolder.items&&currentFolder.items.includes(r[idKey]))
+      : filtered;
+    const cols = getVisibleCols();
+    const out = rows.map(row=>{const obj={};cols.forEach(c=>{obj[c]=row[c]||'';});return obj;});
+    const ws=XLSX.utils.json_to_sheet(out);const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'Sheet1');
+    XLSX.writeFile(wb,`warehouse_${Date.now()}.xlsx`);
+    showToast(`✅ ${out.length}개 내보내기 완료!`);
+  };
+
+  // ── 유틸 ──────────────────────────────────────────
+  window.copyEmail = function(email) { navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패')); };
+
+  function showModal(title, placeholder, onConfirm) {
+    document.getElementById('modal-area').innerHTML = `
+      <div class="modal-bg" onclick="if(event.target===this)closeModal()">
+        <div class="modal">
+          <div class="modal-title">${title}</div>
+          <input id="modal-input" placeholder="${placeholder}" onkeydown="if(event.key==='Enter')confirmModal()" />
+          <div class="modal-btns">
+            <button class="btn" onclick="closeModal()">취소</button>
+            <button class="btn btn-green" onclick="confirmModal()">확인</button>
+          </div>
+        </div>
+      </div>`;
+    window._modalCb = onConfirm;
+    setTimeout(()=>document.getElementById('modal-input').focus(), 50);
+  }
+  window.confirmModal = function() { const val=document.getElementById('modal-input').value.trim(); if(!val)return; closeModal(); if(window._modalCb)window._modalCb(val); };
+  window.closeModal = function() { document.getElementById('modal-area').innerHTML=''; };
+  function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500); }
+
+  // ── 초기 로드 ─────────────────────────────────────
+  loadData();
 </script>
 </body>
 </html>
