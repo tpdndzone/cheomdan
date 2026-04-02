@@ -23,7 +23,7 @@
     .btn-warehouse { background: transparent; border: 1px solid var(--accent2); border-radius: 8px; padding: 10px 20px; color: var(--accent2); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
     .btn-warehouse:hover { background: var(--accent2); color: #fff; }
     .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 60px 40px; text-align: center; cursor: pointer; transition: all 0.3s ease; background: var(--surface); margin-bottom: 32px; position: relative; overflow: hidden; }
-    .upload-zone::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(200, 240, 101, 0.04) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s; }
+    .upload-zone::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(200,240,101,0.04) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s; }
     .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); transform: translateY(-2px); }
     .upload-zone:hover::before, .upload-zone.drag-over::before { opacity: 1; }
     .upload-icon { font-size: 48px; margin-bottom: 16px; display: block; }
@@ -38,10 +38,9 @@
     .btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn:hover { border-color: var(--accent); color: var(--accent); }
     .btn-accent { background: var(--accent); border-color: var(--accent); color: #0a0a0f; font-weight: 500; }
-    .btn-accent:hover { background: #b8e050; border-color: #b8e050; color: #0a0a0f; }
+    .btn-accent:hover { background: #b8e050; color: #0a0a0f; }
     .btn-send { background: var(--surface); border: 1px solid var(--success); border-radius: 8px; padding: 10px 16px; color: var(--success); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn-send:hover { background: var(--success); color: #0a0a0f; }
-    .btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
     .file-info { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; align-items: center; justify-content: space-between; gap: 16px; }
     .file-info.visible { display: flex; }
     .file-meta { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
@@ -50,14 +49,13 @@
     .file-stat b { color: var(--text); }
     .col-filter { display: none; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .col-filter.visible { display: flex; }
-    .col-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--surface); color: var(--muted); }
+    .col-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; background: var(--surface); color: var(--muted); }
     .col-chip.active { background: var(--accent); border-color: var(--accent); color: #0a0a0f; font-weight: 500; }
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
     .table-scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); }
-    th { padding: 14px 16px; text-align: left; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.2s; }
-    th:hover { color: var(--accent); }
+    th { padding: 14px 16px; text-align: left; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; cursor: pointer; }
     th.sort-asc::after { content: ' ↑'; color: var(--accent); }
     th.sort-desc::after { content: ' ↓'; color: var(--accent); }
     tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
@@ -68,15 +66,16 @@
     td.num { color: var(--accent); font-weight: 500; text-align: right; }
     td a { color: var(--accent2); text-decoration: none; font-size: 12px; padding: 3px 10px; border: 1px solid var(--accent2); border-radius: 4px; transition: all 0.2s; display: inline-block; }
     td a:hover { background: var(--accent2); color: white; }
-    .send-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .send-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.2s; }
     .send-btn:hover { border-color: var(--success); color: var(--success); }
     .send-btn.sent { border-color: var(--success); color: var(--success); background: rgba(76,175,130,0.1); cursor: default; }
     .chk { width: 14px; height: 14px; cursor: pointer; accent-color: var(--success); }
     .email-chip { color: #f0a050; border: 1px solid #f0a05055; border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
-    .email-chip:hover { background: rgba(240,160,80,0.1); }
+    .selected-bar { display: none; background: rgba(76,175,130,0.1); border: 1px solid var(--success); border-radius: 10px; padding: 12px 20px; margin-bottom: 16px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .selected-bar.visible { display: flex; }
+    .selected-info { font-size: 13px; color: var(--success); }
     .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); }
     .empty-state .icon { font-size: 40px; margin-bottom: 16px; }
-    .empty-state p { font-size: 14px; }
     .pagination { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
     .page-info { font-size: 12px; color: var(--muted); }
     .page-info b { color: var(--text); }
@@ -85,9 +84,6 @@
     .page-btn:hover, .page-btn.active { border-color: var(--accent); color: var(--accent); }
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--accent); transform: translateY(80px); opacity: 0; transition: all 0.3s ease; z-index: 100; }
     .toast.show { transform: translateY(0); opacity: 1; }
-    .selected-bar { display: none; background: rgba(76,175,130,0.1); border: 1px solid var(--success); border-radius: 10px; padding: 12px 20px; margin-bottom: 16px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .selected-bar.visible { display: flex; }
-    .selected-info { font-size: 13px; color: var(--success); }
   </style>
 </head>
 <body>
@@ -116,12 +112,9 @@
       <span class="file-stat">총 <b id="totalCount">0</b>개</span>
       <span class="file-stat">표시 <b id="visibleCount">0</b>개</span>
     </div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn" onclick="resetAll()">✕ 초기화</button>
-    </div>
+    <button class="btn" onclick="resetAll()">✕ 초기화</button>
   </div>
 
-  <!-- 선택 항목 바 -->
   <div class="selected-bar" id="selectedBar">
     <div class="selected-info" id="selectedInfo">0개 선택됨</div>
     <div style="display:flex;gap:8px;">
@@ -154,10 +147,25 @@
     <p>검색 결과가 없습니다</p>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0dUb1p0wAWZHvDPlmG_WO3QJ7xhSYJ5s",
+    authDomain: "dscrew-6da8c.firebaseapp.com",
+    projectId: "dscrew-6da8c",
+    storageBucket: "dscrew-6da8c.firebasestorage.app",
+    messagingSenderId: "235741797636",
+    appId: "1:235741797636:web:5e9c9cf83751fc0504c451",
+    measurementId: "G-60G8QVFVCL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
   let allData = [], columns = [], visibleCols = [], sortCol = null, sortDir = 'desc', currentPage = 1;
   let selectedRows = new Set();
   let sentRows = new Set();
@@ -224,12 +232,12 @@
       columns.map(col => `<div class="col-chip active" onclick="toggleCol('${col}', this)">${col}</div>`).join('');
   }
 
-  function toggleCol(col, el) {
+  window.toggleCol = function(col, el) {
     el.classList.toggle('active');
     if (visibleCols.includes(col)) visibleCols = visibleCols.filter(c => c !== col);
     else visibleCols = columns.filter(c => visibleCols.includes(c) || c === col);
     renderTable();
-  }
+  };
 
   function getFilteredData() {
     const q = document.getElementById('searchBox').value.toLowerCase().trim();
@@ -244,6 +252,8 @@
     return data;
   }
 
+  function getIdCol() { return columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0]; }
+
   function renderTable() {
     const data = getFilteredData();
     const total = data.length, totalPages = Math.ceil(total / PAGE_SIZE);
@@ -251,9 +261,8 @@
     const pageData = data.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
     document.getElementById('visibleCount').textContent = total.toLocaleString();
 
-    const thead = document.getElementById('tableHead');
-    thead.innerHTML = `<tr>
-      <th style="width:36px;"><input type="checkbox" class="chk" id="chk-all" onchange="toggleAll(this.checked)" /></th>
+    document.getElementById('tableHead').innerHTML = `<tr>
+      <th style="width:36px;"><input type="checkbox" class="chk" onchange="toggleAll(this.checked)" /></th>
       ${visibleCols.map(col => `<th onclick="setSort('${col}')" class="${sortCol===col?'sort-'+sortDir:''}">${col}</th>`).join('')}
       <th>창고로 보내기</th>
     </tr>`;
@@ -266,27 +275,22 @@
     }
     document.getElementById('tableWrap').style.display = 'block';
     document.getElementById('emptyState').style.display = 'none';
-
-    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
+    const idCol = getIdCol();
 
     tbody.innerHTML = pageData.map((row, i) => {
-      const rowId = row[idCol] || i;
+      const rowId = String(row[idCol] || i);
       const isSel = selectedRows.has(rowId);
       const isSent = sentRows.has(rowId);
       return `<tr class="${isSel?'selected':''}">
         <td><input type="checkbox" class="chk" ${isSel?'checked':''} onchange="toggleRow(this.checked,'${rowId}')" /></td>
         ${visibleCols.map(col => {
           const val = row[col] ?? '';
-          if (isUrlCol(col) && String(val).startsWith('http')) return `<td><a href="${val}" target="_blank" rel="noopener">→ ${getPlatform(val)}</a></td>`;
+          if (isUrlCol(col) && String(val).startsWith('http')) return `<td><a href="${val}" target="_blank">→ ${getPlatform(val)}</a></td>`;
           if (isNumCol(col) && !isNaN(parseFloat(String(val).replace(/,/g,'')))) return `<td class="num">${Number(val).toLocaleString()}</td>`;
           if (col === '이메일' && val) return `<td><span class="email-chip" onclick="copyEmail('${val}')">${val} 📋</span></td>`;
           return `<td title="${val}">${val}</td>`;
         }).join('')}
-        <td>
-          <button class="send-btn ${isSent?'sent':''}" onclick="sendOneToWarehouse('${rowId}', this)" ${isSent?'disabled':''}>
-            ${isSent ? '✓ 전송됨' : '→ 창고로'}
-          </button>
-        </td>
+        <td><button class="send-btn ${isSent?'sent':''}" onclick="sendOne('${rowId}', this)" ${isSent?'disabled':''}>${isSent?'✓ 전송됨':'→ 창고로'}</button></td>
       </tr>`;
     }).join('');
 
@@ -294,109 +298,89 @@
     updateSelectedBar();
   }
 
-  function toggleAll(checked) {
-    const data = getFilteredData();
-    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
-    data.forEach((row, i) => {
-      const rowId = row[idCol] || i;
-      if (checked) selectedRows.add(rowId);
-      else selectedRows.delete(rowId);
+  window.toggleAll = function(checked) {
+    const idCol = getIdCol();
+    getFilteredData().forEach((row,i) => {
+      const rowId = String(row[idCol]||i);
+      checked ? selectedRows.add(rowId) : selectedRows.delete(rowId);
     });
     renderTable();
-  }
+  };
 
-  function toggleRow(checked, rowId) {
-    if (checked) selectedRows.add(rowId);
-    else selectedRows.delete(rowId);
+  window.toggleRow = function(checked, rowId) {
+    checked ? selectedRows.add(rowId) : selectedRows.delete(rowId);
     updateSelectedBar();
-    document.querySelectorAll('tbody tr').forEach(tr => {
-      const chk = tr.querySelector('.chk');
-      if (chk && chk.onchange) {
-        const id = chk.getAttribute('onchange').match(/'([^']+)'/)?.[1];
-        if (id === rowId) tr.classList.toggle('selected', checked);
-      }
-    });
-  }
+  };
 
   function updateSelectedBar() {
     const bar = document.getElementById('selectedBar');
-    const info = document.getElementById('selectedInfo');
-    if (selectedRows.size > 0) {
-      bar.classList.add('visible');
-      info.textContent = `${selectedRows.size}개 선택됨`;
-    } else {
-      bar.classList.remove('visible');
+    if (selectedRows.size > 0) { bar.classList.add('visible'); document.getElementById('selectedInfo').textContent = `${selectedRows.size}개 선택됨`; }
+    else bar.classList.remove('visible');
+  }
+
+  window.clearSelection = function() { selectedRows.clear(); renderTable(); };
+
+  // ── Firebase 창고로 보내기 ─────────────────────────
+  async function sendRowsToFirebase(rows) {
+    const idCol = getIdCol();
+    let count = 0;
+    for (const row of rows) {
+      const id = String(row[idCol] || Date.now()).replace(/[^a-zA-Z0-9_\-]/g, '_');
+      const docRef = doc(db, 'instaviewer', id);
+      const existing = await getDoc(docRef);
+      const merged = existing.exists() ? { ...existing.data(), ...row } : { ...row };
+      await setDoc(docRef, merged);
+      count++;
     }
+    return count;
   }
 
-  function clearSelection() { selectedRows.clear(); renderTable(); }
-
-  // ── 창고로 보내기 (Firebase 연동 전: localStorage 임시 저장) ──
-  function getWarehouseData() {
-    try { return JSON.parse(localStorage.getItem('warehouse_data') || '[]'); } catch { return []; }
-  }
-  function saveWarehouseData(data) { localStorage.setItem('warehouse_data', JSON.stringify(data)); }
-
-  function sendOneToWarehouse(rowId, btn) {
-    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
-    const row = allData.find((r, i) => (r[idCol] || i) == rowId);
+  window.sendOne = async function(rowId, btn) {
+    const idCol = getIdCol();
+    const row = allData.find((r,i) => String(r[idCol]||i) === rowId);
     if (!row) return;
-    const warehouse = getWarehouseData();
-    const exists = warehouse.find(r => r[idCol] === row[idCol]);
-    if (!exists) warehouse.push({...row});
-    else Object.assign(exists, row);
-    saveWarehouseData(warehouse);
-    sentRows.add(rowId);
-    btn.textContent = '✓ 전송됨';
-    btn.classList.add('sent');
-    btn.disabled = true;
-    showToast(`✅ 창고로 보냈습니다!`);
-  }
-
-  function sendSelectedToWarehouse() {
-    if (!selectedRows.size) return;
-    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
-    const warehouse = getWarehouseData();
-    let count = 0;
-    selectedRows.forEach(rowId => {
-      const row = allData.find((r, i) => (r[idCol] || i) == rowId);
-      if (!row) return;
-      const exists = warehouse.find(r => r[idCol] === row[idCol]);
-      if (!exists) warehouse.push({...row});
-      else Object.assign(exists, row);
+    btn.textContent = '전송 중...'; btn.disabled = true;
+    try {
+      await sendRowsToFirebase([row]);
       sentRows.add(rowId);
-      count++;
-    });
-    saveWarehouseData(warehouse);
-    selectedRows.clear();
-    renderTable();
-    showToast(`✅ ${count}개를 창고로 보냈습니다!`);
-  }
+      btn.textContent = '✓ 전송됨'; btn.classList.add('sent');
+      showToast('✅ 창고로 보냈습니다!');
+    } catch(e) { btn.textContent = '→ 창고로'; btn.disabled = false; showToast('❌ 오류: ' + e.message); }
+  };
 
-  function sendAllToWarehouse() {
+  window.sendSelectedToWarehouse = async function() {
+    if (!selectedRows.size) return;
+    const idCol = getIdCol();
+    const rows = allData.filter((r,i) => selectedRows.has(String(r[idCol]||i)));
+    showToast(`⏳ ${rows.length}개 전송 중...`);
+    try {
+      const count = await sendRowsToFirebase(rows);
+      rows.forEach((r,i) => sentRows.add(String(r[idCol]||i)));
+      selectedRows.clear(); renderTable();
+      showToast(`✅ ${count}개를 창고로 보냈습니다!`);
+    } catch(e) { showToast('❌ 오류: ' + e.message); }
+  };
+
+  window.sendAllToWarehouse = async function() {
     if (!allData.length) return;
-    const idCol = columns.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || columns[0];
-    const warehouse = getWarehouseData();
-    let count = 0;
-    getFilteredData().forEach(row => {
-      const exists = warehouse.find(r => r[idCol] === row[idCol]);
-      if (!exists) warehouse.push({...row});
-      else Object.assign(exists, row);
-      count++;
-    });
-    saveWarehouseData(warehouse);
-    allData.forEach((r, i) => sentRows.add(r[idCol] || i));
-    renderTable();
-    showToast(`✅ ${count}개 전체를 창고로 보냈습니다!`);
-  }
+    const rows = getFilteredData();
+    showToast(`⏳ ${rows.length}개 전송 중...`);
+    try {
+      const count = await sendRowsToFirebase(rows);
+      const idCol = getIdCol();
+      rows.forEach((r,i) => sentRows.add(String(r[idCol]||i)));
+      renderTable();
+      showToast(`✅ ${count}개 전체를 창고로 보냈습니다!`);
+    } catch(e) { showToast('❌ 오류: ' + e.message); }
+  };
 
   function renderPagination(total, totalPages) {
     const pag = document.getElementById('pagination');
     if (totalPages <= 1) { pag.innerHTML = ''; return; }
     const start = (currentPage-1)*PAGE_SIZE+1, end = Math.min(currentPage*PAGE_SIZE, total);
     let pages = [];
-    for (let i = Math.max(1, currentPage-2); i <= Math.min(totalPages, currentPage+2); i++) pages.push(i);
-    pag.innerHTML = `<div class="page-info">${start} - ${end} / <b>${total}</b>개</div>
+    for (let i=Math.max(1,currentPage-2); i<=Math.min(totalPages,currentPage+2); i++) pages.push(i);
+    pag.innerHTML = `<div class="page-info">${start}-${end} / <b>${total}</b>개</div>
       <div class="page-btns">
         <button class="page-btn" onclick="goPage(1)">«</button>
         <button class="page-btn" onclick="goPage(${currentPage-1})">‹</button>
@@ -406,27 +390,32 @@
       </div>`;
   }
 
-  function goPage(p) { const d = getFilteredData(); const tp = Math.ceil(d.length/PAGE_SIZE); if (p<1||p>tp) return; currentPage=p; renderTable(); window.scrollTo({top:0,behavior:'smooth'}); }
-  function setSort(col) { if (sortCol===col) sortDir=sortDir==='asc'?'desc':'asc'; else { sortCol=col; sortDir='desc'; } currentPage=1; renderTable(); }
-  function toggleSort() { if (!sortCol && columns.length) { const n=columns.find(c=>isNumCol(c)); sortCol=n||columns[0]; sortDir='desc'; } else { sortDir=sortDir==='desc'?'asc':'desc'; } currentPage=1; renderTable(); }
+  window.goPage = function(p) { const d=getFilteredData(); const tp=Math.ceil(d.length/PAGE_SIZE); if(p<1||p>tp)return; currentPage=p; renderTable(); window.scrollTo({top:0,behavior:'smooth'}); };
+  window.setSort = function(col) { if(sortCol===col) sortDir=sortDir==='asc'?'desc':'asc'; else{sortCol=col;sortDir='desc';} currentPage=1; renderTable(); };
+  window.toggleSort = function() { if(!sortCol&&columns.length){const n=columns.find(c=>isNumCol(c));sortCol=n||columns[0];sortDir='desc';}else{sortDir=sortDir==='desc'?'asc':'desc';} currentPage=1; renderTable(); };
   document.getElementById('searchBox').addEventListener('input', () => { currentPage=1; renderTable(); });
 
-  function exportFiltered() {
-    const data = getFilteredData().map(row => { const obj={}; visibleCols.forEach(c=>obj[c]=row[c]); return obj; });
-    const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `export_${Date.now()}.xlsx`); showToast(`✅ ${data.length}개 내보내기 완료!`);
-  }
+  window.exportFiltered = function() {
+    const data=getFilteredData().map(row=>{const obj={};visibleCols.forEach(c=>obj[c]=row[c]);return obj;});
+    const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Sheet1');
+    XLSX.writeFile(wb,`export_${Date.now()}.xlsx`);showToast(`✅ ${data.length}개 내보내기 완료!`);
+  };
 
-  function resetAll() {
-    allData=[]; columns=[]; visibleCols=[]; sortCol=null; currentPage=1; selectedRows=new Set(); sentRows=new Set();
-    document.getElementById('uploadZone').style.display='block'; document.getElementById('fileInfo').classList.remove('visible');
-    document.getElementById('controls').style.display='none'; document.getElementById('colFilter').classList.remove('visible');
-    document.getElementById('tableWrap').style.display='none'; document.getElementById('emptyState').style.display='none';
+  window.resetAll = function() {
+    allData=[];columns=[];visibleCols=[];sortCol=null;currentPage=1;selectedRows=new Set();sentRows=new Set();
+    document.getElementById('uploadZone').style.display='block';
+    document.getElementById('fileInfo').classList.remove('visible');
+    document.getElementById('controls').style.display='none';
+    document.getElementById('colFilter').classList.remove('visible');
+    document.getElementById('tableWrap').style.display='none';
+    document.getElementById('emptyState').style.display='none';
     document.getElementById('selectedBar').classList.remove('visible');
-    document.getElementById('fileInput').value=''; document.getElementById('searchBox').value='';
-  }
+    document.getElementById('fileInput').value='';
+    document.getElementById('searchBox').value='';
+  };
 
-  function copyEmail(email) { navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패')); }
+  window.copyEmail = function(email) { navigator.clipboard.writeText(email).then(()=>showToast(`📋 복사됨: ${email}`)).catch(()=>showToast('복사 실패')); };
+
   function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 </script>
 </body>
