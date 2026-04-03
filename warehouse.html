@@ -51,6 +51,10 @@
     .chip-label { font-size: 11px; color: var(--muted); }
     .col-chip { padding: 4px 12px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.2s; }
     .col-chip.on { background: var(--surface2); border-color: var(--accent2); color: var(--text); }
+    th[draggable] { cursor: grab; user-select: none; }
+    th[draggable]:active { cursor: grabbing; }
+    th.drag-over { background: rgba(123,97,255,0.3); border-left: 2px solid var(--accent2); }
+    th.dragging { opacity: 0.4; }
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
     .table-scroll { overflow-x: auto; max-height: 520px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -114,18 +118,18 @@
 
   <div class="nav-area">
     <div class="tabs">
-      <button class="tab active" id="tab-all" onclick="switchTab('all')">전체 목록</button>
-      <button class="tab wishlist-tab" id="tab-wishlist" onclick="toggleWishlist()">관심 목록 ▾</button>
+      <button class="tab active" id="tab-all" onclick="window.switchTab('all')">전체 목록</button>
+      <button class="tab wishlist-tab" id="tab-wishlist" onclick="window.toggleWishlist()">관심 목록 ▾</button>
     </div>
     <div class="folder-bar" id="folder-bar"></div>
   </div>
 
   <div id="view-all">
     <div class="toolbar">
-      <input class="search-box" id="searchBox" placeholder="검색..." oninput="doFilter(this.value)" />
-      <button class="btn btn-green" onclick="showAddCol()">+ 컬럼 추가</button>
-      <button class="btn" onclick="exportData()">↓ 내보내기</button>
-      <button class="btn btn-red" onclick="clearAll()">🗑 전체 삭제</button>
+      <input class="search-box" id="searchBox" placeholder="검색..." oninput="window.doFilter(this.value)" />
+      <button class="btn btn-green" onclick="window.showAddCol()">+ 컬럼 추가</button>
+      <button class="btn" onclick="window.exportData()">↓ 내보내기</button>
+      <button class="btn btn-red" onclick="window.clearAll()">🗑 전체 삭제</button>
     </div>
     <div class="col-chips" id="col-chips"></div>
     <div class="table-wrap">
@@ -138,8 +142,8 @@
   <div id="view-folder" style="display:none;">
     <div class="folder-header">
       <div class="folder-header-title" id="folder-view-title"></div>
-      <button class="btn btn-red" onclick="deleteFolder()">폴더 삭제</button>
-      <button class="btn" onclick="exportData(true)" style="margin-left:auto;">↓ 내보내기</button>
+      <button class="btn btn-red" onclick="window.deleteFolder()">폴더 삭제</button>
+      <button class="btn" onclick="window.exportData(true)" style="margin-left:auto;">↓ 내보내기</button>
     </div>
     <div class="table-wrap">
       <div class="table-scroll">
@@ -199,21 +203,40 @@
 
   function getIdKey() { return baseCols.find(c => c.toLowerCase().includes('username') || c.includes('유저')) || baseCols[0] || 'id'; }
 
-  function refreshCols() {
+  function refreshCols(savedOrder) {
     const allKeys = new Set();
     data.forEach(row => Object.keys(row).forEach(k => { if (k !== '__id') allKeys.add(k); }));
-    baseCols = [...allKeys];
+    const allKeysArr = [...allKeys];
+    if (savedOrder && savedOrder.length > 0) {
+      // 저장된 순서 기준으로 정렬, 새 컬럼은 뒤에 추가
+      const ordered = savedOrder.filter(c => allKeysArr.includes(c));
+      const newCols = allKeysArr.filter(c => !ordered.includes(c));
+      baseCols = [...ordered, ...newCols];
+    } else {
+      baseCols = allKeysArr;
+    }
     baseCols.forEach(c => { if (colVisible[c] === undefined) colVisible[c] = true; });
+  }
+
+  async function saveColOrder() {
+    try {
+      await setDoc(doc(db, 'instaviewer_settings', 'colOrder'), { order: baseCols });
+    } catch(e) { console.warn('컬럼 순서 저장 실패', e); }
   }
 
   // ── Firebase 데이터 로드 ───────────────────────────
   async function loadData() {
     try {
-      const snap = await getDocs(collection(db, 'instaviewer'));
+      const [snap, fSnap, settingSnap] = await Promise.all([
+        getDocs(collection(db, 'instaviewer')),
+        getDocs(collection(db, 'instaviewer_folders')),
+        getDocs(collection(db, 'instaviewer_settings')),
+      ]);
       data = snap.docs.map(d => ({ ...d.data(), __id: d.id }));
-      const fSnap = await getDocs(collection(db, 'instaviewer_folders'));
       folders = fSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-      refreshCols();
+      const colOrderDoc = settingSnap.docs.find(d => d.id === 'colOrder');
+      const savedOrder = colOrderDoc ? colOrderDoc.data().order : [];
+      refreshCols(savedOrder);
       filtered = [...data];
       renderStats();
       renderChips();
@@ -365,7 +388,13 @@
   function renderAll() {
     const cols = getVisibleCols();
     document.getElementById('thead-all').innerHTML =
-      cols.map(c=>`<th>${c}</th>`).join('') + '<th>관심목록</th><th>삭제</th>';
+      cols.map((c,i)=>`<th draggable="true" data-col="${c}"
+        ondragstart="dragStart(event,'${c}')"
+        ondragover="dragOver(event)"
+        ondragleave="dragLeave(event)"
+        ondrop="dropCol(event,'${c}')"
+        ondragend="dragEnd(event)"
+      >${c}</th>`).join('') + '<th>관심목록</th><th>삭제</th>';
     document.getElementById('tbody-all').innerHTML = filtered.length
       ? filtered.map(row => `<tr>
           ${cols.map(c=>renderCell(row,c)).join('')}
@@ -436,7 +465,7 @@
     document.getElementById('folder-bar').innerHTML =
       '<span style="font-size:11px;color:var(--muted);align-self:center;">폴더:</span>' +
       folders.map(f=>`<span class="folder-chip ${currentFolder&&currentFolder.id===f.id?'active':''}" onclick="openFolder('${f.id}')">${f.name} <span style="opacity:0.6;font-size:10px;">${(f.items||[]).length}</span></span>`).join('') +
-      `<span class="folder-chip folder-chip-add" onclick="showAddFolder()">+ 폴더 추가</span>`;
+      `<span class="folder-chip folder-chip-add" onclick="window.showAddFolder()">+ 폴더 추가</span>`;
   }
 
   window.deleteFolder = async function() {
@@ -449,6 +478,42 @@
       switchTab('all'); renderStats();
       showToast('폴더가 삭제됐습니다');
     } catch(e) { showToast('❌ 실패: ' + e.message); }
+  };
+
+  // ── 컬럼 드래그 순서 변경 ────────────────────────────
+  let dragSrcCol = null;
+
+  window.dragStart = function(e, col) {
+    dragSrcCol = col;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  window.dragOver = function(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    e.currentTarget.classList.add('drag-over');
+  };
+  window.dragLeave = function(e) {
+    e.currentTarget.classList.remove('drag-over');
+  };
+  window.dragEnd = function(e) {
+    e.target.classList.remove('dragging');
+    document.querySelectorAll('th.drag-over').forEach(el => el.classList.remove('drag-over'));
+  };
+  window.dropCol = async function(e, targetCol) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    if (!dragSrcCol || dragSrcCol === targetCol) return;
+    const srcIdx = baseCols.indexOf(dragSrcCol);
+    const tgtIdx = baseCols.indexOf(targetCol);
+    if (srcIdx < 0 || tgtIdx < 0) return;
+    baseCols.splice(srcIdx, 1);
+    baseCols.splice(tgtIdx, 0, dragSrcCol);
+    dragSrcCol = null;
+    renderChips();
+    renderAll();
+    await saveColOrder();
+    showToast('✅ 컬럼 순서 저장됨');
   };
 
   // ── 검색 ──────────────────────────────────────────
@@ -502,8 +567,8 @@
           <div class="modal-title">${title}</div>
           <input id="modal-input" placeholder="${placeholder}" onkeydown="if(event.key==='Enter')confirmModal()" />
           <div class="modal-btns">
-            <button class="btn" onclick="closeModal()">취소</button>
-            <button class="btn btn-green" onclick="confirmModal()">확인</button>
+            <button class="btn" onclick="window.closeModal()">취소</button>
+            <button class="btn btn-green" onclick="window.confirmModal()">확인</button>
           </div>
         </div>
       </div>`;
