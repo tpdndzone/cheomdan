@@ -99,6 +99,26 @@
     </div>
   </header>
 
+  <!-- 수집 데이터 불러오기 배너 -->
+  <div id="loadBanner" style="margin-bottom:20px;">
+    <div style="background:rgba(123,97,255,0.1);border:1px solid var(--accent2);border-radius:12px 12px 0 0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div style="font-size:13px;color:var(--accent2);font-weight:500;">☁️ 수집 프로그램 데이터</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">수집 회차를 선택해서 불러오세요 · 7일 지난 데이터는 자동 삭제</div>
+      </div>
+      <span id="tempCount" style="font-size:12px;color:var(--muted);"></span>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--accent2);border-top:none;border-radius:0 0 12px 12px;padding:12px 20px;display:flex;gap:10px;">
+      <button onclick="toggleBatchList()" id="loadBtn" style="background:var(--success);border:none;border-radius:8px;padding:9px 18px;color:#0a0a0f;font-family:'DM Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">↓ 수집 데이터 불러오기</button>
+      <button onclick="clearTempData()" style="background:var(--danger);border:none;border-radius:8px;padding:9px 16px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;">임시데이터 초기화</button>
+    </div>
+    <!-- 배치 목록 -->
+    <div id="batchList" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:8px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">수집 회차를 선택하세요:</div>
+      <div id="batchItems"></div>
+    </div>
+  </div>
+
   <div class="upload-zone" id="uploadZone">
     <span class="upload-icon">📊</span>
     <div class="upload-title">엑셀 파일을 드래그하거나 클릭하여 업로드</div>
@@ -151,7 +171,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA0dUb1p0wAWZHvDPlmG_WO3QJ7xhSYJ5s",
@@ -319,6 +339,158 @@
   }
 
   window.clearSelection = function() { selectedRows.clear(); renderTable(); };
+
+  // ── Firebase 임시저장소에서 불러오기 ─────────────────
+  // ── Firebase 배치 선택 불러오기 ─────────────────────
+  let batchOpen = false;
+  const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+
+  window.toggleBatchList = async function() {
+    batchOpen = !batchOpen;
+    const list = document.getElementById('batchList');
+    if (!batchOpen) { list.style.display = 'none'; return; }
+    list.style.display = 'block';
+    document.getElementById('batchItems').innerHTML = '<div style="color:var(--muted);font-size:12px;">불러오는 중...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer_temp'));
+      if (snap.empty) {
+        document.getElementById('batchItems').innerHTML = '<div style="color:var(--muted);font-size:12px;">저장된 수집 데이터가 없습니다.</div>';
+        return;
+      }
+      const batches = {};
+      const now = Date.now();
+      snap.docs.forEach(d => {
+        const data = d.data();
+        const bid = data.batch_id || 'unknown';
+        const savedAt = data.저장일시 ? new Date(data.저장일시).getTime() : 0;
+        const expired = savedAt && (now - savedAt) > SEVEN_DAYS;
+        if (!batches[bid]) batches[bid] = { count: 0, savedAt, expired };
+        batches[bid].count++;
+      });
+      const sorted = Object.entries(batches).sort((a,b) => b[1].savedAt - a[1].savedAt);
+      document.getElementById('tempCount').textContent = `${sorted.length}개 회차 대기중`;
+      document.getElementById('batchItems').innerHTML = sorted.map(([bid, info]) => {
+        const date = info.savedAt ? new Date(info.savedAt).toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : bid;
+        const daysLeft = info.savedAt ? Math.ceil((SEVEN_DAYS - (now - info.savedAt)) / 86400000) : '?';
+        const dis = info.expired ? 'opacity:0.4;pointer-events:none;' : 'cursor:pointer;';
+        return `<div style="${dis}background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;"
+          onmouseover="if(!this.style.pointerEvents||this.style.pointerEvents!='none')this.style.borderColor='var(--accent2)'"
+          onmouseout="this.style.borderColor='var(--border)'"
+          onclick="loadBatch('${bid}')">
+          <div>
+            <div style="font-size:12px;font-weight:500;color:var(--text);">📦 ${date} 수집</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px;">${info.count}개 계정</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:11px;color:var(--accent);background:rgba(200,240,101,0.1);padding:3px 8px;border-radius:4px;">${info.count}개</span>
+            ${info.expired ? '<span style="font-size:10px;color:var(--danger);">⚠ 만료됨</span>' : `<span style="font-size:10px;color:var(--muted);">D-${daysLeft}</span>`}
+          </div>
+        </div>`;
+      }).join('');
+    } catch(e) {
+      document.getElementById('batchItems').innerHTML = `<div style="color:var(--danger);font-size:12px;">오류: ${e.message}</div>`;
+    }
+  };
+
+  window.loadBatch = async function(batchId) {
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer_temp'));
+      const rows = snap.docs.filter(d => d.data().batch_id === batchId).map(d => {
+        const data = d.data();
+        delete data.batch_id; delete data.저장일시;
+        return data;
+      });
+      if (!rows.length) { showToast('⚠️ 해당 배치 데이터가 없습니다.'); return; }
+      allData = rows;
+      columns = [...new Set(allData.flatMap(r => Object.keys(r)))];
+      visibleCols = [...columns];
+      sortCol = null; currentPage = 1; selectedRows = new Set(); sentRows = new Set();
+      document.getElementById('batchList').style.display = 'none';
+      batchOpen = false;
+      document.getElementById('uploadZone').style.display = 'none';
+      document.getElementById('fileInfo').classList.add('visible');
+      document.getElementById('fileName').textContent = `📦 ${batchId} (${rows.length}개)`;
+      document.getElementById('totalCount').textContent = rows.length.toLocaleString();
+      document.getElementById('controls').style.display = 'flex';
+      document.getElementById('tableWrap').style.display = 'block';
+      renderColFilter(); renderTable();
+      showToast(`✅ ${rows.length}개 데이터 불러오기 완료!`);
+    } catch(e) { showToast('❌ 불러오기 실패: ' + e.message); }
+  };
+
+  window.loadFromFirebase = async function() {
+    const btn = document.getElementById('loadBtn');
+    btn.textContent = '불러오는 중...';
+    btn.disabled = true;
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer_temp'));
+      if (snap.empty) {
+        showToast('⚠️ 불러올 데이터가 없습니다. 프로그램을 먼저 실행해주세요!');
+        btn.textContent = '↓ 수집 데이터 불러오기';
+        btn.disabled = false;
+        return;
+      }
+
+      const rows = snap.docs.map(d => {
+        const data = d.data();
+        delete data.batch_id;
+        delete data.저장일시;
+        return data;
+      });
+
+      // 기존 데이터와 합치기 (유저네임 기준 중복 제거)
+      const existing = new Map(allData.map(r => [r['유저네임'], r]));
+      rows.forEach(row => {
+        existing.set(row['유저네임'], row);
+      });
+      allData = [...existing.values()];
+      columns = [...new Set(allData.flatMap(r => Object.keys(r)))];
+      visibleCols = [...columns];
+      sortCol = null; currentPage = 1;
+      selectedRows = new Set(); sentRows = new Set();
+
+      document.getElementById('uploadZone').style.display = 'none';
+      document.getElementById('fileInfo').classList.add('visible');
+      document.getElementById('fileName').textContent = `Firebase 임시저장소 (${rows.length}개)`;
+      document.getElementById('totalCount').textContent = allData.length.toLocaleString();
+      document.getElementById('controls').style.display = 'flex';
+      document.getElementById('tableWrap').style.display = 'block';
+      document.getElementById('tempCount').textContent = `${rows.length}개 대기중`;
+
+      renderColFilter();
+      renderTable();
+      showToast(`✅ ${rows.length}개 데이터 불러오기 완료!`);
+    } catch(e) {
+      showToast('❌ 불러오기 실패: ' + e.message);
+    }
+    btn.textContent = '↓ 수집 데이터 불러오기';
+    btn.disabled = false;
+  };
+
+  window.clearTempData = async function() {
+    if (!confirm('Firebase 임시저장소 데이터를 모두 삭제할까요?\n(창고에 저장된 데이터는 유지됩니다)')) return;
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer_temp'));
+      for (const d of snap.docs) await deleteDoc(doc(db, 'instaviewer_temp', d.id));
+      document.getElementById('tempCount').textContent = '';
+      document.getElementById('batchItems').innerHTML = '';
+      document.getElementById('batchList').style.display = 'none';
+      batchOpen = false;
+      showToast('✅ 임시데이터 초기화 완료!');
+    } catch(e) { showToast('❌ 초기화 실패: ' + e.message); }
+  };
+
+  // 페이지 로드 시 배치 개수 확인
+  async function checkTempCount() {
+    try {
+      const snap = await getDocs(collection(db, 'instaviewer_temp'));
+      if (!snap.empty) {
+        const batches = new Set(snap.docs.map(d => d.data().batch_id));
+        document.getElementById('tempCount').textContent = batches.size + '개 회차 대기중';
+      }
+    } catch(e) {}
+  }
+  checkTempCount();
 
   // ── Firebase 창고로 보내기 ─────────────────────────
   async function sendRowsToFirebase(rows) {
