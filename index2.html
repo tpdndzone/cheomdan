@@ -566,6 +566,30 @@ window.filterCols = function(tag) {
 }
 
 window.openColumn = function(id) {
+  showPage('col-detail', id);
+}
+
+/* ═══════════════════════════════════
+   PAGE NAV
+═══════════════════════════════════ */
+window.showPage = function(name, colId) {
+  let hash = name === 'home' ? '' : name;
+  if (name === 'col-detail' && colId) hash = 'column/' + colId;
+  history.pushState(null, '', location.pathname + (hash ? '#' + hash : ''));
+  _renderPage(name, colId);
+}
+
+function _renderPage(name, colId) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById('page-'+name);
+  if (el) el.classList.add('active');
+  window.scrollTo(0,0);
+  if (name==='column') { renderFilters(); renderColumnList(currentFilter); }
+  if (name==='home') renderHomeColumns();
+  if (name==='col-detail' && colId) _showColDetail(colId);
+}
+
+function _showColDetail(id) {
   const col = COLUMNS.find(c=>c.id===id);
   if (!col) return;
   document.getElementById('detail-tag').textContent = col.tag||'';
@@ -574,19 +598,22 @@ window.openColumn = function(id) {
   document.getElementById('detail-content').innerHTML = col.content||'';
   const related = COLUMNS.filter(c=>c.id!==id).slice(0,3);
   document.getElementById('related-cols').innerHTML = related.map(c=>colCard(c,`openColumn('${c.id}')`)).join('');
-  showPage('col-detail');
 }
 
-/* ═══════════════════════════════════
-   PAGE NAV
-═══════════════════════════════════ */
-window.showPage = function(name) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  window.scrollTo(0,0);
-  if (name==='column') { renderFilters(); renderColumnList(currentFilter); }
-  if (name==='home') renderHomeColumns();
+function routeFromHash() {
+  const hash = location.hash.replace('#','');
+  if (!hash) { _renderPage('home'); return; }
+  if (hash.startsWith('column/')) {
+    const id = hash.replace('column/','');
+    _renderPage('col-detail', id);
+  } else if (['service','column','contact'].includes(hash)) {
+    _renderPage(hash);
+  } else {
+    _renderPage('home');
+  }
 }
+
+window.addEventListener('popstate', routeFromHash);
 
 window.toggleMenu = function() {
   const m = document.getElementById('mobileMenu');
@@ -802,7 +829,7 @@ window.delCol = async function(id) {
 /* ═══════════════════════════════════
    INIT
 ═══════════════════════════════════ */
-loadColumns();
+loadColumns().then(() => routeFromHash());
 </script>
 </body>
 </html>
